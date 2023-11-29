@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes=2
+#SBATCH --tasks-per-node=1
+
+# make sure anaconda is activated
+source $HOME/anaconda3/bin/activate
+conda activate haddock3
+
+# go to the example directory
+cd /mnt/nfs_share/greenBeansHaddock/exp-mpi
+
+# execute
+haddock3 dpp-mpi-nc2-no2-tpn1_gl2-1.cfg
+
