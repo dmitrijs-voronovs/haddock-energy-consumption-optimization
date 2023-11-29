@@ -1,0 +1,83 @@
+[2023-11-27 18:36:07,164 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2023-11-27 18:36:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2023-11-27 18:36:11,816 libworkflow INFO] Reading instructions step 0_topoaa
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 1_rigidbody
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 2_caprieval
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 3_seletop
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 4_caprieval
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 5_flexref
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 6_caprieval
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 7_emref
+[2023-11-27 18:36:11,817 libworkflow INFO] Reading instructions step 8_caprieval
+[2023-11-27 18:36:11,818 libworkflow INFO] Reading instructions step 9_clustfcc
+[2023-11-27 18:36:11,818 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2023-11-27 18:36:11,818 libworkflow INFO] Reading instructions step 11_caprieval
+[2023-11-27 18:36:11,935 base_cns_module INFO] Running [topoaa] module
+[2023-11-27 18:36:11,936 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2023-11-27 18:36:11,943 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-local/run.daa-local-nc4_gl2-7/00_topoaa/4G6K_fv.inp
+4G6K_fv.inp
+[2023-11-27 18:36:12,070 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+4G6K_fv.out
+[2023-11-27 18:36:12,070 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2023-11-27 18:36:12,075 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-local/run.daa-local-nc4_gl2-7/00_topoaa/4I1B-matched.inp
+4I1B-matched.inp
+[2023-11-27 18:36:12,253 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+4I1B-matched.out
+[2023-11-27 18:36:12,253 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2023-11-27 18:36:12,253 libutil INFO] Selected 2 cores to process 2 jobs, with 8 maximum available cores.
+[2023-11-27 18:36:12,253 libparallel INFO] Using 2 cores
+4I1B-matched.inp
+4G6K_fv.inp
+[2023-11-27 18:36:16,687 libparallel INFO] >> /4G6K_fv.inp completed 50% 
+[2023-11-27 18:36:16,688 libparallel INFO] >> /4I1B-matched.inp completed 100% 
+[2023-11-27 18:36:16,688 libparallel INFO] 2 tasks finished
+[2023-11-27 18:36:16,688 __init__ INFO] [topoaa] CNS jobs have finished
+[2023-11-27 18:36:16,736 base_cns_module INFO] Module [topoaa] finished.
+[2023-11-27 18:36:16,736 __init__ INFO] [topoaa] took 5 seconds
+[2023-11-27 18:36:17,666 base_cns_module INFO] Running [rigidbody] module
+[2023-11-27 18:36:17,667 __init__ INFO] [rigidbody] crossdock=true
+[2023-11-27 18:36:17,667 __init__ INFO] [rigidbody] Preparing jobs...
+[2023-11-27 18:45:41,828 __init__ INFO] [rigidbody] Running CNS Jobs n=10000
+[2023-11-27 18:45:41,828 libutil INFO] Selected 4 cores to process 10000 jobs, with 8 maximum available cores.
+[2023-11-27 18:45:41,840 libparallel INFO] Using 4 cores
+Process Worker-6:
+Traceback (most recent call last):
+  File "/home/greenBeans/anaconda3/envs/haddock3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libparallel.py", line 28, in run
+    task.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libsubprocess.py", line 193, in run
+    p.kill()
+OSError: [Errno 28] No space left on device
+rigidbody_7501.inp
+rigidbody_7502.inp
+rigidbody_7503.inp
+rigidbody_7504.inp
+rigidbody_7505.inp
+rigidbody_7506.inp
+rigidbody_7507.inp
+rigidbody_7508.inp
+rigidbody_7509.inp
+rigidbody_7510.inp
+rigidbody_7511.inp
+rigidbody_7512.inp
+rigidbody_7513.inp
+rigidbody_7514.inp
+rigidbody_7515.inp
+rigidbody_7516.inp
+rigidbody_7517.inp
+rigidbody_7518.inp
+rigidbody_7519.inp
+rigid
