@@ -1,4 +1,4 @@
-from Experiment import LocalExperimentGL2, LocalExperimentGL6
+from examples.domain import LocalExperimentGL2, LocalExperimentGL6
 
 
 def main():

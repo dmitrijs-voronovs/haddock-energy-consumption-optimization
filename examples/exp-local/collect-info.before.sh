@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rundir=$1
-echo "Coolind down for 5 minutes..."
+echo "Cooling down for 5 minutes..."
 sleep 300
 infodir="$rundir.info"
 mkdir $infodir

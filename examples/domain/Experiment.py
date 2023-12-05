@@ -1,7 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 from typing import List
-from Config import Config, LocalConfig
+from examples.domain.Config import Config
 
 COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
 COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
@@ -23,6 +23,10 @@ class Experiment(ABC):
 
     @abstractmethod
     def get_create_job_script_name(self):
+        pass
+
+    @abstractmethod
+    def get_ncores(self, config: Config) -> int:
         pass
 
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
@@ -65,8 +69,9 @@ class Experiment(ABC):
                 self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_name, 1,
                                          COLLECT_INFO_BEFORE_SH,
                                          job_prev_id if job_idx > warmup_config_idx else None))
+            # TODO: fix config.ncores, as not all of them have ncores defined. Fallback value? Or force ncores in Config
             commands.append(
-                self.__get_slurm_command(job_id, config.name, config.node_name, config.ncores,
+                self.__get_slurm_command(job_id, config.name, config.node_name, self.get_ncores(config),
                                          f"haddock3 \"{config.name}\"",
                                          job_check_before_id))
             commands.append(
@@ -96,38 +101,6 @@ sacct -o jobid,jobname%50,cluster,Node,state,start,end,ConsumedEnergy,AveRSS,Ave
 cat {experiment_name}-data.txt
 EOF
 '''
-
-
-class LocalExperimentGL2(Experiment):
-    def get_create_job_script_name(self):
-        return "create-local-job.sh"
-
-    def create_configs(self) -> List[Config]:
-        return [
-            LocalConfig(workflow, "gl2", trial, ncores)
-            for workflow in ["dpp", "daa"]
-            for ncores in [2, 4, 8]
-            for trial in range(1, 11)
-        ]
-
-    def create_warmup_config(self) -> Config:
-        return LocalConfig("dpp", "gl2", 1, 8, True)
-
-
-class LocalExperimentGL6(Experiment):
-    def get_create_job_script_name(self):
-        return "create-local-job.sh"
-
-    def create_configs(self) -> List[Config]:
-        return [
-            LocalConfig(workflow, "gl6", trial, ncores)
-            for workflow in ["dpp", "daa"]
-            for ncores in [2, 4, 8, 16, 32]
-            for trial in range(1, 11)
-        ]
-
-    def create_warmup_config(self) -> Config:
-        return LocalConfig("dpp", "gl6", 1, 8, True)
 
 # MPIExperimentGL2
 # MPIExperimentGL6
