@@ -1,4 +1,4 @@
-#!/bin/bash/ 
+#!/bin/bash
 
 rm -rf "run.dpp-local-nc8_gl6-1.warmup.cfg"
 

@@ -2,13 +2,11 @@
 
 workflow=$1
 
-filename="$workflow-local"
+filename="$workflow-hpc"
 cfg_template="template/${filename}-template.cfg"
 
 cfg_template_concat="___CONCAT___"
 cfg_template_queue_limit="___QUEUE_LIMIT___"
-cfg_template_node="___NODE___"
-cfg_template_trial="___TRIAL___"
 cfg_template_run_dir="___RUNDIR___"
 
 # script that accepts ncores, nodes, tasks_per_node as cli arguments and replaces them in template files
@@ -38,6 +36,4 @@ cp "$cfg_template" "$cfg_file"
 # replace ncores in cfg file
 sed -i "s/$cfg_template_concat/$concat/g" $cfg_file
 sed -i "s/$cfg_template_queue_limit/$queue_limit/g" $cfg_file
-sed -i "s/$cfg_template_node/$node/g" $cfg_file
-sed -i "s/$cfg_template_trial/$trial/g" $cfg_file
 sed -i "s/$cfg_template_run_dir/$run_dir/g" $cfg_file

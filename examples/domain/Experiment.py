@@ -38,7 +38,7 @@ class Experiment(ABC):
                     self.configs + [self.warmup_config]]
 
         with open(f"{name}.sh", "w") as file:
-            file.writelines("#!/bin/bash/ \n")
+            file.writelines("#!/bin/bash \n")
             file.writelines("\n".join(commands))
 
         return self
@@ -51,7 +51,7 @@ class Experiment(ABC):
         configs.insert(warmup_config_idx, warmup_config)
 
         commands = [
-            "#!/bin/bash/ \n",
+            "#!/bin/bash \n",
             f"rm -rf \"{warmup_config.run_dir}\"\n",
         ]
 

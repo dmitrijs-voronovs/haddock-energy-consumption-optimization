@@ -1,4 +1,4 @@
-#!/bin/bash/ 
+#!/bin/bash
 sh create-local-job.sh dpp 2 gl2 1
 sh create-local-job.sh dpp 2 gl2 2
 sh create-local-job.sh dpp 2 gl2 3
