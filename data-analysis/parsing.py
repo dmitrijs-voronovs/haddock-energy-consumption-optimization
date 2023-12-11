@@ -105,34 +105,39 @@ import matplotlib.pyplot as plt
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
 fig, ax = plt.subplots(figsize=(15, 10))
 data.boxplot(column='ElapsedSeconds', by=['Workflow', 'ncores', 'node'], ax=ax)
-plt.show()
 # save
 fig.savefig('boxplot.png')
 
 
-# In[9]:
+# In[17]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
-fig, ax = plt.subplots(nrows=2, ncols=6, figsize=(40, 10))
+fig, ax = plt.subplots(nrows=2, ncols=6, figsize=(26, 10))
 for j, workflow in enumerate(data.Workflow.unique()):
     for i, column in enumerate(
             ['ElapsedHours', 'ConsumedEnergyK', 'AveRSSM', 'AveDiskReadM', 'AveDiskWriteM', 'AveVMSizeM']):
         data[data.Workflow == workflow].boxplot(column=column, by=['ncores', 'node'], ax=ax[j, i])
         ax[j, i].set_title(f"{workflow}-{column}")
+        ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60)
         # next to every boxplot box show data distribution
+
+fig.subplots_adjust(hspace=0.5, wspace=0.25)
 
 fig.savefig('boxplot-overview-by-workflows.png')
 
 
-# In[47]:
+# In[21]:
 
 
-fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(40, 20))
+fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(26, 10))
 for i, column in enumerate(
         ['ElapsedHours', 'ConsumedEnergyK', 'AveRSSM', 'AveDiskReadM', 'AveDiskWriteM', 'AveVMSizeM']):
     data.boxplot(column=column, by=['Workflow', 'ncores', 'node'], ax=ax[i // 3, i % 3])
     ax[i // 3, i % 3].set_title(column)
+    ax[i // 3, i % 3].set_xticklabels(ax[i // 3, i % 3].get_xticklabels(), rotation=-60)
+
+fig.subplots_adjust(hspace=0.6)
 
 fig.savefig('boxplot-overview.png')
 
