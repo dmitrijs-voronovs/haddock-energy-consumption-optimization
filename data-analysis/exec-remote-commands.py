@@ -56,12 +56,7 @@ class RemoteSSHClient:
             print(output)
 
 
-def main():
-    server_ip = env_values.get("SERVER_IP")
-    username = env_values.get("USERNAME")
-    password = env_values.get("PASSWORD")
-
-    client = RemoteSSHClient(server_ip, username, password)
+def get_local_exp_data(client):
     client.execute_commands([
         'cd /mnt/nfs_share/greenBeansHaddock/exp-local/',
         'sh check-local-exp-gl2.sh',
@@ -71,6 +66,15 @@ def main():
         "/mnt/nfs_share/greenBeansHaddock/exp-local/local-exp-gl2-data.txt",
         "/mnt/nfs_share/greenBeansHaddock/exp-local/local-exp-gl6-data.txt",
     ])
+
+
+def main():
+    server_ip = env_values.get("SERVER_IP")
+    username = env_values.get("USERNAME")
+    password = env_values.get("PASSWORD")
+
+    client = RemoteSSHClient(server_ip, username, password)
+    get_local_exp_data(client)
 
 
 if __name__ == '__main__':
