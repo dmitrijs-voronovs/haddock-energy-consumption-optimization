@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import pandas as pd
 import regex as re
 
 
-# In[3]:
+# In[2]:
 
 
 data1 = pd.read_fwf('local-exp-gl2-data.txt', skiprows=[1])
@@ -17,7 +17,7 @@ data = pd.concat([data1, data2])
 data
 
 
-# In[4]:
+# In[3]:
 
 
 def convert_to_numeric(value):
@@ -68,15 +68,15 @@ data = data.sort_values(by=['ncores', 'Workflow'])
 data
 
 
-# In[5]:
+# In[4]:
 
 
 # All collected data
 data.groupby(['Workflow', 'mode', 'ncores', 'node']).size().reset_index(name='count').sort_values(
-    by=['Workflow', "node", "ncores"]).to_csv('data.csv', index=False, header=True)
+    by=['Workflow', "node", "ncores"]).to_csv('local_exp_overview.csv', index=False, header=True)
 
 
-# In[6]:
+# In[5]:
 
 
 mask = (data.groupby(['Workflow', 'mode', 'ncores', 'node']).size()).reset_index(name='count')
@@ -85,7 +85,7 @@ mask = mask[mask.count_threshold]
 mask
 
 
-# In[7]:
+# In[6]:
 
 
 mask.drop(['count', 'count_threshold'], axis=1, inplace=True)
@@ -93,13 +93,13 @@ data = data.merge(mask, on=['Workflow', 'mode', 'ncores', 'node'], how='inner')
 data
 
 
-# In[16]:
+# In[7]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[9]:
+# In[8]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -110,7 +110,7 @@ plt.show()
 fig.savefig('boxplot.png')
 
 
-# In[46]:
+# In[9]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
