@@ -169,9 +169,9 @@ def main():
     password = env_values.get("PASSWORD")
 
     client = RemoteSSHClient(server_ip, username, password)
-    # get_local_exp_data(client)
+    get_local_exp_data(client)
     # get_log_files(client, ExperimentType.LOCAL)
-    clean_experiment_dir(client, ExperimentType.LOCAL)
+    # clean_experiment_dir(client, ExperimentType.LOCAL)
 
 
 if __name__ == '__main__':
