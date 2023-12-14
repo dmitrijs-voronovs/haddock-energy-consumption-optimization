@@ -1,16 +1,9 @@
 from typing import List
 
-from examples.domain import Config, LocalConfig
-from examples.domain.Experiment import Experiment
+from examples.domain import Config, LocalConfig, LocalExperiment
 
 
-class LocalExperimentGL6(Experiment):
-    def get_ncores(self, config: LocalConfig):
-        return config.ncores
-
-    def get_create_job_script_name(self):
-        return "create-local-job.sh"
-
+class LocalExperimentGL6(LocalExperiment):
     def create_configs(self) -> List[Config]:
         return [
             LocalConfig(workflow, "gl6", trial, ncores)

@@ -1,16 +1,11 @@
 from typing import List
 
+from examples.domain import LocalExperiment
 from examples.domain.Config import Config
 from examples.domain.LocalConfig import LocalConfig
-from examples.domain import Experiment
 
 
-class LocalExperimentGL2(Experiment):
-    def get_ncores(self, config: LocalConfig):
-        return config.ncores
-
-    def get_create_job_script_name(self):
-        return "create-local-job.sh"
+class LocalExperimentGL2(LocalExperiment):
 
     def create_configs(self) -> List[Config]:
         return [
