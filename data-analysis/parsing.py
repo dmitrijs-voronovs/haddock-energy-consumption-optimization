@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[80]:
+# In[160]:
 
 
 import pandas as pd
@@ -9,16 +9,18 @@ import regex as re
 from IPython.core.display_functions import display
 
 
-# In[65]:
+# In[161]:
 
 
 data1 = pd.read_fwf('local-exp-gl2-data.txt', skiprows=[1], index_col=None)
 data2 = pd.read_fwf('local-exp-gl6-data.txt', skiprows=[1], index_col=None)
-data = pd.concat([data1, data2], axis=0, ignore_index=True)
+data3 = pd.read_fwf('local-exp-gl5-data.txt', skiprows=[1], index_col=None)
+data4 = pd.read_fwf('local-exp-gl2_2-data.txt', skiprows=[1], index_col=None)
+data = pd.concat([data1, data2, data3, data4], axis=0, ignore_index=True)
 data
 
 
-# In[66]:
+# In[162]:
 
 
 def convert_to_numeric(value):
@@ -46,7 +48,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[67]:
+# In[163]:
 
 
 def filter_out_completed_jobs(dat):
@@ -75,13 +77,19 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[81]:
+# In[164]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
+
 data_completed = filter_out_completed_jobs(data)
+data_completed = data_completed[~data_completed.JobName.str.contains("nc2")].reset_index(drop=True)
+
 data_pending = data[data.State == "PENDING"]
+data_pending = data_pending[~data_pending.JobName.str.contains("nc2")].reset_index(drop=True)
+
 data = pd.concat([data_completed, data_pending], axis=0, ignore_index=True)
+data = data[~data.JobName.str.contains("nc2")].reset_index(drop=True)
 
 # data = data[~data.JobName.str.contains("nc2")].reset_index(drop=True)
 data = extract_params_from_local_file_name(data)
@@ -94,7 +102,27 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[69]:
+# In[165]:
+
+
+jobs_to_eliminate = data[data.ncores == 2]
+" ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
+
+
+# In[166]:
+
+
+gl2_trials = data[data.node == "gl2"].sort_values(
+    by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
+    # trials_count=('trial', 'count'),
+    # trials_list=('trial', lambda x: x.tolist()),
+    # trials_left=('trial', lambda x: list(set(range(1, 11)) - set(x.tolist()))),
+    trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
+).reset_index()
+gl2_trials
+
+
+# In[167]:
 
 
 gl2_trials_left = data_completed[data_completed.node == "gl2"].sort_values(
@@ -108,7 +136,7 @@ gl2_trials_left.to_csv('gl2_trials_left.csv', index=False, header=True)
 gl2_trials_left
 
 
-# In[70]:
+# In[168]:
 
 
 gl6_trials_left = data_completed[data_completed.node == "gl6"].sort_values(
@@ -122,7 +150,7 @@ gl6_trials_left.to_csv('gl6_trials_left.csv', index=False, header=True)
 gl6_trials_left
 
 
-# In[71]:
+# In[169]:
 
 
 # All collected data
@@ -133,7 +161,7 @@ collected_data.to_csv('local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[72]:
+# In[170]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -142,19 +170,19 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[73]:
+# In[171]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[74]:
+# In[172]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[78]:
+# In[173]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -165,7 +193,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 fig.savefig('boxplot.png')
 
 
-# In[76]:
+# In[174]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
@@ -184,7 +212,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('boxplot-overview-by-workflows.png')
 
 
-# In[77]:
+# In[175]:
 
 
 fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(26, 10))
