@@ -90,10 +90,21 @@ class Experiment(ABC):
             file.write("\n".join(commands))
             file.write(check_jobs_command)
 
+    def __get_formatted_dependency(self, dependent_job_id):
+        dependency = ""
+        if dependent_job_id:
+            var_sign = "$"
+            if dependent_job_id.isdigit():
+                var_sign = ""
+            dependency = f" --dependency=afterany:{var_sign}{dependent_job_id}"
+        return dependency
+
     def __get_slurm_command(self, id: str, name: str, node_name: str, ncores: int, command,
                             dependent_job_id: str = None):
-        dependency = f" --dependency=afterany:${dependent_job_id}" if dependent_job_id else ""
-        return f"{id}=$(sbatch --job-name=\"{name}\" -w {node_name} -n {ncores}{dependency} {command} | awk '{{print $NF}}')"
+        dependency = self.__get_formatted_dependency(dependent_job_id)
+
+        job_id_extraction_pipe = "| awk '{{print $NF}}'"
+        return f"{id}=$(sbatch --job-name=\"{name}\" -w {node_name} -n {ncores}{dependency} {command} {job_id_extraction_pipe})"
 
     def __get_check_jobs_command(self, experiment_name, job_ids):
         return f'''
