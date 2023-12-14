@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[160]:
+# In[217]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import regex as re
 from IPython.core.display_functions import display
 
 
-# In[161]:
+# In[218]:
 
 
 data1 = pd.read_fwf('local-exp-gl2-data.txt', skiprows=[1], index_col=None)
@@ -20,7 +20,7 @@ data = pd.concat([data1, data2, data3, data4], axis=0, ignore_index=True)
 data
 
 
-# In[162]:
+# In[219]:
 
 
 def convert_to_numeric(value):
@@ -48,7 +48,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[163]:
+# In[220]:
 
 
 def filter_out_completed_jobs(dat):
@@ -77,7 +77,7 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[164]:
+# In[221]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
@@ -102,14 +102,14 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[165]:
+# In[222]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
 
 
-# In[166]:
+# In[223]:
 
 
 gl2_trials = data[data.node == "gl2"].sort_values(
@@ -122,35 +122,55 @@ gl2_trials = data[data.node == "gl2"].sort_values(
 gl2_trials
 
 
-# In[167]:
+# In[224]:
 
 
 gl2_trials_left = data_completed[data_completed.node == "gl2"].sort_values(
     by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    # trials_count=('trial', 'count'),
-    # trials_list=('trial', lambda x: x.tolist()),
-    # trials_left=('trial', lambda x: list(set(range(1, 11)) - set(x.tolist()))),
     trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
 ).reset_index()
 gl2_trials_left.to_csv('gl2_trials_left.csv', index=False, header=True)
 gl2_trials_left
 
 
-# In[168]:
+# In[225]:
 
 
 gl6_trials_left = data_completed[data_completed.node == "gl6"].sort_values(
     by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    # trials_count=('trial', 'count'),
-    # trials_list=('trial', lambda x: x.tolist()),
-    # trials_left=('trial', lambda x: list(set(range(1, 11)) - set(x.tolist()))),
     trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
 ).reset_index()
 gl6_trials_left.to_csv('gl6_trials_left.csv', index=False, header=True)
 gl6_trials_left
 
 
-# In[169]:
+# In[226]:
+
+
+gl6_trials_failed = data[data.node == "gl6"].sort_values(
+    by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
+    trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
+).reset_index()
+start_idx = 11
+gl6_trials_failed['code'] = gl6_trials_failed.apply(lambda
+                                                        x: f'[LocalConfig("{x.Workflow}", "{x.node}", trial, {x.ncores}) for trial in range({start_idx}, {start_idx} + {x.trials_left_count})]',
+                                                    axis=1)
+# LocalConfig("dpp", "gl5", trial, 32) for trial in range(11, 11 + 4)]
+gl6_trials_failed.to_csv('gl6_trials_failed.csv', index=False, header=True)
+display(gl6_trials_failed)
+print(" + ".join(gl6_trials_failed.code.to_list()))
+
+
+# In[227]:
+
+
+collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).describe().reset_index()
+collected_data_stats.to_csv(
+    'local_exp_overview_stats.csv', header=True)
+collected_data_stats
+
+
+# In[228]:
 
 
 # All collected data
@@ -161,7 +181,7 @@ collected_data.to_csv('local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[170]:
+# In[229]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -170,19 +190,19 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[171]:
+# In[230]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[172]:
+# In[231]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[173]:
+# In[232]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -193,7 +213,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 fig.savefig('boxplot.png')
 
 
-# In[174]:
+# In[233]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
@@ -212,7 +232,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('boxplot-overview-by-workflows.png')
 
 
-# In[175]:
+# In[234]:
 
 
 fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(26, 10))

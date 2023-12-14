@@ -95,7 +95,8 @@ class RemoteSSHClient:
 
 
 def get_local_exp_data(client):
-    experiments = ["gl2", "gl6", "gl2_2", "gl5"]
+    # experiments = ["gl2", "gl6", "gl2_2", "gl5"]
+    experiments = ["gl6", "gl2_2", "gl5", "gl6_2"]
     client.execute_commands([
                                 f'cd {LOCAL_EXP_DIR}',
                             ] + [f'sh check-local-exp-{experiment}.sh' for experiment in experiments])
@@ -159,6 +160,10 @@ def get_log_files(client, exp: 'ExperimentType'):
     get_slurm_files(client, exp)
 
 
+def check_space(client):
+    client.execute_commands(["df -h"])
+
+
 def main():
     server_ip = env_values.get("SERVER_IP")
     username = env_values.get("USERNAME")
@@ -166,6 +171,7 @@ def main():
 
     client = RemoteSSHClient(server_ip, username, password)
     get_local_exp_data(client)
+    # check_space(client)
     # get_log_files(client, ExperimentType.LOCAL)
     # clean_experiment_dir(client, ExperimentType.LOCAL)
 
