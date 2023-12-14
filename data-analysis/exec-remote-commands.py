@@ -1,5 +1,4 @@
 from enum import Enum
-from functools import reduce
 from pathlib import Path
 from typing import List
 
@@ -22,7 +21,7 @@ def get_exp_dir(exp: 'ExperimentType'):
 
 LOCAL_EXP_DIR = get_exp_dir(ExperimentType.LOCAL)
 
-env_values = dotenv_values("../local.env")
+env_values = dotenv_values("../.env.gl2")
 
 
 class RemoteSSHClient:
@@ -96,15 +95,12 @@ class RemoteSSHClient:
 
 
 def get_local_exp_data(client):
+    experiments = ["gl2", "gl6", "gl2_2", "gl5"]
     client.execute_commands([
-        f'cd {LOCAL_EXP_DIR}',
-        'sh check-local-exp-gl2.sh',
-        'sh check-local-exp-gl6.sh',
-    ])
+                                f'cd {LOCAL_EXP_DIR}',
+                            ] + [f'sh check-local-exp-{experiment}.sh' for experiment in experiments])
     client.get_files([
-        f"{LOCAL_EXP_DIR}/local-exp-gl2-data.txt",
-        f"{LOCAL_EXP_DIR}/local-exp-gl6-data.txt",
-    ])
+        f"{LOCAL_EXP_DIR}/local-exp-{experiment}-data.txt" for experiment in experiments])
 
 
 def clean_experiment_dir(client, exp: 'ExperimentType'):
