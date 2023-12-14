@@ -8,3 +8,4 @@ from .LocalExperimentGL2 import LocalExperimentGL2
 from .LocalExperimentGL2_2 import LocalExperimentGL2_2
 from .LocalExperimentGL5 import LocalExperimentGL5
 from .LocalExperimentGL6 import LocalExperimentGL6
+from .LocalExperimentGL6_2 import LocalExperimentGL6_2

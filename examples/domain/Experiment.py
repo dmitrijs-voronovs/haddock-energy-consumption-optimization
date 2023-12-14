@@ -1,6 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 from typing import List
+
 from examples.domain.Config import Config
 
 COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
@@ -43,6 +44,9 @@ class Experiment(ABC):
 
         return self
 
+    def get_experiment_job_dependency(self) -> str | None:
+        return None
+
     def generate_runner(self, experiment_name: str):
         configs = self.configs.copy()
         random.shuffle(configs)
@@ -65,10 +69,11 @@ class Experiment(ABC):
             if job_idx > warmup_config_idx:
                 job_ids.append(f"${job_id}")
 
+            dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
             commands.append(
                 self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_name, 1,
                                          COLLECT_INFO_BEFORE_SH,
-                                         job_prev_id if job_idx > warmup_config_idx else None))
+                                         dependent_job_id))
             # TODO: fix config.ncores, as not all of them have ncores defined. Fallback value? Or force ncores in Config
             commands.append(
                 self.__get_slurm_command(job_id, config.name, config.node_name, self.get_ncores(config),
