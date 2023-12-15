@@ -1,3 +1,4 @@
+import argparse
 from enum import Enum
 from pathlib import Path
 from typing import List
@@ -94,9 +95,10 @@ class RemoteSSHClient:
             return ""
 
 
-def get_local_exp_data(client):
-    # experiments = ["gl2", "gl6", "gl2_2", "gl5"]
-    experiments = ["gl6", "gl2_2", "gl5", "gl6_2"]
+def get_local_exp_data(client, experiments=None):
+    if experiments is None:
+        experiments = ["gl6", "gl2_2", "gl5", "gl6_2"]
+
     client.execute_commands([
                                 f'cd {LOCAL_EXP_DIR}',
                             ] + [f'sh check-local-exp-{experiment}.sh' for experiment in experiments])
@@ -164,16 +166,37 @@ def check_space(client):
     client.execute_commands(["df -h"])
 
 
+def execute_cli_command(client):
+    parser = argparse.ArgumentParser(description='Remote SSH Client')
+    subparsers = parser.add_subparsers(dest='command')
+    get_local_exp_data_parser = subparsers.add_parser('get_local_exp_data', aliases=["get-data"],
+                                                      help='Get local experiment data')
+    get_local_exp_data_parser.add_argument('-e', '--exp', nargs='*',
+                                           help='Experiments to get data from, default ["gl6", "gl2_2", "gl5", "gl6_2"] ')
+    check_space_parser = subparsers.add_parser('check_space', aliases=["space"], help='Check space')
+    get_log_files_parser = subparsers.add_parser('get_log_files', help='Get log files')
+    get_log_files_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
+    clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
+                                                        help='Clean experiment directory')
+    clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
+    args = parser.parse_args()
+    if args.command in ['get_local_exp_data', "get-data"]:
+        get_local_exp_data(client, args.exp)
+    elif args.command in ['check_space', "space"]:
+        check_space(client)
+    elif args.command == 'get_log_files':
+        get_log_files(client, ExperimentType.LOCAL)
+    elif args.command in ['clean_experiment_dir', "clean"]:
+        clean_experiment_dir(client, ExperimentType.LOCAL)
+
+
 def main():
     server_ip = env_values.get("SERVER_IP")
     username = env_values.get("USERNAME")
     password = env_values.get("PASSWORD")
 
     client = RemoteSSHClient(server_ip, username, password)
-    get_local_exp_data(client)
-    # check_space(client)
-    # get_log_files(client, ExperimentType.LOCAL)
-    # clean_experiment_dir(client, ExperimentType.LOCAL)
+    execute_cli_command(client)
 
 
 if __name__ == '__main__':
