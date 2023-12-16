@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get a list of directories created more than 2 days ago and match the naming pattern
-directories=$(find . -maxdepth 1 -type d -mtime +2 -name 'run.*' | grep -E '^\.\/run\.[^/.]+$')
+directories=$(find . -maxdepth 1 -type d -mtime +1 -name 'run.*' | grep -E '^\.\/run\.[^/.]+$')
 
 # Loop through the directories and perform the cleaning
 for dir in $directories; do
