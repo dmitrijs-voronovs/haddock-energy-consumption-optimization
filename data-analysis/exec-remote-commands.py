@@ -166,6 +166,10 @@ def check_space(client):
     client.execute_commands(["df -h"])
 
 
+def check_folder_space(client):
+    client.execute_commands([f"cd {LOCAL_EXP_DIR}", "pwd", "du -h --max-depth=1 | sort -h"])
+
+
 def execute_cli_command(client):
     parser = argparse.ArgumentParser(description='Remote SSH Client')
     subparsers = parser.add_subparsers(dest='command')
@@ -174,6 +178,8 @@ def execute_cli_command(client):
     get_local_exp_data_parser.add_argument('-e', '--exp', nargs='*',
                                            help='Experiments to get data from, default ["gl6", "gl2_2", "gl5", "gl6_2"] ')
     check_space_parser = subparsers.add_parser('check_space', aliases=["space"], help='Check space')
+    check_folders_space_parser = subparsers.add_parser('check_folder_space', aliases=["folder-space"],
+                                                       help='Check folders space')
     get_log_files_parser = subparsers.add_parser('get_log_files', help='Get log files')
     get_log_files_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
     clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
@@ -184,6 +190,8 @@ def execute_cli_command(client):
         get_local_exp_data(client, args.exp)
     elif args.command in ['check_space', "space"]:
         check_space(client)
+    elif args.command in ['check_folder_space', "folder-space"]:
+        check_folder_space(client)
     elif args.command == 'get_log_files':
         get_log_files(client, ExperimentType.LOCAL)
     elif args.command in ['clean_experiment_dir', "clean"]:
