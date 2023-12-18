@@ -1,9 +1,9 @@
 Workflow,mode,ncores,node,count
-daa,local,4,gl2,8
+daa,local,4,gl2,10
 daa,local,8,gl2,9
-daa,local,4,gl5,1
-daa,local,8,gl5,1
-daa,local,16,gl5,1
+daa,local,4,gl5,2
+daa,local,8,gl5,3
+daa,local,16,gl5,2
 daa,local,32,gl5,1
 daa,local,4,gl6,9
 daa,local,8,gl6,7
@@ -12,6 +12,7 @@ daa,local,32,gl6,10
 dpp,local,4,gl2,10
 dpp,local,8,gl2,9
 dpp,local,8,gl5,2
+dpp,local,16,gl5,1
 dpp,local,32,gl5,2
 dpp,local,4,gl6,8
 dpp,local,8,gl6,8
