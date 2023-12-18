@@ -178,7 +178,7 @@ def execute_cli_command(client):
     get_local_exp_data_parser.add_argument('-e', '--exp', nargs='*',
                                            help='Experiments to get data from, default ["gl6", "gl2_2", "gl5", "gl6_2"] ')
     check_space_parser = subparsers.add_parser('check_space', aliases=["space"], help='Check space')
-    check_folders_space_parser = subparsers.add_parser('check_folder_space', aliases=["folder-space"],
+    check_folders_space_parser = subparsers.add_parser('check_folder_space', aliases=["dir-space"],
                                                        help='Check folders space')
     get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
     get_log_files_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
@@ -190,7 +190,7 @@ def execute_cli_command(client):
         get_local_exp_data(client, args.exp)
     elif args.command in ['check_space', "space"]:
         check_space(client)
-    elif args.command in ['check_folder_space', "folder-space"]:
+    elif args.command in ['check_folder_space', "dir-space"]:
         check_folder_space(client)
     elif args.command in ['get_log_files', "get-logs"]:
         get_log_files(client, ExperimentType.LOCAL)
