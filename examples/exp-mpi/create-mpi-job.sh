@@ -1,4 +1,4 @@
-#!/bin/bash/
+#!/bin/bash
 
 workflow=$1
 
@@ -9,8 +9,6 @@ job_template="template/mpi-template.job"
 cfg_template_ncores="___NCORES___"
 cfg_template_nodes="___NODES___"
 cfg_template_tasks_per_node="___TASKS_PER_NODE___"
-cfg_template_node="___NODE___"
-cfg_template_trial="___TRIAL___"
 cfg_template_run_dir="___RUNDIR___"
 job_template_cinfing_file="___CONFIG_FILE___"
 

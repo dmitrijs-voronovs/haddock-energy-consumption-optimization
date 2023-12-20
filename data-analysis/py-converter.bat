@@ -1,0 +1,1 @@
+jupyter nbconvert --to python parsing.ipynb && python.exe parsing.py

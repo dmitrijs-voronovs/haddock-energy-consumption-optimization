@@ -1,0 +1,69 @@
+[2023-12-16 05:14:58,682 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2023-12-16 05:14:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2023-12-16 05:15:05,574 libworkflow INFO] Reading instructions step 0_topoaa
+[2023-12-16 05:15:05,575 libworkflow INFO] Reading instructions step 1_rigidbody
+[2023-12-16 05:15:05,575 libworkflow INFO] Reading instructions step 2_caprieval
+[2023-12-16 05:15:05,575 libworkflow INFO] Reading instructions step 3_seletop
+[2023-12-16 05:15:05,575 libworkflow INFO] Reading instructions step 4_caprieval
+[2023-12-16 05:15:05,575 libworkflow INFO] Reading instructions step 5_flexref
+[2023-12-16 05:15:05,576 libworkflow INFO] Reading instructions step 6_caprieval
+[2023-12-16 05:15:05,576 libworkflow INFO] Reading instructions step 7_emref
+[2023-12-16 05:15:05,577 libworkflow INFO] Reading instructions step 8_caprieval
+[2023-12-16 05:15:05,577 libworkflow INFO] Reading instructions step 9_clustfcc
+[2023-12-16 05:15:05,577 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2023-12-16 05:15:05,577 libworkflow INFO] Reading instructions step 11_caprieval
+[2023-12-16 05:15:05,671 base_cns_module INFO] Running [topoaa] module
+[2023-12-16 05:15:05,671 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2023-12-16 05:15:05,678 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+[2023-12-16 05:15:05,793 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+[2023-12-16 05:15:05,793 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2023-12-16 05:15:05,800 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+[2023-12-16 05:15:05,924 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+[2023-12-16 05:15:05,924 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2023-12-16 05:15:05,925 libutil INFO] Selected 2 cores to process 2 jobs, with 32 maximum available cores.
+[2023-12-16 05:15:05,925 libparallel INFO] Using 2 cores
+[2023-12-16 05:15:10,876 libparallel INFO] >> /4G6K_fv.inp completed 50% 
+[2023-12-16 05:15:10,877 libparallel INFO] >> /4I1B-matched.inp completed 100% 
+[2023-12-16 05:15:10,877 libparallel INFO] 2 tasks finished
+[2023-12-16 05:15:10,877 __init__ INFO] [topoaa] CNS jobs have finished
+[2023-12-16 05:15:10,927 base_cns_module INFO] Module [topoaa] finished.
+[2023-12-16 05:15:10,927 __init__ INFO] [topoaa] took 5 seconds
+[2023-12-16 05:15:12,038 base_cns_module INFO] Running [rigidbody] module
+[2023-12-16 05:15:12,041 __init__ INFO] [rigidbody] crossdock=true
+[2023-12-16 05:15:12,041 __init__ INFO] [rigidbody] Preparing jobs...
+[2023-12-16 05:26:12,787 __init__ INFO] [rigidbody] Running CNS Jobs n=10000
+[2023-12-16 05:26:12,788 libutil INFO] Selected 4 cores to process 10000 jobs, with 32 maximum available cores.
+[2023-12-16 05:26:12,850 libparallel INFO] Using 4 cores
+Process Worker-6:
+Traceback (most recent call last):
+  File "/home/greenBeans/anaconda3/envs/haddock3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libparallel.py", line 28, in run
+    task.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libsubprocess.py", line 192, in run
+    p.kill()
+OSError: [Errno 28] No space left on device
+Process Worker-5:
+Traceback (most recent call last):
+  File "/home/greenBeans/anaconda3/envs/haddock3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libparallel.py", line 28, in run
+    task.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libsubprocess.py", line 192, in run
+    p.kill()
+OSError: [Errno 28] No space left on device
+Process Worker-4:
+Traceback (most recent call last):
+  File "/home/greenBeans/anaconda3/envs/haddock3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/home/greenBean

@@ -1,0 +1,5 @@
+Coolind down for 5 minutes...
+mkdir: cannot create directory ‘run.dpp-local-nc8_gl2-6.cfg.info’: No space left on device
+/var/spool/slurmd/job42939/slurm_script: line 8: run.dpp-local-nc8_gl2-6.cfg.info/nodes_info.before.txt: No such file or directory
+/var/spool/slurmd/job42939/slurm_script: line 9: run.dpp-local-nc8_gl2-6.cfg.info/proc_info.before.txt: No such file or directory
+Collecting info for run.dpp-local-nc8_gl2-6.cfg (before run) done. Ready to run.

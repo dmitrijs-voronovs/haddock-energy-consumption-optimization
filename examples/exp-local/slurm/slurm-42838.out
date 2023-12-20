@@ -1,0 +1,72 @@
+[2023-12-02 08:38:37,671 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2023-12-02 08:38:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2023-12-02 08:38:42,373 libworkflow INFO] Reading instructions step 0_topoaa
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 1_rigidbody
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 2_caprieval
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 3_seletop
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 4_caprieval
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 5_flexref
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 6_caprieval
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 7_emref
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 8_caprieval
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 9_clustfcc
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2023-12-02 08:38:42,374 libworkflow INFO] Reading instructions step 11_caprieval
+[2023-12-02 08:38:42,458 base_cns_module INFO] Running [topoaa] module
+[2023-12-02 08:38:42,458 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2023-12-02 08:38:42,464 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-local/run.daa-local-nc8_gl2-6/00_topoaa/4G6K_fv.inp
+4G6K_fv.inp
+[2023-12-02 08:38:42,568 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+4G6K_fv.out
+[2023-12-02 08:38:42,568 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2023-12-02 08:38:42,573 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-local/run.daa-local-nc8_gl2-6/00_topoaa/4I1B-matched.inp
+4I1B-matched.inp
+[2023-12-02 08:38:42,704 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+4I1B-matched.out
+[2023-12-02 08:38:42,704 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2023-12-02 08:38:42,704 libutil INFO] Selected 2 cores to process 2 jobs, with 8 maximum available cores.
+[2023-12-02 08:38:42,704 libparallel INFO] Using 2 cores
+4I1B-matched.inp
+4G6K_fv.inp
+[2023-12-02 08:38:47,179 libparallel INFO] >> /4G6K_fv.inp completed 50% 
+[2023-12-02 08:38:47,179 libparallel INFO] >> /4I1B-matched.inp completed 100% 
+[2023-12-02 08:38:47,179 libparallel INFO] 2 tasks finished
+[2023-12-02 08:38:47,179 __init__ INFO] [topoaa] CNS jobs have finished
+[2023-12-02 08:38:47,228 base_cns_module INFO] Module [topoaa] finished.
+[2023-12-02 08:38:47,228 __init__ INFO] [topoaa] took 5 seconds
+[2023-12-02 08:38:48,236 base_cns_module INFO] Running [rigidbody] module
+[2023-12-02 08:38:48,238 __init__ INFO] [rigidbody] crossdock=true
+[2023-12-02 08:38:48,238 __init__ INFO] [rigidbody] Preparing jobs...
+[2023-12-02 08:50:02,920 __init__ INFO] [rigidbody] Running CNS Jobs n=10000
+[2023-12-02 08:50:02,921 libutil INFO] Selected 8 cores to process 10000 jobs, with 8 maximum available cores.
+[2023-12-02 08:50:02,932 libparallel INFO] Using 8 cores
+Process Worker-7:
+Traceback (most recent call last):
+  File "/home/greenBeans/anaconda3/envs/haddock3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libparallel.py", line 28, in run
+    task.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libsubprocess.py", line 199, in run
+    gzip_files(self.output_file, remove_original=True)
+  File "/home/greenBeans/haddock3/src/haddock/libs/libio.py", line 330, in gzip_files
+    content = fin.read(block_size)
+  File "/home/greenBeans/anaconda3/envs/haddock3/lib/python3.9/gzip.py", line 343, in close
+    myfileobj.close()
+OSError: [Errno 28] No space left on device
+rigidbody_5001.inp
+rigidbody_5002.inp
+rigidbody_5003.inp
+rigidbody_5004.inp
+rigidbody_500

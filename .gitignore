@@ -140,17 +140,12 @@ tags
 ## Specific to this project
 bin/cns
 # ignore generated data of the examples
-examples/*/run*
-!examples/*/run*.sh
-!examples/*/run.*
-examples/*/run.*/*
-!examples/*/run.*/log
-!examples/*/run.*.info/*.txt
-examples/*/capriscoring-test/*
-examples/thirdparty/*/run*
+
+
 
 # ignore generated data for docs
 docs/modules/*/params/*.rst
 docs/modules/general_module_params.rst
 docs/reference/core/mandatory_parameters.rst
 haddock3-docs/
+/.env

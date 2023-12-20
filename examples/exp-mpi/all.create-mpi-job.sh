@@ -1,4 +1,4 @@
-#!/bin/bash/ 
+#!/bin/bash
 sh create-mpi-job.sh dpp 2 2 1 gl2 1
 sh create-mpi-job.sh dpp 2 2 1 gl2 2
 sh create-mpi-job.sh dpp 2 2 1 gl2 3
