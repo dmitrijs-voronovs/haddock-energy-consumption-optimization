@@ -1,0 +1,4 @@
+JobID                                                   JobName    Cluster        NodeList      State               Start                 End ConsumedEnergy     AveRSS    AveDiskRead   AveDiskWrite  AveVMSize    Elapsed      NCPUS 
+------------ -------------------------------------------------- ---------- --------------- ---------- ------------------- ------------------- -------------- ---------- -------------- -------------- ---------- ---------- ---------- 
+43813                                  daa-local-nc8_gl2-20.cfg    gl2_gl4   None assigned    PENDING             Unknown             Unknown              0                                                       00:00:00          8 
+43816                                  dpp-local-nc8_gl2-20.cfg    gl2_gl4   None assigned    PENDING             Unknown             Unknown              0                                                       00:00:00          8 
