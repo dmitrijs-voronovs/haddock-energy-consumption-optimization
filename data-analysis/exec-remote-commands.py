@@ -22,7 +22,7 @@ def get_exp_dir(exp: 'ExperimentType'):
 
 LOCAL_EXP_DIR = get_exp_dir(ExperimentType.LOCAL)
 
-env_values = dotenv_values("../.env.gl2")
+env_values = dotenv_values("../.env")
 
 
 class RemoteSSHClient:
@@ -81,7 +81,7 @@ class RemoteSSHClient:
         return str(filepath).replace("\\", "/")
 
     def execute_commands(self, commands) -> str:
-        command = "; ".join(commands)
+        command = " && ".join(commands)
         try:
             # Execute a command (replace this with your script execution)
             stdin, stdout, stderr = self.ssh_client.exec_command(command)
@@ -97,13 +97,14 @@ class RemoteSSHClient:
 
 def get_local_exp_data(client, experiments=None):
     if experiments is None:
-        experiments = ["gl5"]
+        experiments = ["gl2_3", "gl5_2", "gl6_3"]
 
     client.execute_commands([
                                 f'cd {LOCAL_EXP_DIR}',
                             ] + [f'sh check-local-exp-{experiment}.sh' for experiment in experiments])
     client.get_files([
-        f"{LOCAL_EXP_DIR}/local-exp-{experiment}-data.txt" for experiment in experiments])
+        f"{LOCAL_EXP_DIR}/local-exp-{experiment}-data.txt" for experiment in experiments],
+        f"{ExperimentType.LOCAL.value}/")
 
 
 def clean_experiment_dir(client, exp: 'ExperimentType'):
@@ -170,6 +171,51 @@ def check_folder_space(client):
     client.execute_commands([f"cd {LOCAL_EXP_DIR}", "pwd", "du -h --max-depth=1 | sort -h"])
 
 
+# TODO: adjust later
+def prepare_experiment_dir(client, exp: 'ExperimentType'):
+    exp_dir = get_exp_dir(exp)
+    template_folder = f"{exp_dir}/template"
+    # get all host files under template folder
+    files = Path(template_folder).glob("**/*")
+
+    client.put_files([
+        f"{HOST_EXPERIMENT_FOLDER}/{exp.value}/",
+    ], template_folder)
+
+
+def run_experiment(client, exp_id: str):
+    # prepare_experiment_dir(client, ExperimentType.LOCAL)
+
+    exp_host_folder = f"{HOST_EXPERIMENT_FOLDER}/{ExperimentType.LOCAL.value}"
+    exp_folder = get_exp_dir(ExperimentType.LOCAL)
+
+    create_jobs_script = f"all.create-local-jobs.{exp_id}.sh"
+    run_experiment_script = f"run-local-exp-{exp_id}.sh"
+    client.put_files(
+        [f"{exp_host_folder}/{file}" for file in ["create-local-job.sh", create_jobs_script, run_experiment_script]],
+        exp_folder)
+
+    client.execute_commands([
+        f"echo running experiment '{exp_id}' on $(hostname)",
+        f"cd {exp_folder}",
+        f"sh {create_jobs_script}",
+        "sleep 2",
+        "echo activate conda",
+        "source $HOME/anaconda3/bin/activate",
+        "conda activate haddock3",
+        "echo run experiment",
+        f"sh {run_experiment_script}",
+        "sinfo"
+    ])
+
+
+def get_credentials_for_node(node) -> (str, str, str):
+    server_ip = env_values.get(f"{node.upper()}-SERVER_IP")
+    username = env_values.get("USERNAME")
+    password = env_values.get("PASSWORD")
+    return server_ip, username, password
+
+
 def execute_cli_command(client):
     parser = argparse.ArgumentParser(description='Remote SSH Client')
     subparsers = parser.add_subparsers(dest='command')
@@ -177,14 +223,21 @@ def execute_cli_command(client):
                                                       help='Get local experiment data')
     get_local_exp_data_parser.add_argument('-e', '--exp', nargs='*',
                                            help='Experiments to get data from, default ["gl6", "gl2_2", "gl5", "gl6_2"] ')
-    check_space_parser = subparsers.add_parser('check_space', aliases=["space"], help='Check space')
-    check_folders_space_parser = subparsers.add_parser('check_folder_space', aliases=["dir-space"],
-                                                       help='Check folders space')
     get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
     get_log_files_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
     clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
                                                         help='Clean experiment directory')
     clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
+    run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
+    run_experiment_parser.add_argument('-e', '--exp', type=str, help='Experiment ID (i.e. "gl2" or "gl5_2"')
+
+    subparsers.add_parser('check_space', aliases=["space"], help='Check space')
+    subparsers.add_parser('check_folder_space', aliases=["dir-space"],
+                          help='Check folders space')
+    subparsers.add_parser('sinfo', help='sinfo')
+    subparsers.add_parser('squeue', help='squeue')
+    subparsers.add_parser('scancel', help='scancel')
+
     args = parser.parse_args()
     if args.command in ['get_local_exp_data', "get-data"]:
         get_local_exp_data(client, args.exp)
@@ -192,18 +245,24 @@ def execute_cli_command(client):
         check_space(client)
     elif args.command in ['check_folder_space', "dir-space"]:
         check_folder_space(client)
+    elif args.command == 'sinfo':
+        client.execute_commands(["sinfo"])
+    elif args.command == 'squeue':
+        client.execute_commands(["squeue"])
+    elif args.command == 'scancel':
+        client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
     elif args.command in ['get_log_files', "get-logs"]:
         get_log_files(client, ExperimentType.LOCAL)
     elif args.command in ['clean_experiment_dir', "clean"]:
         clean_experiment_dir(client, ExperimentType.LOCAL)
+    elif args.command in ['run_experiment', "run-exp"]:
+        node_name = args.exp.split('_')[0]
+        node_client = RemoteSSHClient(*get_credentials_for_node(node_name))
+        run_experiment(node_client, args.exp)
 
 
 def main():
-    server_ip = env_values.get("SERVER_IP")
-    username = env_values.get("USERNAME")
-    password = env_values.get("PASSWORD")
-
-    client = RemoteSSHClient(server_ip, username, password)
+    client = RemoteSSHClient(*get_credentials_for_node("gl4"))
     execute_cli_command(client)
 
 

@@ -38,7 +38,7 @@ class Experiment(ABC):
         commands = [self.convert_config_to_create_workflow_command(config) for config in
                     self.configs + [self.warmup_config]]
 
-        with open(f"{name}.sh", "w") as file:
+        with open(f"{name}.sh", "w", newline='\n') as file:
             file.writelines("#!/bin/bash \n")
             file.writelines("\n".join(commands))
 

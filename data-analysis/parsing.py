@@ -1,26 +1,33 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[217]:
+# In[195]:
 
+
+from pathlib import Path
 
 import pandas as pd
 import regex as re
 from IPython.core.display_functions import display
 
 
-# In[218]:
+# In[196]:
 
 
-data1 = pd.read_fwf('local-exp-gl2-data.txt', skiprows=[1], index_col=None)
-data2 = pd.read_fwf('local-exp-gl6-data.txt', skiprows=[1], index_col=None)
-data3 = pd.read_fwf('local-exp-gl5-data.txt', skiprows=[1], index_col=None)
-data4 = pd.read_fwf('local-exp-gl2_2-data.txt', skiprows=[1], index_col=None)
-data = pd.concat([data1, data2, data3, data4], axis=0, ignore_index=True)
+data_dir = "./exp-local"
+
+
+def import_data(dir):
+    all_files = Path(dir).glob('*.txt')
+    all_data = [pd.read_fwf(path, skiprows=[1], index_col=None) for path in all_files]
+    return pd.concat(all_data, axis=0, ignore_index=True)
+
+
+data = import_data(data_dir)
 data
 
 
-# In[219]:
+# In[197]:
 
 
 def convert_to_numeric(value):
@@ -48,7 +55,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[220]:
+# In[198]:
 
 
 def filter_out_completed_jobs(dat):
@@ -77,7 +84,7 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[221]:
+# In[199]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
@@ -102,66 +109,14 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[222]:
+# In[200]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
 
 
-# In[223]:
-
-
-gl2_trials = data[data.node == "gl2"].sort_values(
-    by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    # trials_count=('trial', 'count'),
-    # trials_list=('trial', lambda x: x.tolist()),
-    # trials_left=('trial', lambda x: list(set(range(1, 11)) - set(x.tolist()))),
-    trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
-).reset_index()
-gl2_trials
-
-
-# In[224]:
-
-
-gl2_trials_left = data_completed[data_completed.node == "gl2"].sort_values(
-    by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
-).reset_index()
-gl2_trials_left.to_csv('gl2_trials_left.csv', index=False, header=True)
-gl2_trials_left
-
-
-# In[225]:
-
-
-gl6_trials_left = data_completed[data_completed.node == "gl6"].sort_values(
-    by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
-).reset_index()
-gl6_trials_left.to_csv('gl6_trials_left.csv', index=False, header=True)
-gl6_trials_left
-
-
-# In[226]:
-
-
-gl6_trials_failed = data[data.node == "gl6"].sort_values(
-    by=['Workflow', "node", "ncores", "trial"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    trials_left_count=('trial', lambda x: 10 - len(x.tolist())),
-).reset_index()
-start_idx = 11
-gl6_trials_failed['code'] = gl6_trials_failed.apply(lambda
-                                                        x: f'[LocalConfig("{x.Workflow}", "{x.node}", trial, {x.ncores}) for trial in range({start_idx}, {start_idx} + {x.trials_left_count})]',
-                                                    axis=1)
-# LocalConfig("dpp", "gl5", trial, 32) for trial in range(11, 11 + 4)]
-gl6_trials_failed.to_csv('gl6_trials_failed.csv', index=False, header=True)
-display(gl6_trials_failed)
-print(" + ".join(gl6_trials_failed.code.to_list()))
-
-
-# In[227]:
+# In[205]:
 
 
 collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).describe().reset_index()
@@ -170,18 +125,100 @@ collected_data_stats.to_csv(
 collected_data_stats
 
 
-# In[228]:
+# In[206]:
 
 
 # All collected data
-collected_data = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).size().reset_index(
-    name='count').sort_values(
-    by=['Workflow', "node", "ncores"])
+collected_data = data_completed.sort_values(
+    by=['Workflow', "node", "ncores"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
+    n_trials=('trial', 'count'), trials_list=('trial', lambda x: x.tolist())).reset_index()
 collected_data.to_csv('local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[229]:
+# In[207]:
+
+
+def to_local_config_class(workflow, node, trial, ncores, warmup=False):
+    warmup_arg = ", True" if warmup else ""
+    return f'LocalConfig("{workflow}", "{node}", {trial}, {ncores}{warmup_arg})'
+
+
+def to_configs_array(x, start_idx):
+    return f'[{to_local_config_class(x.Workflow, x.node, "trial", x.ncores)} for trial in range({start_idx}, {start_idx} + {x.trials_left_count})]'
+
+
+def max_ncores(node):
+    if node == 'gl2':
+        return 8
+    return 32
+
+
+def get_configs_code_for_new_experiment(node, target_total_n, start_idx):
+    exp_data = collected_data[(collected_data.node == node) & (
+            collected_data.n_trials < target_total_n)]
+    exp_data['trials_left_count'] = target_total_n - exp_data.n_trials
+    exp_data['code'] = exp_data.apply(to_configs_array, axis=1, start_idx=start_idx)
+    first = exp_data[exp_data.Workflow == 'dpp'].sort_values(by=['ncores'], ascending=False).iloc[0]
+    return " + ".join(exp_data.code.to_list()), to_local_config_class(first.Workflow, first.node, start_idx,
+                                                                      max_ncores(node), warmup=True)
+
+
+# In[208]:
+
+
+TOTAL_EXPERIMENTS_PER_EPOCH = 10
+
+
+def get_class_name(node, epoch):
+    return f"LocalExperiment{node.upper()}_{epoch}"
+
+
+def generate_class(node, epoch, target_total_n):
+    configs, warmup_config = get_configs_code_for_new_experiment(node, target_total_n,
+                                                                 (epoch - 1) * TOTAL_EXPERIMENTS_PER_EPOCH)
+    class_definition = \
+        f"""
+from typing import List
+
+from examples.domain import LocalExperiment
+from examples.domain.Config import Config
+from examples.domain.LocalConfig import LocalConfig
+
+
+class {get_class_name(node, epoch)}(LocalExperiment):
+    def create_configs(self) -> List[Config]:
+        return {configs}
+
+    def create_warmup_config(self) -> Config:
+        return {warmup_config}
+"""
+    return class_definition if configs else None
+
+
+# In[209]:
+
+
+# new experiment epochs
+def generate_experiment_classes(exp_epochs):
+    for node, epoch in exp_epochs.items():
+        class_code = generate_class(node, epoch, TOTAL_EXPERIMENTS_PER_EPOCH)
+        if class_code is None:
+            continue
+
+        file_path = f"../examples/domain/{get_class_name(node, epoch)}.py"
+        with open(file_path, 'w') as file:
+            file.write(class_code)
+
+
+generate_experiment_classes({
+    "gl2": 3,
+    "gl6": 3,
+    "gl5": 2
+})
+
+
+# In[210]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -190,19 +227,19 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[230]:
+# In[211]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[231]:
+# In[212]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[232]:
+# In[213]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -213,7 +250,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 fig.savefig('boxplot.png')
 
 
-# In[233]:
+# In[214]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
@@ -232,7 +269,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('boxplot-overview-by-workflows.png')
 
 
-# In[234]:
+# In[215]:
 
 
 fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(26, 10))

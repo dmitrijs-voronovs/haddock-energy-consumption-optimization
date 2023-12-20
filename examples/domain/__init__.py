@@ -6,6 +6,9 @@ from .LocalConfig import LocalConfig
 from .LocalExperiment import LocalExperiment
 from .LocalExperimentGL2 import LocalExperimentGL2
 from .LocalExperimentGL2_2 import LocalExperimentGL2_2
+from .LocalExperimentGL2_3 import LocalExperimentGL2_3
 from .LocalExperimentGL5 import LocalExperimentGL5
+from .LocalExperimentGL5_2 import LocalExperimentGL5_2
 from .LocalExperimentGL6 import LocalExperimentGL6
 from .LocalExperimentGL6_2 import LocalExperimentGL6_2
+from .LocalExperimentGL6_3 import LocalExperimentGL6_3

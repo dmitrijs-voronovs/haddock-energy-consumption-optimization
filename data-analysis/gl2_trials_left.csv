@@ -1,5 +1,0 @@
-Workflow,mode,ncores,node,trials_left_count
-daa,local,4,gl2,0
-daa,local,8,gl2,1
-dpp,local,4,gl2,0
-dpp,local,8,gl2,1

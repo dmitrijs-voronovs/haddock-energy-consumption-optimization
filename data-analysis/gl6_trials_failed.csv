@@ -1,9 +1,0 @@
-Workflow,mode,ncores,node,trials_left_count,code
-daa,local,4,gl6,1,"[LocalConfig(""daa"", ""gl6"", trial, 4) for trial in range(11, 11 + 1)]"
-daa,local,8,gl6,3,"[LocalConfig(""daa"", ""gl6"", trial, 8) for trial in range(11, 11 + 3)]"
-daa,local,16,gl6,0,"[LocalConfig(""daa"", ""gl6"", trial, 16) for trial in range(11, 11 + 0)]"
-daa,local,32,gl6,0,"[LocalConfig(""daa"", ""gl6"", trial, 32) for trial in range(11, 11 + 0)]"
-dpp,local,4,gl6,2,"[LocalConfig(""dpp"", ""gl6"", trial, 4) for trial in range(11, 11 + 2)]"
-dpp,local,8,gl6,2,"[LocalConfig(""dpp"", ""gl6"", trial, 8) for trial in range(11, 11 + 2)]"
-dpp,local,16,gl6,1,"[LocalConfig(""dpp"", ""gl6"", trial, 16) for trial in range(11, 11 + 1)]"
-dpp,local,32,gl6,1,"[LocalConfig(""dpp"", ""gl6"", trial, 32) for trial in range(11, 11 + 1)]"
