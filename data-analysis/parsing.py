@@ -125,13 +125,13 @@ collected_data_stats.to_csv(
 collected_data_stats
 
 
-# In[8]:
+# In[22]:
 
 
 # All collected data
 collected_data = data_completed.sort_values(
     by=['Workflow', "node", "ncores"]).groupby(['Workflow', 'mode', 'ncores', 'node']).agg(
-    n_trials=('trial', 'count'), trials_list=('trial', lambda x: x.tolist())).reset_index()
+    n_trials=('trial', 'count'), trials_list=('trial', lambda x: sorted(x.tolist()))).reset_index()
 collected_data.to_csv('local_exp_overview.csv', index=False, header=True)
 collected_data
 
