@@ -1,0 +1,14 @@
+[2023-12-20 15:31:50,945 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2023-12-20 15:31:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2023-12-20 15:31:50,968 prepare_run INFO] The 'run_dir' 'run.dpp-local-nc32_gl6-20.warmup' exists and is not empty. We can't work on it unless you provide the `--restart` option. If you want to start a run from scratch, indicate a new folder, or manually delete this one first, or use `--restart 0`.
+Finished at 20/12/2023 15:31:50. For any help contact us at https://github.com/haddocking/haddock3/issues. Ciao! Au revoir! Dovidenia!.
