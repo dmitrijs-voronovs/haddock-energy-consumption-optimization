@@ -230,6 +230,8 @@ def execute_cli_command(client):
     clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
     run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
     run_experiment_parser.add_argument('-e', '--exp', type=str, help='Experiment ID (i.e. "gl2" or "gl5_2"')
+    execute_parser = subparsers.add_parser('execute', help='Execute a custom command')
+    execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
 
     subparsers.add_parser('check_space', aliases=["space"], help='Check space')
     subparsers.add_parser('check_folder_space', aliases=["dir-space"],
@@ -253,6 +255,8 @@ def execute_cli_command(client):
         client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
     elif args.command in ['get_log_files', "get-logs"]:
         get_log_files(client, ExperimentType.LOCAL)
+    elif args.command == 'execute':
+        client.execute_commands([args.cmd])
     elif args.command in ['clean_experiment_dir', "clean"]:
         clean_experiment_dir(client, ExperimentType.LOCAL)
     elif args.command in ['run_experiment', "run-exp"]:
