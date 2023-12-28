@@ -1,9 +1,9 @@
 import argparse
 from pathlib import Path
 
-from data_analysis.CLI.Constants import ExperimentType, LOCAL_EXP_DIR, get_exp_dir, HOST_EXPERIMENT_FOLDER
-from data_analysis.CLI.CredentialManager import CredentialManager
-from data_analysis.CLI.RemoteSSHClient import RemoteSSHClient
+from .Constants import ExperimentType, LOCAL_EXP_DIR, get_exp_dir, HOST_EXPERIMENT_FOLDER
+from .CredentialManager import CredentialManager
+from .RemoteSSHClient import RemoteSSHClient
 
 
 class CLICommandHandler:

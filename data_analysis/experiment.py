@@ -1,6 +1,6 @@
-from data_analysis.CLI.CLICommandHandler import CLICommandHandler
-from data_analysis.CLI.CredentialManager import CredentialManager
-from data_analysis.CLI.RemoteSSHClient import RemoteSSHClient
+from CLI.CLICommandHandler import CLICommandHandler
+from CLI.CredentialManager import CredentialManager
+from CLI.RemoteSSHClient import RemoteSSHClient
 
 
 def main():

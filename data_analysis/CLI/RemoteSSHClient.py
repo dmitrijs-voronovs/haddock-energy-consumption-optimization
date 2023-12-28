@@ -3,7 +3,7 @@ from typing import List
 
 import paramiko
 
-from data_analysis.CLI.Constants import SHARED_DIR
+from .Constants import SHARED_DIR
 
 
 class RemoteSSHClient:
