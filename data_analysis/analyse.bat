@@ -1,0 +1,1 @@
+jupyter nbconvert --to python analysis.ipynb && python.exe analysis.py
