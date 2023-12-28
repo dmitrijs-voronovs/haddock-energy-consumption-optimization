@@ -111,7 +111,7 @@ class Experiment(ABC):
 cat > check-{experiment_name}.sh << EOF
 #!/bin/bash
 echo {job_ids}
-sacct -o jobid,jobname%50,cluster,Node,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,elapsed,NCPUS \
+sacct -o jobid,jobname%50,cluster,Node,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS \
     -j {job_ids} \
     > {experiment_name}-data.txt
 cat {experiment_name}-data.txt
