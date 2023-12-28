@@ -104,7 +104,7 @@ class Experiment(ABC):
         dependency = self.__get_formatted_dependency(dependent_job_id)
 
         job_id_extraction_pipe = "| awk '{{print $NF}}'"
-        return f"{id}=$(sbatch --job-name=\"{name}\" -w {node_name} -n {ncores}{dependency} {command} {job_id_extraction_pipe})"
+        return f'{id}=$(sbatch --job-name="{name}" -w {node_name} -n {ncores}{dependency} {command} {job_id_extraction_pipe})'
 
     def __get_check_jobs_command(self, experiment_name, job_ids):
         return f'''
