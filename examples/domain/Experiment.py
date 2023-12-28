@@ -32,7 +32,7 @@ class Experiment(ABC):
 
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
         warmup_suffix = ' warmup' if config.is_warmup else ''
-        return f"sh {self.create_job_script_name} {config.workflow} {config.get_params_for_create_command()} {config.node} {config.trial}{warmup_suffix}"
+        return f"sh {self.create_job_script_name} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
 
     def generate_create_job_script(self, name: str):
         commands = [self.convert_config_to_create_workflow_command(config) for config in
@@ -71,16 +71,16 @@ class Experiment(ABC):
 
             dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
             commands.append(
-                self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_name, 1,
+                self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names, 1,
                                          COLLECT_INFO_BEFORE_SH,
                                          dependent_job_id))
             # TODO: fix config.ncores, as not all of them have ncores defined. Fallback value? Or force ncores in Config
             commands.append(
-                self.__get_slurm_command(job_id, config.name, config.node_name, self.get_ncores(config),
+                self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
                                          f"haddock3 \"{config.name}\"",
                                          job_check_before_id))
             commands.append(
-                self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_name, 1,
+                self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names, 1,
                                          COLLECT_INFO_AFTER_SH,
                                          job_id))
 
@@ -99,12 +99,12 @@ class Experiment(ABC):
             dependency = f" --dependency=afterany:{var_sign}{dependent_job_id}"
         return dependency
 
-    def __get_slurm_command(self, id: str, name: str, node_name: str, ncores: int, command,
+    def __get_slurm_command(self, id: str, name: str, nodes: str, ncores: int, command,
                             dependent_job_id: str = None):
         dependency = self.__get_formatted_dependency(dependent_job_id)
 
         job_id_extraction_pipe = "| awk '{{print $NF}}'"
-        return f'{id}=$(sbatch --job-name="{name}" -w {node_name} -n {ncores}{dependency} {command} {job_id_extraction_pipe})'
+        return f'{id}=$(sbatch --job-name="{name}" -w {nodes} -n {ncores}{dependency} {command} {job_id_extraction_pipe})'
 
     def __get_check_jobs_command(self, experiment_name, job_ids):
         return f'''

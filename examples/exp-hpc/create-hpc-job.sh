@@ -14,13 +14,13 @@ cfg_template_run_dir="___RUNDIR___"
 # get cli arguments
 concat=$2
 queue_limit=$3
-node=$4
+nodes=$4
 trial=$5
 # optional argument for warmup flow
 warmup=$6
 
 #create cfg and job files with ncores in filename
-concat_args="$filename-con${concat}-ql${queue_limit}_$node-$trial"
+concat_args="$filename-con${concat}-ql${queue_limit}_$nodes-$trial"
 if [ -n "$warmup" ]; then
     concat_args="$concat_args.warmup"
 fi
@@ -28,7 +28,7 @@ cfg_file="$concat_args.cfg"
 run_dir="run.$concat_args"
 
 echo $cfg_template 
-echo "filename: $cfg_file, concat: $concat, queue_limit: $queue_limit, node: $node, trial: $trial, run_dir: $run_dir"
+echo "filename: $cfg_file, concat: $concat, queue_limit: $queue_limit, nodes: $nodes, trial: $trial, run_dir: $run_dir"
 
 # copy template files
 cp "$cfg_template" "$cfg_file"

@@ -7,7 +7,7 @@ class HPCConfig(Config):
         self.concat = concat
         self.queue_limit = queue_limit
 
-    def _get_params_for_name(self):
+    def _get_params_for_filename(self):
         return f"con{self.concat}-ql{self.queue_limit}"
 
     def get_params_for_create_command(self):

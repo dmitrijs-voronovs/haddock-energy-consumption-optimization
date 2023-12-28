@@ -6,7 +6,7 @@ class LocalConfig(Config):
         super().__init__("local", workflow, node, trial, is_warmup)
         self.ncores = ncores
 
-    def _get_params_for_name(self):
+    def _get_params_for_filename(self):
         return f"nc{self.ncores}"
 
     def get_params_for_create_command(self):
