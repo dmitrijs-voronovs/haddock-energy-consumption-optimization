@@ -2,7 +2,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import List
 
-from examples.domain.Config import Config
+from examples.domain.config.Config import Config
 
 COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
 COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
@@ -13,6 +13,10 @@ class Experiment(ABC):
         self.create_job_script_name = self.get_create_job_script_name()
         self.configs = self.create_configs()
         self.warmup_config = self.create_warmup_config()
+
+    @abstractmethod
+    def get_ID(self) -> str:
+        pass
 
     @abstractmethod
     def create_configs(self) -> List[Config]:

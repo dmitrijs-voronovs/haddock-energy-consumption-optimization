@@ -4,6 +4,7 @@ from pathlib import Path
 from .Constants import ExperimentType, LOCAL_EXP_DIR, get_exp_dir, HOST_EXPERIMENT_FOLDER
 from .CredentialManager import CredentialManager
 from .RemoteSSHClient import RemoteSSHClient
+from ..experiment import DEFAULT_NODE
 
 
 class CLICommandHandler:
@@ -23,8 +24,10 @@ class CLICommandHandler:
                                                             help='Clean experiment directory')
         clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
-        run_experiment_parser.add_argument('-e', '--exp', type=str, help='Experiment ID (i.e. "gl2" or "gl5_2"')
-        execute_parser = subparsers.add_parser('execute', help='Execute a custom command')
+        run_experiment_parser.add_argument('-e', '--exp', type=str, required=True,
+                                           help='Experiment ID (i.e. "gl2" or "gl5_2"')
+        run_experiment_parser.add_argument('-n', '--node', type=str, required=True, help='Node (i.e. "gl2", "gl5"')
+        execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
         execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
 
         subparsers.add_parser('check_space', aliases=["space"], help='Check space')
@@ -49,14 +52,16 @@ class CLICommandHandler:
             self.client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
         elif args.command in ['get_log_files', "get-logs"]:
             self.get_log_files(ExperimentType.LOCAL)
-        elif args.command == 'execute':
+        elif args.command in ['execute', 'exec']:
             self.client.execute_commands([args.cmd])
         elif args.command in ['clean_experiment_dir', "clean"]:
             self.clean_experiment_dir(ExperimentType.LOCAL)
         elif args.command in ['run_experiment', "run-exp"]:
-            node_name = args.exp.split('_')[0]
-            node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node(node_name))
-            CLICommandHandler(node_client).run_experiment(args.exp)
+            if args.node == DEFAULT_NODE:
+                CLICommandHandler(self.client).run_experiment(args.exp)
+            else:
+                node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node(args.node))
+                CLICommandHandler(node_client).run_experiment(args.exp)
 
     def get_local_exp_data(self, experiments=None):
         if experiments is None:

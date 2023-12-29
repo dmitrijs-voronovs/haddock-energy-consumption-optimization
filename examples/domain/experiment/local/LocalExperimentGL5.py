@@ -1,11 +1,14 @@
 from typing import List
 
 from examples.domain import LocalExperiment
-from examples.domain.Config import Config
-from examples.domain.LocalConfig import LocalConfig
+from examples.domain.config.Config import Config
+from examples.domain.config.LocalConfig import LocalConfig
 
 
 class LocalExperimentGL5(LocalExperiment):
+    def get_ID(self):
+        return "gl5"
+
     def create_configs(self) -> List[Config]:
         return [LocalConfig("daa", "gl5", trial, 2) for trial in range(11, 11 + 9)] + [
             LocalConfig("daa", "gl5", trial, 4) for trial in range(11, 11 + 2)] + [LocalConfig("daa", "gl5", trial, 8)

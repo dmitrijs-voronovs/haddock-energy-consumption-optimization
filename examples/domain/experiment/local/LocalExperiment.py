@@ -1,7 +1,7 @@
 from abc import ABC
 
 from examples.domain import Experiment
-from examples.domain.LocalConfig import LocalConfig
+from examples.domain.config.LocalConfig import LocalConfig
 
 
 class LocalExperiment(Experiment, ABC):

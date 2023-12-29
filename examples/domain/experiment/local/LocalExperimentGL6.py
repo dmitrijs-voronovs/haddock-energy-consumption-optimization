@@ -4,6 +4,9 @@ from examples.domain import Config, LocalConfig, LocalExperiment
 
 
 class LocalExperimentGL6(LocalExperiment):
+    def get_ID(self):
+        return "gl6"
+
     def create_configs(self) -> List[Config]:
         return [
             LocalConfig(workflow, "gl6", trial, ncores)
