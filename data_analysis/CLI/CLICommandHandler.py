@@ -2,9 +2,8 @@ import argparse
 from pathlib import Path
 
 from .Constants import ExperimentType, LOCAL_EXP_DIR, get_exp_dir, HOST_EXPERIMENT_FOLDER
-from .CredentialManager import CredentialManager
+from .CredentialManager import CredentialManager, DEFAULT_NODE
 from .RemoteSSHClient import RemoteSSHClient
-from ..experiment import DEFAULT_NODE
 
 
 class CLICommandHandler:
