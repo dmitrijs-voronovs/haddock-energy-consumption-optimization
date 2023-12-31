@@ -9,6 +9,18 @@ class Mode(Enum):
     MPI = "mpi"
 
 
+class Workflow(Enum):
+    DAA = "daa"
+    DPP = "dpp"
+
+
+class Node(Enum):
+    gl2 = "gl2"
+    gl4 = "gl4"
+    gl5 = "gl5"
+    gl6 = "gl6"
+
+
 class ExperimentFolder(Enum):
     LOCAL = "exp-local"
     HPC = "exp-hpc"
@@ -22,23 +34,8 @@ class ExperimentFolder(Enum):
             raise ValueError(f"{value} is not a valid value in ExperimentType")
 
 
-class Workflow(Enum):
-    DAA = "daa"
-    DPP = "dpp"
-
-
-class Node(Enum):
-    gl2 = "gl2"
-    gl4 = "gl4"
-    gl5 = "gl5"
-    gl6 = "gl6"
-
-
 SHARED_DIR = "/mnt/nfs_share/greenBeansHaddock"
 
 
 def get_abs_remote_exp_dir(exp: 'ExperimentFolder'):
     return f"{SHARED_DIR}/{exp.value}"
-
-
-LOCAL_EXP_DIR = get_abs_remote_exp_dir(ExperimentFolder.LOCAL)
