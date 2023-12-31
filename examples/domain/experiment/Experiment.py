@@ -89,13 +89,12 @@ class Experiment(ABC):
 
             dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
             commands.append(
-                self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names, 1,
-                                         COLLECT_INFO_BEFORE_SH, dependent_job_id))
+                self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
+                                         len(config.nodes), COLLECT_INFO_BEFORE_SH, dependent_job_id))
             commands.append(self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
                                                      f'haddock3 "{config.name}"', job_check_before_id))
-            commands.append(
-                self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names, 1,
-                                         COLLECT_INFO_AFTER_SH, job_id))
+            commands.append(self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
+                                                     len(config.nodes), COLLECT_INFO_AFTER_SH, job_id))
 
         check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
 
@@ -125,7 +124,7 @@ class Experiment(ABC):
 cat > {experiment_name} << EOF
 #!/bin/bash
 echo {job_ids}
-sacct -o jobid,jobname%50,cluster,Node,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS \
+sacct -o jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS \
     -j {job_ids} \
     > {data_file_name}
 cat {data_file_name}

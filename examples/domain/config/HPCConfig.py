@@ -1,4 +1,4 @@
-from examples.domain import Config
+from examples.domain.config.Config import Config
 
 
 class HPCConfig(Config):
