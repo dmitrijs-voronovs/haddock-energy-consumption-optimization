@@ -1,6 +1,8 @@
 from typing import List
 
-from examples.domain import Config, LocalConfig, LocalExperimentGL6
+from examples.domain.config.Config import Config
+from examples.domain.config.LocalConfig import LocalConfig
+from examples.domain.experiment.local.LocalExperimentGL6 import LocalExperimentGL6
 
 
 class LocalExperimentGL6_2(LocalExperimentGL6):
