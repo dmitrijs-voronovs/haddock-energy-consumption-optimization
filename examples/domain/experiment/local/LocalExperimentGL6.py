@@ -1,11 +1,12 @@
 from typing import List
 
-from examples.domain import Config, LocalConfig, LocalExperiment
+from examples.domain import LocalExperiment
+from examples.domain.config.Config import Config
+from examples.domain.config.LocalConfig import LocalConfig
 
 
 class LocalExperimentGL6(LocalExperiment):
-    def get_ID(self):
-        return "gl6"
+    ID = "gl6"
 
     def create_configs(self) -> List[Config]:
         return [

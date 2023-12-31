@@ -14,8 +14,10 @@ class Experiment(ABC):
         self.configs = self.create_configs()
         self.warmup_config = self.create_warmup_config()
 
+    @classmethod
+    @property
     @abstractmethod
-    def get_ID(self) -> str:
+    def ID(cls) -> str:
         pass
 
     @abstractmethod

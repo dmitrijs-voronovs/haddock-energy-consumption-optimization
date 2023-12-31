@@ -6,8 +6,7 @@ from examples.domain.config.LocalConfig import LocalConfig
 
 
 class LocalExperimentGL2_3(LocalExperiment):
-    def get_ID(self):
-        return "gl2_3"
+    ID = "gl2_3"
 
     def create_configs(self) -> List[Config]:
         return [LocalConfig("daa", "gl2", trial, 8) for trial in range(20, 20 + 1)] + [
