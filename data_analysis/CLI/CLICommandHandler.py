@@ -19,10 +19,10 @@ class CLICommandHandler:
         get_local_exp_data_parser.add_argument('-eids', '--exp_ids', nargs='*', default='gl5',
                                                help='Experiments to get data from (i.e "gl6 gl2_2 gl5") ')
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
-        get_log_files_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
+        get_log_files_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
                                                             help='Clean experiment directory')
-        clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, help='Experiment type')
+        clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
                                            help='Experiment ID (i.e. "gl2" or "gl5_2"')
@@ -33,7 +33,7 @@ class CLICommandHandler:
 
         subparsers.add_parser('check_space', aliases=["space"], help='Check space')
         check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"], help='Check folders space')
-        check_dir_space.add_argument('-e', '--exp', type=str, help='Experiment Folder')
+        check_dir_space.add_argument('-e', '--exp', required=True, type=str, help='Experiment Folder')
 
         subparsers.add_parser('sinfo', help='sinfo')
         subparsers.add_parser('squeue', help='squeue')
