@@ -1,14 +1,19 @@
 import argparse
+import os
+import sys
 from pathlib import Path
 
-from .Constants import ExperimentFolder, get_abs_remote_exp_dir, HOST_EXPERIMENT_FOLDER
+sys.path.append(os.path.pardir)
+
+from examples import NameRegistry
+from .Constants import ExperimentFolder, HOST_EXPERIMENT_FOLDER
 from .CredentialManager import CredentialManager, DEFAULT_NODE
 from .RemoteSSHClient import RemoteSSHClient
 
 
 class CLICommandHandler:
     def __init__(self, client):
-        self.client = client
+        self.client: 'RemoteSSHClient' = client
 
     def execute_cli_command(self):
         parser = argparse.ArgumentParser(description='Remote SSH Client')
@@ -25,7 +30,7 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
-                                           help='Experiment ID (i.e. "gl2" or "gl5_2"')
+                                           help='Experiment ID (i.e. "gl2", "gl5_2"')
         run_experiment_parser.add_argument('-n', '--node', type=str, required=True, help='Node (i.e. "gl2", "gl5"')
         run_experiment_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment Folder')
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
@@ -67,25 +72,26 @@ class CLICommandHandler:
                 CLICommandHandler(node_client).run_experiment(exp_dir, args.exp_id)
 
     def get_local_exp_data(self, exp: 'ExperimentFolder', experiment_ids):
-        exp_dir = get_abs_remote_exp_dir(exp)
+        exp_dir = ExperimentFolder.dir(exp)
         self.client.execute_commands(
-            [f'cd {exp_dir}', ] + [f'sh check-local-exp-{experiment}.sh' for experiment in experiment_ids])
-        self.client.get_files([f"{exp_dir}/local-exp-{experiment}-data.txt" for experiment in experiment_ids],
-                              f"{ExperimentFolder.LOCAL.value}/")
+            [f'cd {exp_dir}'] + [f'sh {NameRegistry.check_job_script(eid)}' for eid in experiment_ids])
+        self.client.get_files(
+            [ExperimentFolder.dir(exp, NameRegistry.experiment_data_filename(eid)) for eid in experiment_ids],
+            ExperimentFolder.analysis_dir(exp, 'data'))
 
     def clean_experiment_dir(self, exp: 'ExperimentFolder'):
-        exp_dir = get_abs_remote_exp_dir(exp)
+        exp_dir = ExperimentFolder.dir(exp)
         self.client.put_files([f"{HOST_EXPERIMENT_FOLDER}/clean.sh", ], exp_dir)
         self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
 
     def get_haddock_log_files(self, exp: 'ExperimentFolder', subdir='runs'):
-        exp_dir = get_abs_remote_exp_dir(exp)
+        exp_dir = ExperimentFolder.dir(exp)
         all_directories = self.client.execute_commands([f'cd {exp_dir}',  # list directories that have pattern run.*
                                                         'ls -d run.*/', ]).splitlines()
 
         for directory in all_directories:
             directory = directory.strip("/")
-            destination_dir = f"{HOST_EXPERIMENT_FOLDER}/{exp.value}/{subdir}/{directory}"
+            destination_dir = ExperimentFolder.analysis_dir(exp, subdir, directory)
 
             if Path(destination_dir).exists():
                 continue
@@ -98,10 +104,10 @@ class CLICommandHandler:
             self.client.get_files(files_abs_path, destination_dir)
 
     def get_slurm_files(self, exp: 'ExperimentFolder', subdir='slurm'):
-        exp_dir = get_abs_remote_exp_dir(exp)
+        exp_dir = ExperimentFolder.dir(exp)
         slurm_files = self.client.execute_commands([f'cd {exp_dir}', 'ls -p slurm-* | grep -v /', ]).splitlines()
 
-        destination_dir = f"{HOST_EXPERIMENT_FOLDER}/{exp.value}/{subdir}"
+        destination_dir = ExperimentFolder.analysis_dir(exp, subdir)
         new_slurm_files = [f"{exp_dir}/{file}" for file in slurm_files if
                            not Path(f"{destination_dir}/{file}").exists()]
 
@@ -115,30 +121,27 @@ class CLICommandHandler:
         self.client.execute_commands(["df -h"])
 
     def check_dir_space(self, exp: 'ExperimentFolder'):
-        exp_dir = get_abs_remote_exp_dir(exp)
+        exp_dir = ExperimentFolder.dir(exp)
         self.client.execute_commands([f"cd {exp_dir}", "pwd", "du -h --max-depth=1 | sort -h"])
 
     # TODO: adjust later
     def prepare_experiment_dir(self, exp: 'ExperimentFolder'):
-        exp_dir = get_abs_remote_exp_dir(exp)
-        template_folder = f"{exp_dir}/template"
-        # get all host files under template folder
-        files = Path(template_folder).glob("**/*")
-
-        self.client.put_files([f"{HOST_EXPERIMENT_FOLDER}/{exp.value}/", ], template_folder)
+        self.client.put_directory(ExperimentFolder.analysis_dir(exp, 'data'), ExperimentFolder.dir(exp, 'data'))
+        self.client.put_directory(ExperimentFolder.analysis_dir(exp, 'template'), ExperimentFolder.dir(exp, 'template'))
+        self.client.put_files([ExperimentFolder.analysis_dir(exp, NameRegistry.create_job_script())],
+                              ExperimentFolder.dir(exp))
 
     def run_experiment(self, exp: 'ExperimentFolder', exp_id: str):
-        # prepare_experiment_dir(client, exp)
+        self.prepare_experiment_dir(exp)
 
-        exp_host_folder = f"{HOST_EXPERIMENT_FOLDER}/{exp.value}"
-        exp_dir = get_abs_remote_exp_dir(exp)
+        exp_dir = ExperimentFolder.dir(exp)
 
-        create_jobs_script = f"all.create-local-jobs.{exp_id}.sh"
-        run_experiment_script = f"run-local-exp-{exp_id}.sh"
-        scripts_for_transfer = ["create-local-job.sh", create_jobs_script, run_experiment_script]
-        self.client.put_files([f"{exp_host_folder}/{file}" for file in scripts_for_transfer], exp_dir)
+        create_jobs_script = NameRegistry.create_jobs_script(exp_id)
+        run_experiment_script = NameRegistry.run_experiment_script(exp_id)
+        scripts_for_transfer = [create_jobs_script, run_experiment_script]
+        self.client.put_files([ExperimentFolder.analysis_dir(exp, file) for file in scripts_for_transfer], exp_dir)
 
         self.client.execute_commands(
-            [f"echo running experiment '{exp_id}' on $(hostname)", f"cd {exp_dir}", f"sh {create_jobs_script}",
-             "sleep 2", "echo activate conda", "source $HOME/anaconda3/bin/activate", "conda activate haddock3",
+            [f"echo running experiment '{exp_id}' on $(hostname)", f"cd {exp_dir}", "pwd", f"sh {create_jobs_script}",
+             "echo activate conda", "source $HOME/anaconda3/bin/activate", "conda activate haddock3",
              "echo run experiment", f"sh {run_experiment_script}", "sinfo"])

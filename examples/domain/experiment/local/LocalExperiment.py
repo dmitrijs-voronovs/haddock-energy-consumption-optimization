@@ -9,4 +9,4 @@ class LocalExperiment(Experiment, ABC):
         return config.ncores
 
     def get_create_job_script_name(self):
-        return "create-local-job.sh"
+        return "create-job.sh"

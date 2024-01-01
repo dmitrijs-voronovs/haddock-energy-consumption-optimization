@@ -14,7 +14,7 @@ class HPCExperimentTest(Experiment):
         return TOTAL_CORES
 
     def get_create_job_script_name(self):
-        return "create-hpc-job.sh"
+        return "create-job.sh"
 
     def create_configs(self) -> List[Config]:
         return [

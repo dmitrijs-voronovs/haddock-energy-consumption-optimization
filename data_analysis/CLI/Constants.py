@@ -1,7 +1,5 @@
 from enum import Enum
 
-HOST_EXPERIMENT_FOLDER = "../examples"
-
 
 class Mode(Enum):
     LOCAL = "local"
@@ -21,6 +19,10 @@ class Node(Enum):
     gl6 = "gl6"
 
 
+SHARED_DIR = "/mnt/nfs_share/greenBeansHaddock"
+HOST_EXPERIMENT_FOLDER = "../examples"
+
+
 class ExperimentFolder(Enum):
     LOCAL = "exp-local"
     HPC = "exp-hpc"
@@ -33,9 +35,20 @@ class ExperimentFolder(Enum):
         except StopIteration:
             raise ValueError(f"{value} is not a valid value in ExperimentType")
 
+    @staticmethod
+    def dir(exp: 'ExperimentFolder', *path: str):
+        return ExperimentFolder.__get_dir(exp, SHARED_DIR, *path)
 
-SHARED_DIR = "/mnt/nfs_share/greenBeansHaddock"
+    @staticmethod
+    def host_dir(exp: 'ExperimentFolder', *path: str):
+        return ExperimentFolder.__get_dir(exp, HOST_EXPERIMENT_FOLDER, *path)
 
+    @staticmethod
+    def analysis_dir(exp: 'ExperimentFolder', *path: str):
+        return ExperimentFolder.__get_dir(exp, ".", *path)
 
-def get_abs_remote_exp_dir(exp: 'ExperimentFolder'):
-    return f"{SHARED_DIR}/{exp.value}"
+    @staticmethod
+    def __get_dir(exp: 'ExperimentFolder', base_dir_path=SHARED_DIR, *path: str):
+        if path is None:
+            path = []
+        return f"{base_dir_path}/{exp.value}/{'/'.join(path)}"
