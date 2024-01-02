@@ -4,7 +4,7 @@ from CLI.RemoteSSHClient import RemoteSSHClient
 
 
 def main():
-    client = RemoteSSHClient(*CredentialManager.get_credentials_for_node("gl4"))
+    client = RemoteSSHClient(*CredentialManager.get_credentials_for_node())
     CLICommandHandler(client).execute_cli_command()
 
 

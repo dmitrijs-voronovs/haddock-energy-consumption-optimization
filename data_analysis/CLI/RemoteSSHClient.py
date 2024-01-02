@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import List
 
@@ -35,27 +36,41 @@ class RemoteSSHClient:
 
     def get_files(self, remote_files: List[str], destination_dir: str = "."):
         sftp_client = self.ssh_client.open_sftp()
-        # Define the remote file paths
-        # Download remote files to the current directory
         for remote_file in remote_files:
             filepath = Path(destination_dir) / Path(remote_file).name
             Path(filepath.parent).mkdir(parents=True, exist_ok=True)
-            # Download the file
             sftp_client.get(remote_file, self.__get_filepath(filepath))
             print(f"Downloaded {filepath}")
         sftp_client.close()
 
     def put_files(self, local_files: List[str], destination_dir: str = SHARED_DIR):
         sftp_client = self.ssh_client.open_sftp()
-        # Define the remote file paths
-        # Download remote files to the current directory
         for local_file in local_files:
             filepath = Path(destination_dir) / Path(local_file).name
 
-            # Download the file
             sftp_client.put(local_file, self.__get_filepath(filepath),
                             lambda x, y: print(f"Progress: {x / y * 100:.0f}%"))
             print(f"Uploaded {filepath}")
+        sftp_client.close()
+
+    def put_directory(self, local_dir: str, remote_dir: str):
+        sftp_client = self.ssh_client.open_sftp()
+
+        # Recursively traverse the local directory
+        for root, dirs, files in os.walk(local_dir):
+            for file in files:
+                local_file = self.__get_filepath(os.path.join(root, file))
+                remote_file = self.__get_filepath(os.path.join(remote_dir, os.path.relpath(local_file, local_dir)))
+
+                # Ensure the remote directory exists
+                try:
+                    sftp_client.stat(os.path.dirname(remote_file))
+                except IOError:
+                    self.execute_commands([f'mkdir -p {os.path.dirname(remote_file)}'])
+
+                sftp_client.put(local_file, remote_file, lambda x, y: print(f"Progress: {x / y * 100:.0f}%"))
+                print(f"Uploaded {remote_file}")
+
         sftp_client.close()
 
     def __get_filepath(self, filepath):
@@ -70,6 +85,9 @@ class RemoteSSHClient:
             output = stdout.read().decode('utf-8')
             print(f"{command=}")
             print(output)
+            error = stderr.read().decode('utf-8')
+            if error:
+                print(f"Error: {error}")
             return output
         except Exception as e:
             print(f"Error: {e}")
