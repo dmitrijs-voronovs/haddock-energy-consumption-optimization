@@ -51,6 +51,22 @@ class Experiment(ABC):
         finished"""
         return None
 
+    def generate_commands_for_config(self, config, job_idx, warmup_config_idx):
+        job_prev_id = f"job{job_idx - 1}_2"
+        job_check_before_id = f"job{job_idx}_0"
+        job_id = f"job{job_idx}_1"
+        job_check_after_id = f"job{job_idx}_2"
+
+        dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
+        return [self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
+                                         len(config.nodes), f"{COLLECT_INFO_BEFORE_SH} {config.name_without_extension}",
+                                         dependent_job_id),
+                self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
+                                         f'haddock3 "{config.name}"', job_check_before_id),
+                self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
+                                         len(config.nodes), f"{COLLECT_INFO_AFTER_SH} {config.name_without_extension}",
+                                         job_id)]
+
     def generate_runner(self):
         configs = self.configs.copy()
         random.shuffle(configs)
@@ -58,29 +74,10 @@ class Experiment(ABC):
         warmup_config_idx = 0
         configs.insert(warmup_config_idx, warmup_config)
 
+        job_ids = [f"$job{job_idx}_1" for job_idx in range(warmup_config_idx + 1, len(configs))]
         commands = ["#!/bin/bash \n", f"rm -rf \"{warmup_config.run_dir}\"\n", ]
-
-        job_ids = []
-        for (job_idx, config) in enumerate(configs):
-            job_prev_id = f"job{job_idx - 1}_2"
-            job_check_before_id = f"job{job_idx}_0"
-            job_id = f"job{job_idx}_1"
-            job_check_after_id = f"job{job_idx}_2"
-
-            if job_idx > warmup_config_idx:
-                job_ids.append(f"${job_id}")
-
-            dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
-            commands.append(
-                self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
-                                         len(config.nodes), f"{COLLECT_INFO_BEFORE_SH} {config.name_without_extension}",
-                                         dependent_job_id))
-            commands.append(self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
-                                                     f'haddock3 "{config.name}"', job_check_before_id))
-            commands.append(self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
-                                                     len(config.nodes),
-                                                     f"{COLLECT_INFO_AFTER_SH} {config.name_without_extension}",
-                                                     job_id))
+        commands += [command for job_idx, config in enumerate(configs) for command in
+                     self.generate_commands_for_config(config, job_idx, warmup_config_idx)]
 
         check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
 
