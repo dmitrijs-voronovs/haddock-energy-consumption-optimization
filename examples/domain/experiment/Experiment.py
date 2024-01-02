@@ -11,7 +11,6 @@ COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
 
 class Experiment(ABC):
     def __init__(self):
-        self.create_job_script_name = self.get_create_job_script_name()
         self.configs = self.create_configs()
         self.warmup_config = self.create_warmup_config()
 
@@ -30,16 +29,12 @@ class Experiment(ABC):
         pass
 
     @abstractmethod
-    def get_create_job_script_name(self):
-        pass
-
-    @abstractmethod
     def get_ncores(self, config: Config) -> int:
         pass
 
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
         warmup_suffix = ' warmup' if config.is_warmup else ''
-        return f"sh {self.create_job_script_name} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
+        return f"sh {PathRegistry.create_job_script()} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
 
     def generate_create_job_script(self):
         name = PathRegistry.create_jobs_script(self.ID)

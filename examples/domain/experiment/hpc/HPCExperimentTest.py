@@ -13,9 +13,6 @@ class HPCExperimentTest(Experiment):
     def get_ncores(self, config: HPCConfig):
         return TOTAL_CORES
 
-    def get_create_job_script_name(self):
-        return "create-job.sh"
-
     def create_configs(self) -> List[Config]:
         return [
             HPCConfig(workflow, ["gl2", "gl5", "gl6"], trial, concat, queue_limit)
