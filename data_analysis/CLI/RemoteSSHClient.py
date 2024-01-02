@@ -86,7 +86,8 @@ class RemoteSSHClient:
             print(f"{command=}")
             print(output)
             error = stderr.read().decode('utf-8')
-            print(f"Error: {error}")
+            if error:
+                print(f"Error: {error}")
             return output
         except Exception as e:
             print(f"Error: {e}")

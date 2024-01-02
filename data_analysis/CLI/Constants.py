@@ -1,5 +1,7 @@
 from enum import Enum
 
+from examples import PathRegistry
+
 
 class Mode(Enum):
     LOCAL = "local"
@@ -19,8 +21,8 @@ class Node(Enum):
     gl6 = "gl6"
 
 
-SHARED_DIR = "/mnt/nfs_share/greenBeansHaddock"
-HOST_EXPERIMENT_FOLDER = "../examples"
+SHARED_DIR = PathRegistry.SHARED_DIR
+HOST_EXPERIMENT_FOLDER = PathRegistry.HOST_EXPERIMENT_FOLDER
 
 
 class ExperimentFolder(Enum):

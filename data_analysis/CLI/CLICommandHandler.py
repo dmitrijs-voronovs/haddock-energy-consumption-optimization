@@ -5,8 +5,8 @@ from pathlib import Path
 
 sys.path.append(os.path.pardir)
 
-from examples import NameRegistry
-from .Constants import ExperimentFolder, HOST_EXPERIMENT_FOLDER
+from examples import PathRegistry
+from .Constants import ExperimentFolder
 from .CredentialManager import CredentialManager, DEFAULT_NODE
 from .RemoteSSHClient import RemoteSSHClient
 
@@ -74,14 +74,14 @@ class CLICommandHandler:
     def get_local_exp_data(self, exp: 'ExperimentFolder', experiment_ids):
         exp_dir = ExperimentFolder.dir(exp)
         self.client.execute_commands(
-            [f'cd {exp_dir}'] + [f'sh {NameRegistry.check_job_script(eid)}' for eid in experiment_ids])
+            [f'cd {exp_dir}'] + [f'sh {PathRegistry.check_job_script(eid)}' for eid in experiment_ids])
         self.client.get_files(
-            [ExperimentFolder.dir(exp, NameRegistry.experiment_data_filename(eid)) for eid in experiment_ids],
+            [ExperimentFolder.dir(exp, PathRegistry.experiment_data_filename(eid)) for eid in experiment_ids],
             ExperimentFolder.analysis_dir(exp, 'data'))
 
     def clean_experiment_dir(self, exp: 'ExperimentFolder'):
         exp_dir = ExperimentFolder.dir(exp)
-        self.client.put_files([f"{HOST_EXPERIMENT_FOLDER}/clean.sh", ], exp_dir)
+        self.client.put_files([PathRegistry.clean_script()], exp_dir)
         self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
 
     def get_haddock_log_files(self, exp: 'ExperimentFolder', subdir='runs'):
@@ -91,7 +91,7 @@ class CLICommandHandler:
 
         for directory in all_directories:
             directory = directory.strip("/")
-            destination_dir = ExperimentFolder.analysis_dir(exp, subdir, directory)
+            destination_dir = ExperimentFolder.host_dir(exp, subdir, directory)
 
             if Path(destination_dir).exists():
                 continue
@@ -107,7 +107,7 @@ class CLICommandHandler:
         exp_dir = ExperimentFolder.dir(exp)
         slurm_files = self.client.execute_commands([f'cd {exp_dir}', 'ls -p slurm-* | grep -v /', ]).splitlines()
 
-        destination_dir = ExperimentFolder.analysis_dir(exp, subdir)
+        destination_dir = ExperimentFolder.host_dir(exp, subdir)
         new_slurm_files = [f"{exp_dir}/{file}" for file in slurm_files if
                            not Path(f"{destination_dir}/{file}").exists()]
 
@@ -126,20 +126,21 @@ class CLICommandHandler:
 
     # TODO: adjust later
     def prepare_experiment_dir(self, exp: 'ExperimentFolder'):
-        self.client.put_directory(ExperimentFolder.analysis_dir(exp, 'data'), ExperimentFolder.dir(exp, 'data'))
-        self.client.put_directory(ExperimentFolder.analysis_dir(exp, 'template'), ExperimentFolder.dir(exp, 'template'))
-        self.client.put_files([ExperimentFolder.analysis_dir(exp, NameRegistry.create_job_script())],
-                              ExperimentFolder.dir(exp))
+        self.client.put_directory(ExperimentFolder.host_dir(exp, 'data'), ExperimentFolder.dir(exp, 'data'))
+        self.client.put_directory(ExperimentFolder.host_dir(exp, 'template'), ExperimentFolder.dir(exp, 'template'))
+        self.client.put_files(
+            [ExperimentFolder.host_dir(exp, PathRegistry.create_job_script())] + PathRegistry.info_scripts(),
+            ExperimentFolder.dir(exp))
 
     def run_experiment(self, exp: 'ExperimentFolder', exp_id: str):
         self.prepare_experiment_dir(exp)
 
         exp_dir = ExperimentFolder.dir(exp)
 
-        create_jobs_script = NameRegistry.create_jobs_script(exp_id)
-        run_experiment_script = NameRegistry.run_experiment_script(exp_id)
+        create_jobs_script = PathRegistry.create_jobs_script(exp_id)
+        run_experiment_script = PathRegistry.run_experiment_script(exp_id)
         scripts_for_transfer = [create_jobs_script, run_experiment_script]
-        self.client.put_files([ExperimentFolder.analysis_dir(exp, file) for file in scripts_for_transfer], exp_dir)
+        self.client.put_files([ExperimentFolder.host_dir(exp, file) for file in scripts_for_transfer], exp_dir)
 
         self.client.execute_commands(
             [f"echo running experiment '{exp_id}' on $(hostname)", f"cd {exp_dir}", "pwd", f"sh {create_jobs_script}",

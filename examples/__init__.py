@@ -1,1 +1,1 @@
-from .domain.experiment.NameRegistry import NameRegistry
+from .domain.experiment.PathRegistry import PathRegistry

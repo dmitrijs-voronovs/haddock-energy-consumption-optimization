@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from examples.domain.config.Config import Config
-from examples.domain.experiment.NameRegistry import NameRegistry
+from examples.domain.experiment.PathRegistry import PathRegistry
 
 COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
 COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
@@ -42,7 +42,7 @@ class Experiment(ABC):
         return f"sh {self.create_job_script_name} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
 
     def generate_create_job_script(self):
-        name = NameRegistry.create_jobs_script(self.ID)
+        name = PathRegistry.create_jobs_script(self.ID)
         commands = [self.convert_config_to_create_workflow_command(config) for config in
                     self.configs + [self.warmup_config]]
 
@@ -87,7 +87,7 @@ class Experiment(ABC):
 
         check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
 
-        with open(NameRegistry.run_experiment_script(self.ID), "w", newline='\n') as file:
+        with open(PathRegistry.run_experiment_script(self.ID), "w", newline='\n') as file:
             file.write("\n".join(commands))
             file.write(check_jobs_command)
 
@@ -107,8 +107,8 @@ class Experiment(ABC):
         return f'{id}=$(sbatch --job-name="{name}" -w {nodes} -n {ncores}{dependency} {command} {job_id_extraction_pipe})'
 
     def __get_check_jobs_command(self, job_ids):
-        experiment_name = NameRegistry.check_job_script(self.ID)
-        data_file_name = NameRegistry.experiment_data_filename(self.ID)
+        experiment_name = PathRegistry.check_job_script(self.ID)
+        data_file_name = PathRegistry.experiment_data_filename(self.ID)
         return f'''
 cat > {experiment_name} << EOF
 #!/bin/bash
