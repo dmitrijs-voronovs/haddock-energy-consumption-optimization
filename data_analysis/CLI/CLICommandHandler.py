@@ -43,6 +43,7 @@ class CLICommandHandler:
 
         subparsers.add_parser('sinfo', help='sinfo')
         subparsers.add_parser('squeue', help='squeue')
+        subparsers.add_parser('sacct', help='sacct')
         subparsers.add_parser('scancel', help='scancel')
 
         args = parser.parse_args()
@@ -55,7 +56,10 @@ class CLICommandHandler:
         elif args.command == 'sinfo':
             self.client.execute_commands(["sinfo"])
         elif args.command == 'squeue':
-            self.client.execute_commands(["squeue"])
+            self.client.execute_commands(['squeue -o "%7A %50j %3t %N"'])
+        elif args.command == 'sacct':
+            self.client.execute_commands([
+                "sacct -o jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS"])
         elif args.command == 'scancel':
             self.client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
         elif args.command in ['get_log_files', "get-logs"]:
