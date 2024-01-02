@@ -31,7 +31,8 @@ class CLICommandHandler:
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
                                            help='Experiment ID (i.e. "gl2", "gl5_2"')
-        run_experiment_parser.add_argument('-n', '--node', type=str, required=True, help='Node (i.e. "gl2", "gl5"')
+        run_experiment_parser.add_argument('-n', '--node', type=str, default="gl4",
+                                           help='Node (i.e. "gl2", "gl5"')
         run_experiment_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment Folder')
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
         execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')

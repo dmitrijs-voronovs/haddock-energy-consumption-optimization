@@ -79,11 +79,14 @@ class Experiment(ABC):
             dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
             commands.append(
                 self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
-                                         len(config.nodes), COLLECT_INFO_BEFORE_SH, dependent_job_id))
+                                         len(config.nodes), f"{COLLECT_INFO_BEFORE_SH} {config.name_without_extension}",
+                                         dependent_job_id))
             commands.append(self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
                                                      f'haddock3 "{config.name}"', job_check_before_id))
             commands.append(self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
-                                                     len(config.nodes), COLLECT_INFO_AFTER_SH, job_id))
+                                                     len(config.nodes),
+                                                     f"{COLLECT_INFO_AFTER_SH} {config.name_without_extension}",
+                                                     job_id))
 
         check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
 

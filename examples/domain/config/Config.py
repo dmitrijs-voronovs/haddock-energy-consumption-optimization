@@ -20,6 +20,10 @@ class Config(ABC):
         return f"{self.workflow}-{self.mode}-{self._get_params_for_filename()}_{self.nodes_for_filename}-{self.trial}.{warmup_string}cfg"
 
     @property
+    def name_without_extension(self):
+        return self.name.split(".")[0]
+
+    @property
     def run_dir(self):
         return f"run.{self.name}"
 
