@@ -1,12 +1,11 @@
 from typing import List
 
+from examples.domain import LocalExperiment
 from examples.domain.config.Config import Config
 from examples.domain.config.LocalConfig import LocalConfig
-from examples.domain.experiment.local.LocalExperimentGL6 import LocalExperimentGL6
 
 
-class LocalExperimentGL6_2(LocalExperimentGL6):
-    ID = "gl6_2"
+class GL6_2(LocalExperiment):
 
     def create_configs(self) -> List[Config]:
         return [LocalConfig("daa", "gl6", trial, 4) for trial in range(11, 11 + 1)] + [
@@ -21,3 +20,6 @@ class LocalExperimentGL6_2(LocalExperimentGL6):
     def get_experiment_job_dependency(self):
         # dependency of last job of GL6_1 experiment
         return '43262'
+
+    def create_warmup_config(self) -> Config:
+        return LocalConfig("dpp", "gl6", 1, 8, True)

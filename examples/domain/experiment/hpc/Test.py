@@ -2,16 +2,10 @@ from typing import List
 
 from examples.domain.config.Config import Config
 from examples.domain.config.HPCConfig import HPCConfig
-from examples.domain.experiment.Experiment import Experiment
-
-TOTAL_CORES = 72
+from examples.domain.experiment.hpc.HPCExperiment import HPCExperiment
 
 
-class HPCExperimentTest(Experiment):
-    ID = "test"
-
-    def get_ncores(self, config: HPCConfig):
-        return TOTAL_CORES
+class Test(HPCExperiment):
 
     def create_configs(self) -> List[Config]:
         return [

@@ -16,9 +16,8 @@ class Experiment(ABC):
 
     @classmethod
     @property
-    @abstractmethod
     def ID(cls) -> str:
-        pass
+        return cls.__name__.lower()
 
     @abstractmethod
     def create_configs(self) -> List[Config]:
