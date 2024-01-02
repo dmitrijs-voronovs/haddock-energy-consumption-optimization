@@ -31,6 +31,14 @@ class Experiment(ABC):
     def get_ncores(self, config: Config) -> int:
         pass
 
+    def get_experiment_job_dependency(self) -> str | None:
+        """Define dependency for the current experiment in order to execute it right after the previous one is
+        finished"""
+        return None
+
+    def get_command_for_haddock_execution(self, config: 'Config') -> str:
+        return f'haddock3 "{config.name}"'
+
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
         warmup_suffix = ' warmup' if config.is_warmup else ''
         return f"sh {PathRegistry.create_job_script()} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
@@ -46,12 +54,7 @@ class Experiment(ABC):
 
         return self
 
-    def get_experiment_job_dependency(self) -> str | None:
-        """Define dependency for the current experiment in order to execute it right after the previous one is
-        finished"""
-        return None
-
-    def generate_commands_for_config(self, config, job_idx, warmup_config_idx):
+    def generate_commands_for_config(self, config: 'Config', job_idx: int, warmup_config_idx: int):
         job_prev_id = f"job{job_idx - 1}_2"
         job_check_before_id = f"job{job_idx}_0"
         job_id = f"job{job_idx}_1"
@@ -62,7 +65,7 @@ class Experiment(ABC):
                                          len(config.nodes), f"{COLLECT_INFO_BEFORE_SH} {config.name_without_extension}",
                                          dependent_job_id),
                 self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
-                                         f'haddock3 "{config.name}"', job_check_before_id),
+                                         self.get_command_for_haddock_execution(config), job_check_before_id),
                 self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
                                          len(config.nodes), f"{COLLECT_INFO_AFTER_SH} {config.name_without_extension}",
                                          job_id)]
