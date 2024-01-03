@@ -20,31 +20,31 @@ class CLICommandHandler:
         parser = argparse.ArgumentParser(description='Remote SSH Client')
         subparsers = parser.add_subparsers(dest='command')
         get_data_parser = subparsers.add_parser('get_exp_data', aliases=["get-data"], help='Get experiment data')
-        get_data_parser.add_argument('-e', '--exp', required=True, help='Experiment directory')
-        get_data_parser.add_argument('-eids', '--exp_ids', nargs='*', required=True,
+        get_data_parser.add_argument('-d', '--dir', required=True, help='Experiment directory')
+        get_data_parser.add_argument('-e', '--exp_ids', nargs='*', required=True,
                                      help='Experiment IDs (that are identical to lowercase experiment classnames) to \
                                      get data from [example: "gl6 gl2_2 gl5"]')
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
-        get_log_files_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
+        get_log_files_parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment type')
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
                                                             help='Clean experiment directory')
-        clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
+        clean_experiment_dir_parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment type')
         clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
                                                  help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
-        run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
+        run_experiment_parser.add_argument('-e', '--exp_id', type=str, required=True,
                                            help='Experiment ID (that is identical to lowercase experiment classname) \
                                            [example: "gl2", "gl5_2"]')
         run_experiment_parser.add_argument('-n', '--node', type=str, default="gl4",
                                            help='Node [default = "gl4", example: "gl2", "gl5"]')
-        run_experiment_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment Directory')
+        run_experiment_parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment Directory')
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
         execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
 
         subparsers.add_parser('check_space', aliases=["space"], help='Check space of the cluster')
         check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"],
                                                 help='Check experiment directory space')
-        check_dir_space.add_argument('-e', '--exp', required=True, type=str, help='Experiment Directory')
+        check_dir_space.add_argument('-d', '--dir', required=True, type=str, help='Experiment Directory')
 
         create_experiment_parser = subparsers.add_parser('create_experiment', aliases=["create-exp"],
                                                          help='Create experiment')
@@ -59,11 +59,11 @@ class CLICommandHandler:
 
         args = parser.parse_args()
         if args.command in ['get_exp_data', "get-data"]:
-            self.get_exp_data(ExperimentDir.value_to_enum(args.exp), args.exp_ids)
+            self.get_exp_data(ExperimentDir.value_to_enum(args.dir), args.exp_ids)
         elif args.command in ['check_space', "space"]:
             self.check_space()
         elif args.command in ['check_dir_space', "dir-space"]:
-            self.check_dir_space(ExperimentDir.value_to_enum(args.exp))
+            self.check_dir_space(ExperimentDir.value_to_enum(args.dir))
         elif args.command == 'sinfo':
             self.client.execute_commands(["sinfo"])
         elif args.command == 'squeue':
@@ -74,15 +74,15 @@ class CLICommandHandler:
         elif args.command == 'scancel':
             self.client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
         elif args.command in ['get_log_files', "get-logs"]:
-            self.get_log_files(ExperimentDir.value_to_enum(args.exp))
+            self.get_log_files(ExperimentDir.value_to_enum(args.dir))
         elif args.command in ['execute', 'exec']:
             self.client.execute_commands([args.cmd])
         elif args.command in ['clean_experiment_dir', "clean"]:
-            self.clean_experiment_dir(ExperimentDir.value_to_enum(args.exp), args.full)
+            self.clean_experiment_dir(ExperimentDir.value_to_enum(args.dir), args.full)
         elif args.command in ['create_experiment', "create-exp"]:
             self.create_experiment(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['run_experiment', "run-exp"]:
-            exp_dir = ExperimentDir.value_to_enum(args.exp)
+            exp_dir = ExperimentDir.value_to_enum(args.dir)
             if args.node == DEFAULT_NODE:
                 CLICommandHandler(self.client).run_experiment(exp_dir, args.exp_id)
             else:
