@@ -1,0 +1,2 @@
+/var/spool/slurmd/job45850/slurm_script: line 5: daa-hpc-con5-ql18_gl2-gl5-gl6-6.info/nodes_info.after.txt: No such file or directory
+slurmstepd: error: *** JOB 45850 ON GreenLab-STF CANCELLED AT 2024-01-03T01:54:14 ***

@@ -1,0 +1,98 @@
+[2024-01-02 22:16:09,190 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-02 22:16:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-02 22:16:13,655 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 2_caprieval
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 3_seletop
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 4_caprieval
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 5_flexref
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 6_caprieval
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 7_emref
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 8_caprieval
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 9_clustfcc
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2024-01-02 22:16:13,656 libworkflow INFO] Reading instructions step 11_caprieval
+[2024-01-02 22:16:13,738 base_cns_module INFO] Running [topoaa] module
+[2024-01-02 22:16:13,738 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2024-01-02 22:16:13,744 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.daa-hpc-con1-ql36_gl2-gl5-gl6-4/00_topoaa/4G6K_fv.inp
+4G6K_fv.inp
+[2024-01-02 22:16:13,864 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+4G6K_fv.out
+[2024-01-02 22:16:13,864 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2024-01-02 22:16:13,869 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.daa-hpc-con1-ql36_gl2-gl5-gl6-4/00_topoaa/4I1B-matched.inp
+4I1B-matched.inp
+[2024-01-02 22:16:13,986 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+4I1B-matched.out
+[2024-01-02 22:16:13,986 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2024-01-02 22:16:13,987 libhpc INFO] > Running batch 1/1
+#!/usr/bin/env bash
+#SBATCH -J haddock3
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --output=topoaa_1.out
+#SBATCH --error=topoaa_1.err
+#SBATCH --chdir=.
+export MODDIR=.
+export MODULE=/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/cns
+export TOPPAR=/home/greenBeans/haddock3/src/haddock/cns/toppar
+
+cd .
+/home/greenBeans/haddock3/bin/cns < 4G6K_fv.inp > 4G6K_fv.out
+
+b'Submitted batch job 46129\n' b''
+#!/usr/bin/env bash
+#SBATCH -J haddock3
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --output=topoaa_2.out
+#SBATCH --error=topoaa_2.err
+#SBATCH --chdir=.
+export MODDIR=.
+export MODULE=/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/cns
+export TOPPAR=/home/greenBeans/haddock3/src/haddock/cns/toppar
+
+cd .
+/home/greenBeans/haddock3/bin/cns < 4I1B-matched.inp > 4I1B-matched.out
+
+b'Submitted batch job 46130\n' b''
+[2024-01-02 22:16:14,166 libhpc INFO] >> topoaa_1.job submitted
+[2024-01-02 22:16:14,257 libhpc INFO] >> topoaa_2.job submitted
+[2024-01-02 22:16:14,258 libhpc INFO] >> Waiting... (10.00s)
+[2024-01-02 22:16:24,345 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 22:16:24,402 libhpc INFO] >> topoaa_2.job failed
+[2024-01-02 22:16:24,402 libhpc INFO] >> Batch 1/1 took 10.42s to finish, 100.00% complete
+[2024-01-02 22:16:24,402 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-02 22:16:24,403 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 255, in _run
+    self.export_output_models(faulty_tolerance=self.params["tolerance"])
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 271, in export_output_models
+    self.finish_with_error(_msg)
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 280, in finish_with_error
+    raise RuntimeError(reason)
+RuntimeError: 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 22:16:24,404 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 22:16:24,404 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-02 22:16:24,404 libutil INFO] Finished at 02/01/2024 22:16:24. For any help contact us at https://github.com/haddocking/haddock3/issues. Tot ziens! Agur! Good bye!.

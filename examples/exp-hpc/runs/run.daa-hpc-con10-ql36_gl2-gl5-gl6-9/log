@@ -1,0 +1,61 @@
+[2024-01-02 22:43:51,094 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-02 22:43:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-02 22:43:55,602 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 2_caprieval
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 3_seletop
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 4_caprieval
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 5_flexref
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 6_caprieval
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 7_emref
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 8_caprieval
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 9_clustfcc
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2024-01-02 22:43:55,603 libworkflow INFO] Reading instructions step 11_caprieval
+[2024-01-02 22:43:55,687 base_cns_module INFO] Running [topoaa] module
+[2024-01-02 22:43:55,687 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2024-01-02 22:43:55,693 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+[2024-01-02 22:43:55,807 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+[2024-01-02 22:43:55,807 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2024-01-02 22:43:55,812 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+[2024-01-02 22:43:55,951 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+[2024-01-02 22:43:55,951 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2024-01-02 22:43:55,951 libhpc INFO] Concatenating, each .job will produce 10 (or less) models
+[2024-01-02 22:43:55,951 libhpc INFO] > Running batch 1/1
+[2024-01-02 22:43:56,089 libhpc INFO] >> topoaa_1.job submitted
+[2024-01-02 22:43:56,089 libhpc INFO] >> Waiting... (10.00s)
+[2024-01-02 22:44:06,172 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 22:44:06,172 libhpc INFO] >> Batch 1/1 took 10.22s to finish, 100.00% complete
+[2024-01-02 22:44:06,172 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-02 22:44:06,173 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 255, in _run
+    self.export_output_models(faulty_tolerance=self.params["tolerance"])
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 271, in export_output_models
+    self.finish_with_error(_msg)
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 280, in finish_with_error
+    raise RuntimeError(reason)
+RuntimeError: 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 22:44:06,174 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 22:44:06,174 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-02 22:44:06,174 libutil INFO] Finished at 02/01/2024 22:44:06. For any help contact us at https://github.com/haddocking/haddock3/issues. Au revoir! Good bye! Até logo!.
