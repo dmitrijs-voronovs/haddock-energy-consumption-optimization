@@ -1,0 +1,165 @@
+[2024-01-02 17:01:46,164 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-02 17:01:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-02 17:01:50,173 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-02 17:01:50,173 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-02 17:01:50,173 libworkflow INFO] Reading instructions step 2_seletop
+[2024-01-02 17:01:50,173 libworkflow INFO] Reading instructions step 3_caprieval
+[2024-01-02 17:01:50,173 libworkflow INFO] Reading instructions step 4_flexref
+[2024-01-02 17:01:50,174 libworkflow INFO] Reading instructions step 5_caprieval
+[2024-01-02 17:01:50,174 libworkflow INFO] Reading instructions step 6_emref
+[2024-01-02 17:01:50,174 libworkflow INFO] Reading instructions step 7_caprieval
+[2024-01-02 17:01:50,286 base_cns_module INFO] Running [topoaa] module
+[2024-01-02 17:01:50,288 __init__ INFO] [topoaa] Molecule 1: e2aP_1F3G.pdb
+[2024-01-02 17:01:50,298 __init__ INFO] [topoaa] Sanitizing molecule e2aP_1F3G.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/e2aP_1F3G.inp
+e2aP_1F3G.inp
+[2024-01-02 17:01:50,424 __init__ INFO] [topoaa] Topology CNS input created in e2aP_1F3G.inp
+e2aP_1F3G.out
+[2024-01-02 17:01:50,424 __init__ INFO] [topoaa] Molecule 2: hpr_ensemble.pdb
+[2024-01-02 17:01:51,155 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_1.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_1.inp
+hpr_ensemble_1.inp
+[2024-01-02 17:01:51,271 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_1.inp
+hpr_ensemble_1.out
+[2024-01-02 17:01:51,272 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_2.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_2.inp
+hpr_ensemble_2.inp
+[2024-01-02 17:01:51,419 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_2.inp
+hpr_ensemble_2.out
+[2024-01-02 17:01:51,419 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_3.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_3.inp
+hpr_ensemble_3.inp
+[2024-01-02 17:01:51,540 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_3.inp
+hpr_ensemble_3.out
+[2024-01-02 17:01:51,540 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_4.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_4.inp
+hpr_ensemble_4.inp
+[2024-01-02 17:01:51,678 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_4.inp
+hpr_ensemble_4.out
+[2024-01-02 17:01:51,678 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_5.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_5.inp
+hpr_ensemble_5.inp
+[2024-01-02 17:01:51,781 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_5.inp
+hpr_ensemble_5.out
+[2024-01-02 17:01:51,781 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_6.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_6.inp
+hpr_ensemble_6.inp
+[2024-01-02 17:01:51,888 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_6.inp
+hpr_ensemble_6.out
+[2024-01-02 17:01:51,888 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_7.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_7.inp
+hpr_ensemble_7.inp
+[2024-01-02 17:01:52,013 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_7.inp
+hpr_ensemble_7.out
+[2024-01-02 17:01:52,013 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_8.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_8.inp
+hpr_ensemble_8.inp
+[2024-01-02 17:01:52,128 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_8.inp
+hpr_ensemble_8.out
+[2024-01-02 17:01:52,129 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_9.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_9.inp
+hpr_ensemble_9.inp
+[2024-01-02 17:01:52,230 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_9.inp
+hpr_ensemble_9.out
+[2024-01-02 17:01:52,231 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_10.pdb
+/mnt/nfs_share/greenBeansHaddock/exp-hpc/run.dpp-hpc-con5-ql36_gl2-gl5-gl6-4/0_topoaa/hpr_ensemble_10.inp
+hpr_ensemble_10.inp
+[2024-01-02 17:01:52,385 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_10.inp
+hpr_ensemble_10.out
+[2024-01-02 17:01:52,385 __init__ INFO] [topoaa] Running CNS Jobs n=11
+[2024-01-02 17:01:52,385 libhpc INFO] Concatenating, each .job will produce 5 (or less) models
+[2024-01-02 17:01:52,386 libhpc INFO] > Running batch 1/1
+#!/usr/bin/env bash
+#SBATCH -J haddock3
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --output=topoaa_1.out
+#SBATCH --error=topoaa_1.err
+#SBATCH --chdir=.
+export MODDIR=.
+export MODULE=/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/cns
+export TOPPAR=/home/greenBeans/haddock3/src/haddock/cns/toppar
+
+cd .
+/home/greenBeans/haddock3/bin/cns < e2aP_1F3G.inp > e2aP_1F3G.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_1.inp > hpr_ensemble_1.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_2.inp > hpr_ensemble_2.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_3.inp > hpr_ensemble_3.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_4.inp > hpr_ensemble_4.out
+
+b'Submitted batch job 45946\n' b''
+#!/usr/bin/env bash
+#SBATCH -J haddock3
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --output=topoaa_2.out
+#SBATCH --error=topoaa_2.err
+#SBATCH --chdir=.
+export MODDIR=.
+export MODULE=/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/cns
+export TOPPAR=/home/greenBeans/haddock3/src/haddock/cns/toppar
+
+cd .
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_5.inp > hpr_ensemble_5.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_6.inp > hpr_ensemble_6.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_7.inp > hpr_ensemble_7.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_8.inp > hpr_ensemble_8.out
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_9.inp > hpr_ensemble_9.out
+
+b'Submitted batch job 45947\n' b''
+#!/usr/bin/env bash
+#SBATCH -J haddock3
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --output=topoaa_3.out
+#SBATCH --error=topoaa_3.err
+#SBATCH --chdir=.
+export MODDIR=.
+export MODULE=/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/cns
+export TOPPAR=/home/greenBeans/haddock3/src/haddock/cns/toppar
+
+cd .
+/home/greenBeans/haddock3/bin/cns < hpr_ensemble_10.inp > hpr_ensemble_10.out
+
+b'Submitted batch job 45948\n' b''
+[2024-01-02 17:01:52,616 libhpc INFO] >> topoaa_1.job running
+[2024-01-02 17:01:52,776 libhpc INFO] >> topoaa_2.job submitted
+[2024-01-02 17:01:52,860 libhpc INFO] >> topoaa_3.job submitted
+[2024-01-02 17:01:52,860 libhpc INFO] >> Waiting... (10.00s)
+[2024-01-02 17:02:02,933 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 17:02:02,992 libhpc INFO] >> topoaa_2.job failed
+[2024-01-02 17:02:03,046 libhpc INFO] >> topoaa_3.job failed
+[2024-01-02 17:02:03,047 libhpc INFO] >> Batch 1/1 took 10.66s to finish, 100.00% complete
+[2024-01-02 17:02:03,047 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-02 17:02:03,052 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 255, in _run
+    self.export_output_models(faulty_tolerance=self.params["tolerance"])
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 271, in export_output_models
+    self.finish_with_error(_msg)
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 280, in finish_with_error
+    raise RuntimeError(reason)
+RuntimeError: 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 17:02:03,053 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 17:02:03,053 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-02 17:02:03,053 libutil INFO] Finished at 02/01/2024 17:02:03. For any help contact us at https://github.com/haddocking/haddock3/issues. Agur! Até logo! Au revoir!.

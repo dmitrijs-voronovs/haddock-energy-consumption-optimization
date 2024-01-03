@@ -1,0 +1,117 @@
+[2024-01-02 20:20:47,832 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-02 20:20:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-02 20:20:51,711 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-02 20:20:51,711 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-02 20:20:51,712 libworkflow INFO] Reading instructions step 2_seletop
+[2024-01-02 20:20:51,712 libworkflow INFO] Reading instructions step 3_caprieval
+[2024-01-02 20:20:51,712 libworkflow INFO] Reading instructions step 4_flexref
+[2024-01-02 20:20:51,712 libworkflow INFO] Reading instructions step 5_caprieval
+[2024-01-02 20:20:51,712 libworkflow INFO] Reading instructions step 6_emref
+[2024-01-02 20:20:51,712 libworkflow INFO] Reading instructions step 7_caprieval
+[2024-01-02 20:20:51,806 base_cns_module INFO] Running [topoaa] module
+[2024-01-02 20:20:51,806 __init__ INFO] [topoaa] Molecule 1: e2aP_1F3G.pdb
+[2024-01-02 20:20:51,813 __init__ INFO] [topoaa] Sanitizing molecule e2aP_1F3G.pdb
+[2024-01-02 20:20:51,952 __init__ INFO] [topoaa] Topology CNS input created in e2aP_1F3G.inp
+[2024-01-02 20:20:51,952 __init__ INFO] [topoaa] Molecule 2: hpr_ensemble.pdb
+[2024-01-02 20:20:52,647 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_1.pdb
+[2024-01-02 20:20:52,764 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_1.inp
+[2024-01-02 20:20:52,764 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_2.pdb
+[2024-01-02 20:20:52,889 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_2.inp
+[2024-01-02 20:20:52,889 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_3.pdb
+[2024-01-02 20:20:52,995 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_3.inp
+[2024-01-02 20:20:52,995 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_4.pdb
+[2024-01-02 20:20:53,103 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_4.inp
+[2024-01-02 20:20:53,103 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_5.pdb
+[2024-01-02 20:20:53,193 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_5.inp
+[2024-01-02 20:20:53,193 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_6.pdb
+[2024-01-02 20:20:53,320 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_6.inp
+[2024-01-02 20:20:53,320 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_7.pdb
+[2024-01-02 20:20:53,415 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_7.inp
+[2024-01-02 20:20:53,415 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_8.pdb
+[2024-01-02 20:20:53,539 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_8.inp
+[2024-01-02 20:20:53,539 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_9.pdb
+[2024-01-02 20:20:53,631 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_9.inp
+[2024-01-02 20:20:53,631 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_10.pdb
+[2024-01-02 20:20:53,727 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_10.inp
+[2024-01-02 20:20:53,727 __init__ INFO] [topoaa] Running CNS Jobs n=11
+[2024-01-02 20:20:53,728 libhpc INFO] > Running batch 1/2
+[2024-01-02 20:20:54,487 libhpc INFO] >> topoaa_1.job submitted
+[2024-01-02 20:20:54,588 libhpc INFO] >> topoaa_2.job submitted
+[2024-01-02 20:20:54,667 libhpc INFO] >> topoaa_3.job submitted
+[2024-01-02 20:20:54,726 libhpc INFO] >> topoaa_4.job submitted
+[2024-01-02 20:20:54,798 libhpc INFO] >> topoaa_5.job submitted
+[2024-01-02 20:20:54,882 libhpc INFO] >> topoaa_6.job submitted
+[2024-01-02 20:20:54,955 libhpc INFO] >> topoaa_7.job submitted
+[2024-01-02 20:20:55,021 libhpc INFO] >> topoaa_8.job submitted
+[2024-01-02 20:20:55,088 libhpc INFO] >> topoaa_9.job submitted
+[2024-01-02 20:20:55,088 libhpc INFO] >> Waiting... (10.00s)
+[2024-01-02 20:21:05,223 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 20:21:05,338 libhpc INFO] >> topoaa_2.job failed
+[2024-01-02 20:21:05,391 libhpc INFO] >> topoaa_3.job failed
+[2024-01-02 20:21:05,461 libhpc INFO] >> topoaa_4.job failed
+[2024-01-02 20:21:05,508 libhpc INFO] >> topoaa_5.job submitted
+[2024-01-02 20:21:05,556 libhpc INFO] >> topoaa_6.job submitted
+[2024-01-02 20:21:05,607 libhpc INFO] >> topoaa_7.job submitted
+[2024-01-02 20:21:05,660 libhpc INFO] >> topoaa_8.job submitted
+[2024-01-02 20:21:05,738 libhpc INFO] >> topoaa_9.job submitted
+[2024-01-02 20:21:05,738 libhpc INFO] >> Waiting... (10.00s)
+[2024-01-02 20:21:15,832 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 20:21:16,681 libhpc INFO] >> topoaa_2.job failed
+[2024-01-02 20:21:16,823 libhpc INFO] >> topoaa_3.job failed
+[2024-01-02 20:21:16,961 libhpc INFO] >> topoaa_4.job failed
+[2024-01-02 20:21:17,078 libhpc INFO] >> topoaa_5.job failed
+[2024-01-02 20:21:17,179 libhpc INFO] >> topoaa_6.job failed
+[2024-01-02 20:21:17,268 libhpc INFO] >> topoaa_7.job failed
+[2024-01-02 20:21:17,323 libhpc INFO] >> topoaa_8.job failed
+[2024-01-02 20:21:17,369 libhpc INFO] >> topoaa_9.job submitted
+[2024-01-02 20:21:17,370 libhpc INFO] >> Waiting... (10.00s)
+[2024-01-02 20:21:27,399 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 20:21:27,473 libhpc INFO] >> topoaa_2.job failed
+[2024-01-02 20:21:27,533 libhpc INFO] >> topoaa_3.job failed
+[2024-01-02 20:21:27,594 libhpc INFO] >> topoaa_4.job failed
+[2024-01-02 20:21:27,665 libhpc INFO] >> topoaa_5.job failed
+[2024-01-02 20:21:27,714 libhpc INFO] >> topoaa_6.job failed
+[2024-01-02 20:21:27,773 libhpc INFO] >> topoaa_7.job failed
+[2024-01-02 20:21:27,839 libhpc INFO] >> topoaa_8.job failed
+[2024-01-02 20:21:27,907 libhpc INFO] >> topoaa_9.job failed
+[2024-01-02 20:21:27,908 libhpc INFO] >> Batch 1/2 took 34.18s to finish, 50.00% complete
+[2024-01-02 20:21:27,908 libhpc INFO] > Running batch 2/2
+[2024-01-02 20:21:28,102 libhpc INFO] >> topoaa_10.job submitted
+[2024-01-02 20:21:28,170 libhpc INFO] >> topoaa_11.job submitted
+[2024-01-02 20:21:28,170 libhpc INFO] >> Waiting... (34.00s)
+[2024-01-02 20:22:02,213 libhpc INFO] >> topoaa_10.job failed
+[2024-01-02 20:22:02,298 libhpc INFO] >> topoaa_11.job failed
+[2024-01-02 20:22:02,298 libhpc INFO] >> Batch 2/2 took 34.39s to finish, 100.00% complete
+[2024-01-02 20:22:02,298 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-02 20:22:02,304 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 255, in _run
+    self.export_output_models(faulty_tolerance=self.params["tolerance"])
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 271, in export_output_models
+    self.finish_with_error(_msg)
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 280, in finish_with_error
+    raise RuntimeError(reason)
+RuntimeError: 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 20:22:02,305 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 20:22:02,305 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-02 20:22:02,305 libutil INFO] Finished at 02/01/2024 20:22:02. For any help contact us at https://github.com/haddocking/haddock3/issues. Tot ziens! Agur! Au revoir!.

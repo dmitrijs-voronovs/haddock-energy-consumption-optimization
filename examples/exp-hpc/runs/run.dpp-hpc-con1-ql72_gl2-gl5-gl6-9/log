@@ -1,0 +1,94 @@
+[2024-01-02 21:26:13,672 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-02 21:26:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-02 21:26:17,689 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-02 21:26:17,689 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-02 21:26:17,689 libworkflow INFO] Reading instructions step 2_seletop
+[2024-01-02 21:26:17,689 libworkflow INFO] Reading instructions step 3_caprieval
+[2024-01-02 21:26:17,690 libworkflow INFO] Reading instructions step 4_flexref
+[2024-01-02 21:26:17,690 libworkflow INFO] Reading instructions step 5_caprieval
+[2024-01-02 21:26:17,690 libworkflow INFO] Reading instructions step 6_emref
+[2024-01-02 21:26:17,690 libworkflow INFO] Reading instructions step 7_caprieval
+[2024-01-02 21:26:17,818 base_cns_module INFO] Running [topoaa] module
+[2024-01-02 21:26:17,819 __init__ INFO] [topoaa] Molecule 1: e2aP_1F3G.pdb
+[2024-01-02 21:26:17,830 __init__ INFO] [topoaa] Sanitizing molecule e2aP_1F3G.pdb
+[2024-01-02 21:26:17,935 __init__ INFO] [topoaa] Topology CNS input created in e2aP_1F3G.inp
+[2024-01-02 21:26:17,935 __init__ INFO] [topoaa] Molecule 2: hpr_ensemble.pdb
+[2024-01-02 21:26:18,586 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_1.pdb
+[2024-01-02 21:26:18,672 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_1.inp
+[2024-01-02 21:26:18,672 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_2.pdb
+[2024-01-02 21:26:18,791 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_2.inp
+[2024-01-02 21:26:18,792 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_3.pdb
+[2024-01-02 21:26:18,872 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_3.inp
+[2024-01-02 21:26:18,873 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_4.pdb
+[2024-01-02 21:26:19,002 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_4.inp
+[2024-01-02 21:26:19,002 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_5.pdb
+[2024-01-02 21:26:19,095 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_5.inp
+[2024-01-02 21:26:19,096 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_6.pdb
+[2024-01-02 21:26:19,227 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_6.inp
+[2024-01-02 21:26:19,227 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_7.pdb
+[2024-01-02 21:26:19,328 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_7.inp
+[2024-01-02 21:26:19,328 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_8.pdb
+[2024-01-02 21:26:19,453 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_8.inp
+[2024-01-02 21:26:19,453 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_9.pdb
+[2024-01-02 21:26:19,559 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_9.inp
+[2024-01-02 21:26:19,559 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_10.pdb
+[2024-01-02 21:26:19,685 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_10.inp
+[2024-01-02 21:26:19,685 __init__ INFO] [topoaa] Running CNS Jobs n=11
+[2024-01-02 21:26:19,685 libhpc INFO] > Running batch 1/1
+[2024-01-02 21:26:20,589 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 21:26:20,677 libhpc INFO] >> topoaa_2.job submitted
+[2024-01-02 21:26:20,733 libhpc INFO] >> topoaa_3.job submitted
+[2024-01-02 21:26:20,808 libhpc INFO] >> topoaa_4.job submitted
+[2024-01-02 21:26:20,873 libhpc INFO] >> topoaa_5.job submitted
+[2024-01-02 21:26:20,996 libhpc INFO] >> topoaa_6.job submitted
+[2024-01-02 21:26:21,130 libhpc INFO] >> topoaa_7.job submitted
+[2024-01-02 21:26:21,232 libhpc INFO] >> topoaa_8.job submitted
+[2024-01-02 21:26:21,328 libhpc INFO] >> topoaa_9.job submitted
+[2024-01-02 21:26:21,418 libhpc INFO] >> topoaa_10.job submitted
+[2024-01-02 21:26:21,490 libhpc INFO] >> topoaa_11.job submitted
+[2024-01-02 21:26:21,491 libhpc INFO] >> Waiting... (30.00s)
+[2024-01-02 21:26:51,540 libhpc INFO] >> topoaa_1.job failed
+[2024-01-02 21:26:51,611 libhpc INFO] >> topoaa_2.job failed
+[2024-01-02 21:26:51,677 libhpc INFO] >> topoaa_3.job failed
+[2024-01-02 21:26:51,738 libhpc INFO] >> topoaa_4.job failed
+[2024-01-02 21:26:51,796 libhpc INFO] >> topoaa_5.job failed
+[2024-01-02 21:26:51,850 libhpc INFO] >> topoaa_6.job failed
+[2024-01-02 21:26:51,913 libhpc INFO] >> topoaa_7.job failed
+[2024-01-02 21:26:51,971 libhpc INFO] >> topoaa_8.job failed
+[2024-01-02 21:26:52,061 libhpc INFO] >> topoaa_9.job failed
+[2024-01-02 21:26:52,181 libhpc INFO] >> topoaa_10.job failed
+[2024-01-02 21:26:52,279 libhpc INFO] >> topoaa_11.job failed
+[2024-01-02 21:26:52,279 libhpc INFO] >> Batch 1/1 took 32.59s to finish, 100.00% complete
+[2024-01-02 21:26:52,280 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-02 21:26:52,285 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 255, in _run
+    self.export_output_models(faulty_tolerance=self.params["tolerance"])
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 271, in export_output_models
+    self.finish_with_error(_msg)
+  File "/home/greenBeans/haddock3/src/haddock/modules/__init__.py", line 280, in finish_with_error
+    raise RuntimeError(reason)
+RuntimeError: 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 21:26:52,286 libutil ERROR] 100.00% of output was not generated for this module and tolerance was set to 0.00%.
+[2024-01-02 21:26:52,286 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-02 21:26:52,286 libutil INFO] Finished at 02/01/2024 21:26:52. For any help contact us at https://github.com/haddocking/haddock3/issues. Tot ziens! Dovidenia! Adéu-siau!.
