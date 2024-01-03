@@ -29,6 +29,8 @@ class CLICommandHandler:
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
                                                             help='Clean experiment directory')
         clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
+        clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
+                                                 help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
                                            help='Experiment ID (that is identical to lowercase experiment classname) \
@@ -76,7 +78,7 @@ class CLICommandHandler:
         elif args.command in ['execute', 'exec']:
             self.client.execute_commands([args.cmd])
         elif args.command in ['clean_experiment_dir', "clean"]:
-            self.clean_experiment_dir(ExperimentDir.value_to_enum(args.exp))
+            self.clean_experiment_dir(ExperimentDir.value_to_enum(args.exp), args.full)
         elif args.command in ['create_experiment', "create-exp"]:
             self.create_experiment(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['run_experiment', "run-exp"]:
@@ -95,10 +97,15 @@ class CLICommandHandler:
             [ExperimentDir.dir(exp, PathRegistry.experiment_data_filename(eid)) for eid in experiment_ids],
             ExperimentDir.analysis_dir(exp, 'data'))
 
-    def clean_experiment_dir(self, exp: 'ExperimentDir'):
+    def clean_experiment_dir(self, exp: 'ExperimentDir', full: bool):
         exp_dir = ExperimentDir.dir(exp)
         self.client.put_files([PathRegistry.clean_script()], exp_dir)
-        self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
+        print(full)
+        if full:
+            self.client.execute_commands(
+                [f'cd {exp_dir}', 'rm -rf run.*', 'rm -rf *.info', 'rm -rf *.cfg', 'rm -rf slurm-*'])
+        else:
+            self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
 
     def get_haddock_log_files(self, exp: 'ExperimentDir', subdir='runs'):
         exp_dir = ExperimentDir.dir(exp)
