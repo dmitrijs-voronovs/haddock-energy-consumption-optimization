@@ -35,7 +35,9 @@ class ExperimentFolder(Enum):
         try:
             return next(member for member in ExperimentFolder if member.value == value)
         except StopIteration:
-            raise ValueError(f"{value} is not a valid value in ExperimentType")
+            all_values = [member.value for member in ExperimentFolder]
+            raise ValueError(
+                f"{value} is not a valid value in ExperimentType, should be one of {all_values}")
 
     @staticmethod
     def dir(exp: 'ExperimentFolder', *path: str):
