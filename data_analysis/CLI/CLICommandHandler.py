@@ -21,8 +21,8 @@ class CLICommandHandler:
         get_data_parser = subparsers.add_parser('get_exp_data', aliases=["get-data"], help='Get experiment data')
         get_data_parser.add_argument('-e', '--exp', required=True, help='Experiment directory')
         get_data_parser.add_argument('-eids', '--exp_ids', nargs='*', required=True,
-                                     help='Experiment IDs (that are identical to experiment classnames) to get \
-                                     data from [example: "gl6 gl2_2 gl5"]')
+                                     help='Experiment IDs (that are identical to lowercase experiment classnames) to \
+                                     get data from [example: "gl6 gl2_2 gl5"]')
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
         get_log_files_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
@@ -30,10 +30,10 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
-                                           help='Experiment ID (that are identical to experiment classnames) \
+                                           help='Experiment ID (that is identical to lowercase experiment classname) \
                                            [example: "gl2", "gl5_2"]')
         run_experiment_parser.add_argument('-n', '--node', type=str, default="gl4",
-                                           help='Node (i.e. "gl2", "gl5"). Default = "gl4"')
+                                           help='Node [default = "gl4", example: "gl2", "gl5"]')
         run_experiment_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment Directory')
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
         execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
