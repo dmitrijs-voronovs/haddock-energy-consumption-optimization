@@ -1,12 +1,13 @@
 import argparse
 import os
 import sys
+from importlib import import_module
 from pathlib import Path
 
 sys.path.append(os.path.pardir)
 
 from examples import PathRegistry
-from .Constants import ExperimentDir
+from .Constants import ExperimentDir, EXPERIMENT_DIR_TO_MODE_MAP
 from .CredentialManager import CredentialManager, DEFAULT_NODE
 from .RemoteSSHClient import RemoteSSHClient
 
@@ -28,6 +29,8 @@ class CLICommandHandler:
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
                                                             help='Clean experiment directory')
         clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
+        clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
+                                                 help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
                                            help='Experiment ID (that is identical to lowercase experiment classname) \
@@ -42,6 +45,12 @@ class CLICommandHandler:
         check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"],
                                                 help='Check experiment directory space')
         check_dir_space.add_argument('-e', '--exp', required=True, type=str, help='Experiment Directory')
+
+        create_experiment_parser = subparsers.add_parser('create_experiment', aliases=["create-exp"],
+                                                         help='Create experiment')
+        create_experiment_parser.add_argument('-d', '--dir', required=True, type=str, help='Experiment Directory')
+        create_experiment_parser.add_argument('-c', '--cls', type=str, required=True,
+                                              help='Experiment classname) [example: "Test", "GL2_3"]')
 
         subparsers.add_parser('sinfo', help='Slurm node information')
         subparsers.add_parser('squeue', help='Check slurm queue')
@@ -69,7 +78,9 @@ class CLICommandHandler:
         elif args.command in ['execute', 'exec']:
             self.client.execute_commands([args.cmd])
         elif args.command in ['clean_experiment_dir', "clean"]:
-            self.clean_experiment_dir(ExperimentDir.value_to_enum(args.exp))
+            self.clean_experiment_dir(ExperimentDir.value_to_enum(args.exp), args.full)
+        elif args.command in ['create_experiment', "create-exp"]:
+            self.create_experiment(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['run_experiment', "run-exp"]:
             exp_dir = ExperimentDir.value_to_enum(args.exp)
             if args.node == DEFAULT_NODE:
@@ -86,10 +97,15 @@ class CLICommandHandler:
             [ExperimentDir.dir(exp, PathRegistry.experiment_data_filename(eid)) for eid in experiment_ids],
             ExperimentDir.analysis_dir(exp, 'data'))
 
-    def clean_experiment_dir(self, exp: 'ExperimentDir'):
+    def clean_experiment_dir(self, exp: 'ExperimentDir', full: bool):
         exp_dir = ExperimentDir.dir(exp)
         self.client.put_files([PathRegistry.clean_script()], exp_dir)
-        self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
+        print(full)
+        if full:
+            self.client.execute_commands(
+                [f'cd {exp_dir}', 'rm -rf run.*', 'rm -rf *.info', 'rm -rf *.cfg', 'rm -rf slurm-*'])
+        else:
+            self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
 
     def get_haddock_log_files(self, exp: 'ExperimentDir', subdir='runs'):
         exp_dir = ExperimentDir.dir(exp)
@@ -153,3 +169,9 @@ class CLICommandHandler:
             [f"echo running experiment '{exp_id}' on $(hostname)", f"cd {exp_dir}", "pwd", f"sh {create_jobs_script}",
              "echo activate conda", "source $HOME/anaconda3/bin/activate", "conda activate haddock3",
              "echo run experiment", f"sh {run_experiment_script}", "sinfo"])
+
+    def create_experiment(self, exp: 'ExperimentDir', cls: str):
+        mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]
+        module_name = f"examples.domain.experiment.{mode.value.lower()}.{cls}"
+        Exeriment_Class = getattr(import_module(module_name), cls)
+        Exeriment_Class(ExperimentDir.host_dir(exp)).generate_create_job_script().generate_runner()

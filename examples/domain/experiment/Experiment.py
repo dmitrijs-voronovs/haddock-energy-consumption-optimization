@@ -7,7 +7,8 @@ from examples.domain.experiment.PathRegistry import PathRegistry
 
 
 class Experiment(ABC):
-    def __init__(self):
+    def __init__(self, base_dir: str = '.'):
+        self.base_dir = base_dir
         self.configs = self.create_configs()
         self.warmup_config = self.create_warmup_config()
 
@@ -41,7 +42,6 @@ class Experiment(ABC):
         return f"sh {PathRegistry.create_job_script()} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
 
     def generate_create_job_script(self):
-        name = PathRegistry.create_jobs_script(self.ID)
         all_configs = self.configs
 
         if self.warmup_config:
@@ -49,7 +49,8 @@ class Experiment(ABC):
 
         commands = [self.convert_config_to_create_workflow_command(config) for config in all_configs]
 
-        with open(name, "w", newline='\n') as file:
+        file_name = f"{self.base_dir}/{PathRegistry.create_jobs_script(self.ID)}"
+        with open(file_name, "w", newline='\n') as file:
             file.writelines("#!/bin/bash \n")
             file.writelines("\n".join(commands))
 
@@ -65,13 +66,13 @@ class Experiment(ABC):
         dependent_job_id = job_prev_id if job_idx > first_job_idx else self.get_experiment_job_dependency()
         return [self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
                                          len(config.nodes),
-                                         f"{PathRegistry.COLLECT_INFO_BEFORE_SH} run.{config.name_without_extension}",
+                                         f'{PathRegistry.COLLECT_INFO_BEFORE_SH} "{config.run_dir}"',
                                          dependent_job_id),
                 self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
                                          self.get_command_for_haddock_execution(config), job_check_before_id),
                 self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
                                          len(config.nodes),
-                                         f"{PathRegistry.COLLECT_INFO_AFTER_SH} run.{config.name_without_extension}",
+                                         f'{PathRegistry.COLLECT_INFO_AFTER_SH} "{config.run_dir}"',
                                          job_id)]
 
     def generate_runner(self):
@@ -94,7 +95,8 @@ class Experiment(ABC):
 
         check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
 
-        with open(PathRegistry.run_experiment_script(self.ID), "w", newline='\n') as file:
+        file_name = f"{self.base_dir}/{PathRegistry.run_experiment_script(self.ID)}"
+        with open(file_name, "w", newline='\n') as file:
             file.write("\n".join(commands))
             file.write(check_jobs_command)
 

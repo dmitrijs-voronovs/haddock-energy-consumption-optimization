@@ -1,0 +1,49 @@
+[2024-01-03 02:54:13,347 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-03 02:54:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-03 02:54:17,287 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-03 02:54:17,287 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-03 02:54:17,287 libworkflow INFO] Reading instructions step 2_seletop
+[2024-01-03 02:54:17,287 libworkflow INFO] Reading instructions step 3_caprieval
+[2024-01-03 02:54:17,288 libworkflow INFO] Reading instructions step 4_flexref
+[2024-01-03 02:54:17,288 libworkflow INFO] Reading instructions step 5_caprieval
+[2024-01-03 02:54:17,288 libworkflow INFO] Reading instructions step 6_emref
+[2024-01-03 02:54:17,288 libworkflow INFO] Reading instructions step 7_caprieval
+[2024-01-03 02:54:17,384 base_cns_module INFO] Running [topoaa] module
+[2024-01-03 02:54:17,384 __init__ INFO] [topoaa] Molecule 1: e2aP_1F3G.pdb
+[2024-01-03 02:54:17,391 __init__ INFO] [topoaa] Sanitizing molecule e2aP_1F3G.pdb
+[2024-01-03 02:54:17,503 __init__ INFO] [topoaa] Topology CNS input created in e2aP_1F3G.inp
+[2024-01-03 02:54:17,504 __init__ INFO] [topoaa] Molecule 2: hpr_ensemble.pdb
+[2024-01-03 02:54:18,123 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_1.pdb
+[2024-01-03 02:54:18,244 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_1.inp
+[2024-01-03 02:54:18,244 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_2.pdb
+[2024-01-03 02:54:18,370 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_2.inp
+[2024-01-03 02:54:18,370 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_3.pdb
+[2024-01-03 02:54:18,478 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_3.inp
+[2024-01-03 02:54:18,478 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_4.pdb
+[2024-01-03 02:54:18,574 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_4.inp
+[2024-01-03 02:54:18,575 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_5.pdb
+[2024-01-03 02:54:18,674 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_5.inp
+[2024-01-03 02:54:18,674 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_6.pdb
+[2024-01-03 02:54:18,791 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_6.inp
+[2024-01-03 02:54:18,791 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_7.pdb
+[2024-01-03 02:54:18,884 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_7.inp
+[2024-01-03 02:54:18,884 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_8.pdb
+[2024-01-03 02:54:18,989 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_8.inp
+[2024-01-03 02:54:18,989 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_9.pdb
+[2024-01-03 02:54:19,109 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_9.inp
+[2024-01-03 02:54:19,109 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_10.pdb
+[2024-01-03 02:54:19,236 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_10.inp
+[2024-01-03 02:54:19,236 __init__ INFO] [topoaa] Running CNS Jobs n=11
+[2024-01-03 02:54:19,236 libhpc INFO] Concatenating, each .job will produce 10 (or less) models
+[2024-01-03 02:54:19,236 libhpc INFO] > Running batch 1/1
+[2024-01-03 02:54:19,431 libhpc INFO] >> topoaa_1.job submitted
