@@ -30,7 +30,10 @@ class PathRegistry:
     def clean_script():
         return f"{PathRegistry.script_folder()}/clean.sh"
 
+    COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
+    COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
+
     @staticmethod
     def info_scripts():
-        return [f"{PathRegistry.script_folder()}/collect-info.after.sh",
-                f"{PathRegistry.script_folder()}/collect-info.before.sh"]
+        return [f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_AFTER_SH}",
+                f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_BEFORE_SH}"]

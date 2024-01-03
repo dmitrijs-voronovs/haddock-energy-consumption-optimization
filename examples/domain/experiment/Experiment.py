@@ -5,9 +5,6 @@ from typing import List
 from examples.domain.config.Config import Config
 from examples.domain.experiment.PathRegistry import PathRegistry
 
-COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
-COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
-
 
 class Experiment(ABC):
     def __init__(self):
@@ -23,9 +20,9 @@ class Experiment(ABC):
     def create_configs(self) -> List[Config]:
         pass
 
-    @abstractmethod
-    def create_warmup_config(self) -> Config:
-        pass
+    def create_warmup_config(self) -> Config | None:
+        '''Override this method if you want to create a warmup config to run before the actual experiment'''
+        return None
 
     @abstractmethod
     def get_ncores(self, config: Config) -> int:
@@ -45,8 +42,12 @@ class Experiment(ABC):
 
     def generate_create_job_script(self):
         name = PathRegistry.create_jobs_script(self.ID)
-        commands = [self.convert_config_to_create_workflow_command(config) for config in
-                    self.configs + [self.warmup_config]]
+        all_configs = self.configs
+
+        if self.warmup_config:
+            all_configs += [self.warmup_config]
+
+        commands = [self.convert_config_to_create_workflow_command(config) for config in all_configs]
 
         with open(name, "w", newline='\n') as file:
             file.writelines("#!/bin/bash \n")
@@ -54,33 +55,42 @@ class Experiment(ABC):
 
         return self
 
-    def generate_commands_for_config(self, config: 'Config', job_idx: int, warmup_config_idx: int):
+    def generate_commands_for_config(self, config: 'Config', job_idx: int):
         job_prev_id = f"job{job_idx - 1}_2"
         job_check_before_id = f"job{job_idx}_0"
         job_id = f"job{job_idx}_1"
         job_check_after_id = f"job{job_idx}_2"
+        first_job_idx = 0
 
-        dependent_job_id = job_prev_id if job_idx > warmup_config_idx else self.get_experiment_job_dependency()
+        dependent_job_id = job_prev_id if job_idx > first_job_idx else self.get_experiment_job_dependency()
         return [self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
-                                         len(config.nodes), f"{COLLECT_INFO_BEFORE_SH} {config.name_without_extension}",
+                                         len(config.nodes),
+                                         f"{PathRegistry.COLLECT_INFO_BEFORE_SH} run.{config.name_without_extension}",
                                          dependent_job_id),
                 self.__get_slurm_command(job_id, config.name, config.node_names, self.get_ncores(config),
                                          self.get_command_for_haddock_execution(config), job_check_before_id),
                 self.__get_slurm_command(job_check_after_id, f"info.after.{config.name}", config.node_names,
-                                         len(config.nodes), f"{COLLECT_INFO_AFTER_SH} {config.name_without_extension}",
+                                         len(config.nodes),
+                                         f"{PathRegistry.COLLECT_INFO_AFTER_SH} run.{config.name_without_extension}",
                                          job_id)]
 
     def generate_runner(self):
         configs = self.configs.copy()
         random.shuffle(configs)
+
+        commands = ["#!/bin/bash \n"]
+
         warmup_config = self.warmup_config
-        warmup_config_idx = 0
-        configs.insert(warmup_config_idx, warmup_config)
+        warmup_config_idx = -1
+
+        if warmup_config:
+            warmup_config_idx = 0
+            configs.insert(warmup_config_idx, warmup_config)
+            commands.append(f"rm -rf \"{warmup_config.run_dir}\"\n")
 
         job_ids = [f"$job{job_idx}_1" for job_idx in range(warmup_config_idx + 1, len(configs))]
-        commands = ["#!/bin/bash \n", f"rm -rf \"{warmup_config.run_dir}\"\n", ]
         commands += [command for job_idx, config in enumerate(configs) for command in
-                     self.generate_commands_for_config(config, job_idx, warmup_config_idx)]
+                     self.generate_commands_for_config(config, job_idx)]
 
         check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
 
