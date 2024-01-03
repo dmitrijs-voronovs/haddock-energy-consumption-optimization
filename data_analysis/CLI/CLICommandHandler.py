@@ -20,7 +20,7 @@ class CLICommandHandler:
         subparsers = parser.add_subparsers(dest='command')
         get_local_exp_data_parser = subparsers.add_parser('get_local_exp_data', aliases=["get-data"],
                                                           help='Get local experiment data')
-        get_local_exp_data_parser.add_argument('-e', '--exp', required=True, help='Experiment folder')
+        get_local_exp_data_parser.add_argument('-e', '--exp', required=True, help='Experiment directory')
         get_local_exp_data_parser.add_argument('-eids', '--exp_ids', nargs='*', default='gl5',
                                                help='Experiments to get data from (i.e "gl6 gl2_2 gl5") ')
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
@@ -30,21 +30,22 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment type')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
         run_experiment_parser.add_argument('-eid', '--exp_id', type=str, required=True,
-                                           help='Experiment ID (i.e. "gl2", "gl5_2"')
+                                           help='Experiment ID (i.e. "gl2", "gl5_2")')
         run_experiment_parser.add_argument('-n', '--node', type=str, default="gl4",
-                                           help='Node (i.e. "gl2", "gl5"')
-        run_experiment_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment Folder')
+                                           help='Node (i.e. "gl2", "gl5"). Default = "gl4"')
+        run_experiment_parser.add_argument('-e', '--exp', type=str, required=True, help='Experiment Directory')
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
         execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
 
         subparsers.add_parser('check_space', aliases=["space"], help='Check space')
-        check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"], help='Check folders space')
-        check_dir_space.add_argument('-e', '--exp', required=True, type=str, help='Experiment Folder')
+        check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"],
+                                                help='Check experiment directory space')
+        check_dir_space.add_argument('-e', '--exp', required=True, type=str, help='Experiment Directory')
 
-        subparsers.add_parser('sinfo', help='sinfo')
-        subparsers.add_parser('squeue', help='squeue')
-        subparsers.add_parser('sacct', help='sacct')
-        subparsers.add_parser('scancel', help='scancel')
+        subparsers.add_parser('sinfo', help='Slurm node information')
+        subparsers.add_parser('squeue', help='Check slurm queue')
+        subparsers.add_parser('sacct', help='Query slurm accountant to get experiment data')
+        subparsers.add_parser('scancel', help='Cancel all running and pending jobs')
 
         args = parser.parse_args()
         if args.command in ['get_local_exp_data', "get-data"]:

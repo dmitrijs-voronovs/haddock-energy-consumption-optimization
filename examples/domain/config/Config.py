@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+NODE_NAME_MAP = {
+    "gl2": "GreenLab-STF",
+    # Add other mappings here
+}
+
 
 class Config(ABC):
     def __init__(self, mode, workflow, nodes: str | List[str], trial, is_warmup=False):
@@ -29,7 +34,7 @@ class Config(ABC):
 
     @property
     def node_names(self):
-        return ",".join(["GreenLab-STF" if node == "gl2" else node for node in self.nodes])
+        return ",".join([NODE_NAME_MAP.get(node, node) for node in self.nodes])
 
     @abstractmethod
     def _get_params_for_filename(self) -> str:
