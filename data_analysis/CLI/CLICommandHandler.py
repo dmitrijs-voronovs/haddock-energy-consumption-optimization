@@ -20,15 +20,15 @@ class CLICommandHandler:
         parser = argparse.ArgumentParser(description='Remote SSH Client')
         subparsers = parser.add_subparsers(dest='command')
         get_data_parser = subparsers.add_parser('get_exp_data', aliases=["get-data"], help='Get experiment data')
-        get_data_parser.add_argument('-d', '--dir', required=True, help='Experiment directory')
+        self.add_dir_arg(get_data_parser)
         get_data_parser.add_argument('-e', '--exp_ids', nargs='*', required=True,
                                      help='Experiment IDs (that are identical to lowercase experiment classnames) to \
                                      get data from [example: "gl6 gl2_2 gl5"]')
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
-        get_log_files_parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment type')
+        self.add_dir_arg(get_log_files_parser)
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
                                                             help='Clean experiment directory')
-        clean_experiment_dir_parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment type')
+        self.add_dir_arg(clean_experiment_dir_parser)
         clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
                                                  help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
@@ -37,18 +37,18 @@ class CLICommandHandler:
                                            [example: "gl2", "gl5_2"]')
         run_experiment_parser.add_argument('-n', '--node', type=str, default="gl4",
                                            help='Node [default = "gl4", example: "gl2", "gl5"]')
-        run_experiment_parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment Directory')
+        self.add_dir_arg(run_experiment_parser)
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
         execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
 
         subparsers.add_parser('check_space', aliases=["space"], help='Check space of the cluster')
         check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"],
                                                 help='Check experiment directory space')
-        check_dir_space.add_argument('-d', '--dir', required=True, type=str, help='Experiment Directory')
+        self.add_dir_arg(check_dir_space)
 
         create_experiment_parser = subparsers.add_parser('create_experiment', aliases=["create-exp"],
                                                          help='Create experiment')
-        create_experiment_parser.add_argument('-d', '--dir', required=True, type=str, help='Experiment Directory')
+        self.add_dir_arg(create_experiment_parser)
         create_experiment_parser.add_argument('-c', '--cls', type=str, required=True,
                                               help='Experiment classname) [example: "Test", "GL2_3"]')
 
@@ -88,6 +88,9 @@ class CLICommandHandler:
             else:
                 node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node(args.node))
                 CLICommandHandler(node_client).run_experiment(exp_dir, args.exp_id)
+
+    def add_dir_arg(self, parser):
+        parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment directory')
 
     def get_exp_data(self, exp: 'ExperimentDir', experiment_ids):
         exp_dir = ExperimentDir.dir(exp)
