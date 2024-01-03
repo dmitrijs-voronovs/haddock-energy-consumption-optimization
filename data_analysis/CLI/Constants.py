@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict
 
 from examples import PathRegistry
 
@@ -56,3 +57,10 @@ class ExperimentDir(Enum):
         if path is None:
             path = []
         return f"{base_dir_path}/{exp.value}/{'/'.join(path)}"
+
+
+EXPERIMENT_DIR_TO_MODE_MAP: Dict[ExperimentDir, Mode] = {
+    ExperimentDir.LOCAL: Mode.LOCAL,
+    ExperimentDir.HPC: Mode.HPC,
+    ExperimentDir.MPI: Mode.MPI,
+}
