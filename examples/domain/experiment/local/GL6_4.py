@@ -10,7 +10,7 @@ class GL6_4(LocalExperiment):
     def create_configs(self) -> List[Config]:
         return [
             LocalConfig(workflow, "gl6", trial, ncores)
-            for workflow in ["dpp"]
+            for workflow in ["dpp", "daa"]
             for ncores in [2, 4, 8, 16, 32]
             for trial in range(31, 41)
         ]

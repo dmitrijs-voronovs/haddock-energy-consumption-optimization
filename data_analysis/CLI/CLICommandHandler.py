@@ -32,7 +32,7 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
                                                  help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
-        run_experiment_parser.add_argument('-n', '--node', type=str,
+        run_experiment_parser.add_argument('-n', '--node', type=str, required=True,
                                            help='Node [example: "gl2", "gl5"]')
         self.add_dir_arg(run_experiment_parser)
         self.add_cls_arg(run_experiment_parser)
