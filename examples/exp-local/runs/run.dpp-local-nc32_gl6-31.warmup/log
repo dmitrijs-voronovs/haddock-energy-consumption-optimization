@@ -1,0 +1,69 @@
+[2024-01-15 03:11:26,766 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-15 03:11:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-15 03:11:32,959 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-15 03:11:32,960 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-15 03:11:32,960 libworkflow INFO] Reading instructions step 2_seletop
+[2024-01-15 03:11:32,960 libworkflow INFO] Reading instructions step 3_caprieval
+[2024-01-15 03:11:32,960 libworkflow INFO] Reading instructions step 4_flexref
+[2024-01-15 03:11:32,961 libworkflow INFO] Reading instructions step 5_caprieval
+[2024-01-15 03:11:32,961 libworkflow INFO] Reading instructions step 6_emref
+[2024-01-15 03:11:32,962 libworkflow INFO] Reading instructions step 7_caprieval
+[2024-01-15 03:11:33,069 base_cns_module INFO] Running [topoaa] module
+[2024-01-15 03:11:33,069 __init__ INFO] [topoaa] Molecule 1: e2aP_1F3G.pdb
+[2024-01-15 03:11:33,076 __init__ INFO] [topoaa] Sanitizing molecule e2aP_1F3G.pdb
+[2024-01-15 03:11:33,181 __init__ INFO] [topoaa] Topology CNS input created in e2aP_1F3G.inp
+[2024-01-15 03:11:33,182 __init__ INFO] [topoaa] Molecule 2: hpr_ensemble.pdb
+[2024-01-15 03:11:33,797 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_1.pdb
+[2024-01-15 03:11:33,880 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_1.inp
+[2024-01-15 03:11:33,881 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_2.pdb
+[2024-01-15 03:11:33,971 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_2.inp
+[2024-01-15 03:11:33,972 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_3.pdb
+[2024-01-15 03:11:34,054 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_3.inp
+[2024-01-15 03:11:34,055 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_4.pdb
+[2024-01-15 03:11:34,157 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_4.inp
+[2024-01-15 03:11:34,158 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_5.pdb
+[2024-01-15 03:11:34,253 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_5.inp
+[2024-01-15 03:11:34,253 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_6.pdb
+[2024-01-15 03:11:34,395 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_6.inp
+[2024-01-15 03:11:34,395 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_7.pdb
+[2024-01-15 03:11:34,505 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_7.inp
+[2024-01-15 03:11:34,506 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_8.pdb
+[2024-01-15 03:11:34,612 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_8.inp
+[2024-01-15 03:11:34,613 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_9.pdb
+[2024-01-15 03:11:34,734 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_9.inp
+[2024-01-15 03:11:34,734 __init__ INFO] [topoaa] Sanitizing molecule hpr_ensemble_10.pdb
+[2024-01-15 03:11:34,844 __init__ INFO] [topoaa] Topology CNS input created in hpr_ensemble_10.inp
+[2024-01-15 03:11:34,844 __init__ INFO] [topoaa] Running CNS Jobs n=11
+[2024-01-15 03:11:34,844 libutil INFO] Selected 11 cores to process 11 jobs, with 32 maximum available cores.
+[2024-01-15 03:11:34,844 libparallel INFO] Using 11 cores
+[2024-01-15 03:11:38,717 libparallel INFO] >> /e2aP_1F3G.inp completed 9% 
+[2024-01-15 03:11:38,718 libparallel INFO] >> /hpr_ensemble_1.inp completed 18% 
+[2024-01-15 03:11:38,718 libparallel INFO] >> /hpr_ensemble_2.inp completed 27% 
+[2024-01-15 03:11:38,718 libparallel INFO] >> /hpr_ensemble_3.inp completed 36% 
+[2024-01-15 03:11:38,718 libparallel INFO] >> /hpr_ensemble_4.inp completed 45% 
+[2024-01-15 03:11:38,718 libparallel INFO] >> /hpr_ensemble_5.inp completed 55% 
+[2024-01-15 03:11:38,719 libparallel INFO] >> /hpr_ensemble_6.inp completed 64% 
+[2024-01-15 03:11:38,719 libparallel INFO] >> /hpr_ensemble_7.inp completed 73% 
+[2024-01-15 03:11:38,719 libparallel INFO] >> /hpr_ensemble_8.inp completed 82% 
+[2024-01-15 03:11:38,719 libparallel INFO] >> /hpr_ensemble_9.inp completed 91% 
+[2024-01-15 03:11:38,719 libparallel INFO] >> /hpr_ensemble_10.inp completed 100% 
+[2024-01-15 03:11:38,719 libparallel INFO] 11 tasks finished
+[2024-01-15 03:11:38,720 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-15 03:11:38,813 base_cns_module INFO] Module [topoaa] finished.
+[2024-01-15 03:11:38,813 __init__ INFO] [topoaa] took 6 seconds
+[2024-01-15 03:11:39,875 base_cns_module INFO] Running [rigidbody] module
+[2024-01-15 03:11:39,877 __init__ INFO] [rigidbody] crossdock=true
+[2024-01-15 03:11:39,877 __init__ INFO] [rigidbody] Preparing jobs...
+[2024-01-15 03:12:33,063 __init__ INFO] [rigidbody] Running CNS Jobs n=1000
+[2024-01-15 03:12:33,064 libutil INFO] Selected 32 cores to process 1000 jobs, with 32 maximum available cores.
+[2024-01-15 03:12:33,067 libparallel INFO] Using 32 cores

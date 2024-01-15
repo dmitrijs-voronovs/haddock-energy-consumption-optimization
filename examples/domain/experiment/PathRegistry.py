@@ -15,12 +15,16 @@ class PathRegistry:
         return f"run.{ID}.sh"
 
     @staticmethod
-    def check_job_script(ID: str):
-        return f"check.{ID}.sh"
+    def get_full_prefix(full):
+        return "full." if full else ""
 
     @staticmethod
-    def experiment_data_filename(ID: str):
-        return f"data.{ID}.txt"
+    def check_job_script(ID: str, full: bool = False):
+        return f"check.{PathRegistry.get_full_prefix(full)}{ID}.sh"
+
+    @staticmethod
+    def experiment_data_filename(ID: str, full: bool = False):
+        return f"data.{PathRegistry.get_full_prefix(full)}{ID}.txt"
 
     @staticmethod
     def script_folder():

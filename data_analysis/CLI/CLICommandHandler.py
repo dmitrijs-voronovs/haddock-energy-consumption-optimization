@@ -22,9 +22,8 @@ class CLICommandHandler:
         subparsers = parser.add_subparsers(dest='command')
         get_data_parser = subparsers.add_parser('get_exp_data', aliases=["get-data"], help='Get experiment data')
         self.add_dir_arg(get_data_parser)
-        get_data_parser.add_argument('-e', '--exp_ids', nargs='*', required=True,
-                                     help='Experiment IDs (that are identical to lowercase experiment classnames) to \
-                                     get data from [example: "gl6 gl2_2 gl5"]')
+        get_data_parser.add_argument('-c', '--cls', nargs='*', required=True,
+                                     help='Experiment classnames [example: "Test", "GL2_3"]')
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
         self.add_dir_arg(get_log_files_parser)
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
@@ -33,14 +32,13 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
                                                  help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
-        run_experiment_parser.add_argument('-e', '--exp_id', type=str, required=True,
-                                           help='Experiment ID (that is identical to lowercase experiment classname) \
-                                           [example: "gl2", "gl5_2"]')
-        run_experiment_parser.add_argument('-n', '--node', type=str, default="gl4",
-                                           help='Node [default = "gl4", example: "gl2", "gl5"]')
+        run_experiment_parser.add_argument('-n', '--node', type=str,
+                                           help='Node [example: "gl2", "gl5"]')
         self.add_dir_arg(run_experiment_parser)
+        self.add_cls_arg(run_experiment_parser)
+
         execute_parser = subparsers.add_parser('execute', aliases=['exec'], help='Execute a custom command')
-        execute_parser.add_argument('-c', '--cmd', type=str, required=True, help='The command to execute')
+        execute_parser.add_argument('cmd', nargs=argparse.REMAINDER, help='The command to execute')
 
         subparsers.add_parser('check_space', aliases=["space"], help='Check space of the cluster')
         check_dir_space = subparsers.add_parser('check_dir_space', aliases=["dir-space"],
@@ -50,8 +48,7 @@ class CLICommandHandler:
         create_experiment_parser = subparsers.add_parser('create_experiment', aliases=["create-exp"],
                                                          help='Create experiment')
         self.add_dir_arg(create_experiment_parser)
-        create_experiment_parser.add_argument('-c', '--cls', type=str, required=True,
-                                              help='Experiment classname) [example: "Test", "GL2_3"]')
+        self.add_cls_arg(create_experiment_parser)
 
         subparsers.add_parser('sinfo', help='Slurm node information')
         subparsers.add_parser('squeue', help='Check slurm queue')
@@ -60,7 +57,7 @@ class CLICommandHandler:
 
         args = parser.parse_args()
         if args.command in ['get_exp_data', "get-data"]:
-            self.get_exp_data(ExperimentDir.value_to_enum(args.dir), args.exp_ids)
+            self.get_exp_data(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['check_space', "space"]:
             self.check_space()
         elif args.command in ['check_dir_space', "dir-space"]:
@@ -77,7 +74,7 @@ class CLICommandHandler:
         elif args.command in ['get_log_files', "get-logs"]:
             self.get_log_files(ExperimentDir.value_to_enum(args.dir))
         elif args.command in ['execute', 'exec']:
-            self.client.execute_commands([args.cmd])
+            self.client.execute_commands([' '.join(args.cmd)])
         elif args.command in ['clean_experiment_dir', "clean"]:
             self.clean_experiment_dir(ExperimentDir.value_to_enum(args.dir), args.full)
         elif args.command in ['create_experiment', "create-exp"]:
@@ -85,21 +82,29 @@ class CLICommandHandler:
         elif args.command in ['run_experiment', "run-exp"]:
             exp_dir = ExperimentDir.value_to_enum(args.dir)
             if args.node == DEFAULT_NODE:
-                CLICommandHandler(self.client).run_experiment(exp_dir, args.exp_id)
+                CLICommandHandler(self.client).run_experiment(exp_dir, args.cls)
             else:
                 node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node(args.node))
-                CLICommandHandler(node_client).run_experiment(exp_dir, args.exp_id)
+                CLICommandHandler(node_client).run_experiment(exp_dir, args.cls)
 
     def add_dir_arg(self, parser):
         parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment directory')
 
+    def add_cls_arg(self, parser):
+        parser.add_argument('-c', '--cls', type=str, required=True,
+                            help='Experiment classname [example: "Test", "GL2_3"]')
+
     def get_exp_data(self, exp: 'ExperimentDir', experiment_ids):
         exp_dir = ExperimentDir.dir(exp)
         self.client.execute_commands(
-            [f'cd {exp_dir}'] + [f'sh {PathRegistry.check_job_script(eid)}' for eid in experiment_ids])
+            [f'cd {exp_dir}'] + [f'sh {PathRegistry.check_job_script(eid)}' for eid in experiment_ids] + [
+                f'sh {PathRegistry.check_job_script(eid, full=True)}' for eid in experiment_ids])
         self.client.get_files(
             [ExperimentDir.dir(exp, PathRegistry.experiment_data_filename(eid)) for eid in experiment_ids],
             ExperimentDir.analysis_dir(exp, 'data'))
+        self.client.get_files(
+            [ExperimentDir.dir(exp, PathRegistry.experiment_data_filename(eid, full=True)) for eid in experiment_ids],
+            ExperimentDir.analysis_dir(exp, 'full', 'data'))
 
     def clean_experiment_dir(self, exp: 'ExperimentDir', full: bool):
         exp_dir = ExperimentDir.dir(exp)

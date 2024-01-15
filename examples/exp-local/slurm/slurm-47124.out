@@ -1,0 +1,4 @@
+usage: haddock3 [-h] [--restart RESTART] [--extend-run EXTEND_RUN] [--setup]
+                [--log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-v]
+                recipe
+haddock3: error: argument --restart: expected one argument

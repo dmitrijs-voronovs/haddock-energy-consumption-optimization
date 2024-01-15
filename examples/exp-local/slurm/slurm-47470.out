@@ -1,0 +1,4 @@
+/var/spool/slurmd/job47470/slurm_script: line 5: run.dpp-local-nc4_gl6-32.cfg.info/nodes_info.after.txt: No such file or directory
+/var/spool/slurmd/job47470/slurm_script: line 6: run.dpp-local-nc4_gl6-32.cfg.info/proc_info.after.txt: No such file or directory
+Collecting info for run.dpp-local-nc4_gl6-32.cfg (after run) done.
+slurmstepd: error: *** JOB 47470 ON gl6 CANCELLED AT 2024-01-15T02:38:40 ***
