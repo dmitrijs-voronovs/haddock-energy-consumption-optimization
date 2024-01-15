@@ -43,7 +43,7 @@ class Experiment(ABC):
         return f"sh {PathRegistry.create_job_script()} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
 
     def generate_create_job_script(self):
-        all_configs = self.configs
+        all_configs = self.configs.copy()
 
         if self.warmup_config:
             all_configs += [self.warmup_config]
