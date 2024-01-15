@@ -1,0 +1,2 @@
+/var/spool/slurmd/job47566/slurm_script: line 5: run.daa-local-nc2_gl6-39.cfg.info/nodes_info.after.txt: No such file or directory
+slurmstepd: error: *** JOB 47566 ON gl6 CANCELLED AT 2024-01-15T02:38:51 ***
