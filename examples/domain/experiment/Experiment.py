@@ -35,14 +35,15 @@ class Experiment(ABC):
         return None
 
     def get_command_for_haddock_execution(self, config: 'Config') -> str:
-        return f'haddock3 "{config.name}"'
+        run_dir = f"{config.run_dir}.info"
+        return f'--wrap="(perf stat -e power/energy-pkg/,power/energy-ram/ haddock3 \'{config.name}\' > {run_dir}/haddock.output.log) > {run_dir}/perf_stat.txt 2>&1"'
 
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
         warmup_suffix = ' warmup' if config.is_warmup else ''
         return f"sh {PathRegistry.create_job_script()} {config.workflow} {config.get_params_for_create_command()} {config.nodes_for_filename} {config.trial}{warmup_suffix}"
 
     def generate_create_job_script(self):
-        all_configs = self.configs
+        all_configs = self.configs.copy()
 
         if self.warmup_config:
             all_configs += [self.warmup_config]
@@ -115,6 +116,12 @@ class Experiment(ABC):
         job_id_extraction_pipe = "| awk '{{print $NF}}'"
         return f'{id}=$(sbatch --job-name="{name}" -w {nodes} -n {ncores}{dependency} {command} {job_id_extraction_pipe})'
 
+    @staticmethod
+    def get_sacct_output_format(main_fields_only: bool = False):
+        output_format_main_field = "jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS"
+        output_format_secondary_fields = "Account,AdminComment,AllocCPUS,AllocNodes,AllocTRES,AssocID,AveCPUFreq,AvePages,BlockID,Comment,Constraints,ConsumedEnergyRaw,Container,CPUTime,CPUTimeRAW,DBIndex,DerivedExitCode,ElapsedRaw,Eligible,ExitCode,FailedNode,Flags,GID,Group,JobIDRaw,Layout,MaxDiskRead,MaxDiskReadNode,MaxDiskReadTask,MaxDiskWrite,MaxDiskWriteNode,MaxDiskWriteTask,MaxPages,MaxPagesNode,MaxPagesTask,MaxRSS,MaxRSSNode,MaxRSSTask,MaxVMSize,MaxVMSizeNode,MaxVMSizeTask,McsLabel,MinCPU,MinCPUNode,MinCPUTask,NNodes,NodeList,NTasks,Partition,Planned,PlannedCPU,PlannedCPURAW,Priority,QOS,QOSRAW,Reason,ReqCPUFreq,ReqCPUFreqGov,ReqCPUFreqMax,ReqCPUFreqMin,ReqCPUS,ReqMem,ReqNodes,ReqTRES,Reservation,ReservationId,Suspended,SystemComment,Timelimit,TimelimitRaw,TotalCPU,TRESUsageInAve,TRESUsageInMax,TRESUsageInMaxNode,TRESUsageInMaxTask,TRESUsageInMin,TRESUsageInMinNode,TRESUsageInMinTask,TRESUsageInTot,TRESUsageOutAve,TRESUsageOutMax,TRESUsageOutMaxNode,TRESUsageOutMaxTask,TRESUsageOutMin,TRESUsageOutMinNode,TRESUsageOutMinTask,TRESUsageOutTot,UID,User,WCKey,WCKeyID,WorkDir,Submit,SubmitLine"
+        return output_format_main_field if main_fields_only else f"{output_format_main_field},{'%100,'.join(output_format_secondary_fields.split(','))}%500"
+
     def __get_check_jobs_command(self, job_ids):
         experiment_name = PathRegistry.check_job_script(self.ID)
         data_file_name = PathRegistry.experiment_data_filename(self.ID)
@@ -122,9 +129,9 @@ class Experiment(ABC):
 cat > {experiment_name} << EOF
 #!/bin/bash
 echo {job_ids}
-sacct -o jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS \
-    -j {job_ids} \
-    > {data_file_name}
+sacct -o {self.get_sacct_output_format()} \
+-j {job_ids} \
+> {data_file_name}
 cat {data_file_name}
 EOF
 '''
