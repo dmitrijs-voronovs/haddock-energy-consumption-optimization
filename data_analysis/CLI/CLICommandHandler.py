@@ -1,8 +1,11 @@
 import argparse
 import os
+import re
 import sys
 from importlib import import_module
 from pathlib import Path
+
+import pandas as pd
 
 sys.path.append(os.path.pardir)
 
@@ -50,6 +53,11 @@ class CLICommandHandler:
         self.add_dir_arg(create_experiment_parser)
         self.add_cls_arg(create_experiment_parser)
 
+        get_info_data_parser = subparsers.add_parser('get_info_data', aliases=["get-info"],
+                                                     help='Get experiment info data (consumed energy from perf module)')
+        self.add_dir_arg(get_info_data_parser)
+        self.add_cls_arg(get_info_data_parser)
+
         subparsers.add_parser('sinfo', help='Slurm node information')
         subparsers.add_parser('squeue', help='Check slurm queue')
         subparsers.add_parser('sacct', help='Query slurm accountant to get experiment data')
@@ -79,6 +87,8 @@ class CLICommandHandler:
             self.clean_experiment_dir(ExperimentDir.value_to_enum(args.dir), args.full)
         elif args.command in ['create_experiment', "create-exp"]:
             self.create_experiment(ExperimentDir.value_to_enum(args.dir), args.cls)
+        elif args.command in ['get_info_data', "get-info"]:
+            self.get_info_data(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['run_experiment', "run-exp"]:
             exp_dir = ExperimentDir.value_to_enum(args.dir)
             if args.node == DEFAULT_NODE:
@@ -179,8 +189,39 @@ class CLICommandHandler:
              "echo activate conda", "source $HOME/anaconda3/bin/activate", "conda activate haddock3",
              "echo run experiment", f"sh {run_experiment_script}", "sinfo"])
 
+    def create_experiment_class(self, cls, mode):
+        module_name = f"examples.domain.experiment.{mode.value.lower()}.{cls}"
+        return getattr(import_module(module_name), cls)
+
     def create_experiment(self, exp: 'ExperimentDir', cls: str):
         mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]
-        module_name = f"examples.domain.experiment.{mode.value.lower()}.{cls}"
-        Exeriment_Class = getattr(import_module(module_name), cls)
-        Exeriment_Class(ExperimentDir.host_dir(exp)).generate_create_job_script().generate_runner()
+        Experiment_Class: 'Experiment' = self.create_experiment_class(cls, mode)(ExperimentDir.host_dir(exp))
+        Experiment_Class.generate_create_job_script().generate_runner()
+
+    @staticmethod
+    def extract_numbers_from_file(file_path):
+        with open(file_path, 'r') as file:
+            content = file.read()
+            numbers = re.findall(r"(?:\d+,?)+\.\d+", content)
+            return [float(num.replace(',', '')) for num in numbers]
+
+    def get_info_data(self, exp: 'ExperimentDir', cls: str):
+        mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]
+        ExperimentClass: 'Experiment' = self.create_experiment_class(cls, mode)()
+
+        files = [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.info", "perf_stat.txt")) for cfg in
+                 ExperimentClass.configs]
+        job_data = []
+        for job_name, file in files:
+            try:
+                power_energy_pkg, power_energy_ram, perf_elapsed = self.extract_numbers_from_file(file)
+                job_data.append(
+                    {"JobName": job_name, "power_energy_pkg": power_energy_pkg, "power_energy_ram": power_energy_ram,
+                     "perf_elapsed": perf_elapsed})
+            except Exception as e:
+                print(f"Failed to extract data from file {file}", e)
+
+        print(job_data)
+        df = pd.DataFrame(job_data)
+        os.makedirs(ExperimentDir.analysis_dir(exp, 'data', 'info'), exist_ok=True)
+        df.to_csv(ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv'), index=False)

@@ -1,0 +1,2 @@
+/var/spool/slurmd/job48729/slurm_script: 4: cannot create run.dpp-local-nc32_gl6-34.cfg.info/perf_stat.txt: Directory nonexistent
+slurmstepd: error: *** JOB 48729 ON gl6 CANCELLED AT 2024-01-15T13:12:59 ***
