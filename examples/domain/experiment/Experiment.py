@@ -115,6 +115,12 @@ class Experiment(ABC):
         job_id_extraction_pipe = "| awk '{{print $NF}}'"
         return f'{id}=$(sbatch --job-name="{name}" -w {nodes} -n {ncores}{dependency} {command} {job_id_extraction_pipe})'
 
+    @staticmethod
+    def get_sacct_output_format(main_fields_only: bool = False):
+        output_format_main_field = "jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS"
+        output_format_secondary_fields = "Account,AdminComment,AllocCPUS,AllocNodes,AllocTRES,AssocID,AveCPUFreq,AvePages,BlockID,Comment,Constraints,ConsumedEnergyRaw,Container,CPUTime,CPUTimeRAW,DBIndex,DerivedExitCode,ElapsedRaw,Eligible,ExitCode,FailedNode,Flags,GID,Group,JobIDRaw,Layout,MaxDiskRead,MaxDiskReadNode,MaxDiskReadTask,MaxDiskWrite,MaxDiskWriteNode,MaxDiskWriteTask,MaxPages,MaxPagesNode,MaxPagesTask,MaxRSS,MaxRSSNode,MaxRSSTask,MaxVMSize,MaxVMSizeNode,MaxVMSizeTask,McsLabel,MinCPU,MinCPUNode,MinCPUTask,NNodes,NodeList,NTasks,Partition,Planned,PlannedCPU,PlannedCPURAW,Priority,QOS,QOSRAW,Reason,ReqCPUFreq,ReqCPUFreqGov,ReqCPUFreqMax,ReqCPUFreqMin,ReqCPUS,ReqMem,ReqNodes,ReqTRES,Reservation,ReservationId,Submit,SubmitLine,Suspended,SystemComment,Timelimit,TimelimitRaw,TotalCPU,TRESUsageInAve,TRESUsageInMax,TRESUsageInMaxNode,TRESUsageInMaxTask,TRESUsageInMin,TRESUsageInMinNode,TRESUsageInMinTask,TRESUsageInTot,TRESUsageOutAve,TRESUsageOutMax,TRESUsageOutMaxNode,TRESUsageOutMaxTask,TRESUsageOutMin,TRESUsageOutMinNode,TRESUsageOutMinTask,TRESUsageOutTot,UID,User,WCKey,WCKeyID,WorkDir"
+        return output_format_main_field if main_fields_only else f"{output_format_main_field},{output_format_secondary_fields}"
+
     def __get_check_jobs_command(self, job_ids):
         experiment_name = PathRegistry.check_job_script(self.ID)
         data_file_name = PathRegistry.experiment_data_filename(self.ID)
@@ -122,9 +128,9 @@ class Experiment(ABC):
 cat > {experiment_name} << EOF
 #!/bin/bash
 echo {job_ids}
-sacct -o jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS \
-    -j {job_ids} \
-    > {data_file_name}
+sacct -o {self.get_sacct_output_format()} \
+-j {job_ids} \
+> {data_file_name}
 cat {data_file_name}
 EOF
 '''

@@ -6,6 +6,7 @@ from pathlib import Path
 
 sys.path.append(os.path.pardir)
 
+from examples.domain.experiment.Experiment import Experiment
 from examples import PathRegistry
 from .Constants import ExperimentDir, EXPERIMENT_DIR_TO_MODE_MAP
 from .CredentialManager import CredentialManager, DEFAULT_NODE
@@ -70,7 +71,7 @@ class CLICommandHandler:
             self.client.execute_commands(['squeue -o "%7A %50j %3t %N"'])
         elif args.command == 'sacct':
             self.client.execute_commands([
-                "sacct -o jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS"])
+                f"sacct -o {Experiment.get_sacct_output_format(main_fields_only=True)}"])
         elif args.command == 'scancel':
             self.client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
         elif args.command in ['get_log_files', "get-logs"]:
