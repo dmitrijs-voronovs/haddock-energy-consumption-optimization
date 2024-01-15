@@ -1,0 +1,3 @@
+/var/spool/slurmd/job48676/slurm_script: line 5: run.daa-local-nc16_gl6-36.cfg.info/nodes_info.after.txt: No such file or directory
+/var/spool/slurmd/job48676/slurm_script: line 6: run.daa-local-nc16_gl6-36.cfg.info/proc_info.after.txt: No such file or directory
+Collecting info for run.daa-local-nc16_gl6-36.cfg (after run) done.
