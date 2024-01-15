@@ -15,7 +15,7 @@ class Experiment(ABC):
     @classmethod
     @property
     def ID(cls) -> str:
-        return cls.__name__.lower()
+        return cls.__name__
 
     @abstractmethod
     def create_configs(self) -> List[Config]:
@@ -90,16 +90,18 @@ class Experiment(ABC):
             configs.insert(warmup_config_idx, warmup_config)
             commands.append(f"rm -rf \"{warmup_config.run_dir}\"\n")
 
-        job_ids = [f"$job{job_idx}_1" for job_idx in range(warmup_config_idx + 1, len(configs))]
         commands += [command for job_idx, config in enumerate(configs) for command in
                      self.generate_commands_for_config(config, job_idx)]
 
-        check_jobs_command = self.__get_check_jobs_command(",".join(job_ids))
+        main_job_ids = ",".join([f"$job{job_idx}_1" for job_idx in range(warmup_config_idx + 1, len(configs))])
+        all_job_ids = ",".join([id for job_idx in range(len(configs)) for id in
+                                [f"$job{job_idx}_0", f"$job{job_idx}_1", f"$job{job_idx}_2"]])
 
         file_name = f"{self.base_dir}/{PathRegistry.run_experiment_script(self.ID)}"
         with open(file_name, "w", newline='\n') as file:
             file.write("\n".join(commands))
-            file.write(check_jobs_command)
+            file.write(self.__get_check_jobs_command(main_job_ids))
+            file.write(self.__get_check_jobs_command(all_job_ids, full=True))
 
     def __get_formatted_dependency(self, dependent_job_id):
         dependency = ""
@@ -122,9 +124,9 @@ class Experiment(ABC):
         output_format_secondary_fields = "Account,AdminComment,AllocCPUS,AllocNodes,AllocTRES,AssocID,AveCPUFreq,AvePages,BlockID,Comment,Constraints,ConsumedEnergyRaw,Container,CPUTime,CPUTimeRAW,DBIndex,DerivedExitCode,ElapsedRaw,Eligible,ExitCode,FailedNode,Flags,GID,Group,JobIDRaw,Layout,MaxDiskRead,MaxDiskReadNode,MaxDiskReadTask,MaxDiskWrite,MaxDiskWriteNode,MaxDiskWriteTask,MaxPages,MaxPagesNode,MaxPagesTask,MaxRSS,MaxRSSNode,MaxRSSTask,MaxVMSize,MaxVMSizeNode,MaxVMSizeTask,McsLabel,MinCPU,MinCPUNode,MinCPUTask,NNodes,NodeList,NTasks,Partition,Planned,PlannedCPU,PlannedCPURAW,Priority,QOS,QOSRAW,Reason,ReqCPUFreq,ReqCPUFreqGov,ReqCPUFreqMax,ReqCPUFreqMin,ReqCPUS,ReqMem,ReqNodes,ReqTRES,Reservation,ReservationId,Suspended,SystemComment,Timelimit,TimelimitRaw,TotalCPU,TRESUsageInAve,TRESUsageInMax,TRESUsageInMaxNode,TRESUsageInMaxTask,TRESUsageInMin,TRESUsageInMinNode,TRESUsageInMinTask,TRESUsageInTot,TRESUsageOutAve,TRESUsageOutMax,TRESUsageOutMaxNode,TRESUsageOutMaxTask,TRESUsageOutMin,TRESUsageOutMinNode,TRESUsageOutMinTask,TRESUsageOutTot,UID,User,WCKey,WCKeyID,WorkDir,Submit,SubmitLine"
         return output_format_main_field if main_fields_only else f"{output_format_main_field},{'%100,'.join(output_format_secondary_fields.split(','))}%500"
 
-    def __get_check_jobs_command(self, job_ids):
-        experiment_name = PathRegistry.check_job_script(self.ID)
-        data_file_name = PathRegistry.experiment_data_filename(self.ID)
+    def __get_check_jobs_command(self, job_ids, full: bool = False):
+        experiment_name = PathRegistry.check_job_script(self.ID, full)
+        data_file_name = PathRegistry.experiment_data_filename(self.ID, full)
         return f'''
 cat > {experiment_name} << EOF
 #!/bin/bash
