@@ -1,0 +1,46 @@
+[2024-01-16 09:22:43,366 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-16 09:22:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-16 09:22:50,109 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-16 09:22:50,109 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-16 09:22:50,110 libworkflow INFO] Reading instructions step 2_caprieval
+[2024-01-16 09:22:50,110 libworkflow INFO] Reading instructions step 3_seletop
+[2024-01-16 09:22:50,110 libworkflow INFO] Reading instructions step 4_caprieval
+[2024-01-16 09:22:50,110 libworkflow INFO] Reading instructions step 5_flexref
+[2024-01-16 09:22:50,111 libworkflow INFO] Reading instructions step 6_caprieval
+[2024-01-16 09:22:50,111 libworkflow INFO] Reading instructions step 7_emref
+[2024-01-16 09:22:50,112 libworkflow INFO] Reading instructions step 8_caprieval
+[2024-01-16 09:22:50,112 libworkflow INFO] Reading instructions step 9_clustfcc
+[2024-01-16 09:22:50,112 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2024-01-16 09:22:50,112 libworkflow INFO] Reading instructions step 11_caprieval
+[2024-01-16 09:22:50,211 base_cns_module INFO] Running [topoaa] module
+[2024-01-16 09:22:50,212 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2024-01-16 09:22:50,218 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+[2024-01-16 09:22:50,343 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+[2024-01-16 09:22:50,344 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2024-01-16 09:22:50,350 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+[2024-01-16 09:22:50,433 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+[2024-01-16 09:22:50,433 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2024-01-16 09:22:50,433 libutil INFO] Selected 2 cores to process 2 jobs, with 32 maximum available cores.
+[2024-01-16 09:22:50,434 libparallel INFO] Using 2 cores
+[2024-01-16 09:22:55,388 libparallel INFO] >> /4G6K_fv.inp completed 50% 
+[2024-01-16 09:22:55,389 libparallel INFO] >> /4I1B-matched.inp completed 100% 
+[2024-01-16 09:22:55,390 libparallel INFO] 2 tasks finished
+[2024-01-16 09:22:55,390 __init__ INFO] [topoaa] CNS jobs have finished
+[2024-01-16 09:22:55,472 base_cns_module INFO] Module [topoaa] finished.
+[2024-01-16 09:22:55,472 __init__ INFO] [topoaa] took 5 seconds
+[2024-01-16 09:22:56,558 base_cns_module INFO] Running [rigidbody] module
+[2024-01-16 09:22:56,559 __init__ INFO] [rigidbody] crossdock=true
+[2024-01-16 09:22:56,560 __init__ INFO] [rigidbody] Preparing jobs...
+[2024-01-16 09:32:33,564 __init__ INFO] [rigidbody] Running CNS Jobs n=10000
+[2024-01-16 09:32:33,565 libutil INFO] Selected 4 cores to process 10000 jobs, with 32 maximum available cores.
+[2024-01-16 09:32:33,654 libparallel INFO] Using 4 cores

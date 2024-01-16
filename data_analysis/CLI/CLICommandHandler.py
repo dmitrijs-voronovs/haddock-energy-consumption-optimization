@@ -136,7 +136,21 @@ class CLICommandHandler:
             destination_dir = ExperimentDir.host_dir(exp, subdir, directory)
 
             if Path(destination_dir).exists():
-                continue
+                print(f"{destination_dir=} exists. Calculating size...")
+                local_dir_size = sum(f.stat().st_size for f in Path(destination_dir).glob('**/*') if f.is_file())
+
+                if '.info' in directory:
+                    remote_dir_size = int(
+                        self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
+                else:
+                    remote_dir_size = int(
+                        self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
+
+                same_size = remote_dir_size == local_dir_size
+                print(f"{remote_dir_size=}, {local_dir_size=}, same size: {same_size}")
+
+                if same_size:
+                    continue
 
             files = self.client.execute_commands(
                 [f'cd {exp_dir}', f'cd {directory}',  # list all files-only no directories
