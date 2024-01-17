@@ -46,11 +46,11 @@ NodeName=gl6 Arch=x86_64 CoresPerSocket=8
    State=MIXED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
    Partitions=singleNodePartition 
    BootTime=2023-10-24T15:47:11 SlurmdStartTime=2023-12-22T14:38:15
-   LastBusyTime=2024-01-17T14:47:52 ResumeAfterTime=None
+   LastBusyTime=2024-01-17T14:47:54 ResumeAfterTime=None
    CfgTRES=cpu=32,mem=376000M,billing=32
    AllocTRES=cpu=2,mem=376000M
    CapWatts=n/a
-   CurrentWatts=27 AveWatts=15
+   CurrentWatts=18 AveWatts=15
    ExtSensorsJoules=n/s ExtSensorsWatts=0 ExtSensorsTemp=n/s
 
 NodeName=superserver2 Arch=x86_64 CoresPerSocket=8 

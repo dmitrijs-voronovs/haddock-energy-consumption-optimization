@@ -295,7 +295,7 @@ root      660897  0.0  0.0 141620  6540 ?        Ss    2023   4:02 /usr/local/sb
 root      779150  0.0  0.0      0     0 ?        I<    2023   0:00 [nfsiod]
 root      779197  0.0  0.0      0     0 ?        S     2023   1:05 [NFSv4 callback]
 root      965213  0.0  0.0  15428  9412 ?        Ss   Jan04   1:17 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
-root      973746  0.0  0.0 2798772 31656 ?       Ssl  Jan04   2:39 /usr/lib/snapd/snapd
+root      973746  0.0  0.0 2798772 31852 ?       Ssl  Jan04   2:39 /usr/lib/snapd/snapd
 root     1138953  0.0  0.0   6892  2948 ?        Ss   Jan10   0:01 /usr/sbin/cron -f -P
 root     1138955  0.0  0.0  83068  4248 ?        Ssl  Jan10   5:20 /usr/sbin/irqbalance --foreground
 munge    1138959  0.0  0.0 204196  4380 ?        Sl   Jan10   0:30 /usr/sbin/munged
@@ -304,7 +304,7 @@ _rpc     1138970  0.0  0.0   8176  4244 ?        Ss   Jan10   0:00 /sbin/rpcbind
 syslog   1138981  0.0  0.0 222400  6172 ?        Ssl  Jan10   0:38 /usr/sbin/rsyslogd -n -iNONE
 statd    1138990  0.0  0.0   4824  2612 ?        Ss   Jan10   0:00 /sbin/rpc.statd
 root     1139003  0.0  0.0 224064 27384 ?        SLsl Jan10   0:40 /sbin/multipathd -d -s
-root     1139008  0.0  0.0 247456 150004 ?       S<s  Jan10   3:05 /lib/systemd/systemd-journald
+root     1139008  0.0  0.0 247456 149752 ?       S<s  Jan10   3:05 /lib/systemd/systemd-journald
 root     1139009  0.0  0.0 234504  6832 ?        Ssl  Jan10   0:00 /usr/libexec/polkitd --no-debug
 systemd+ 1139010  0.0  0.0  89356  6476 ?        Ssl  Jan10   0:01 /lib/systemd/systemd-timesyncd
 root     1139013  0.0  0.0 392704 13864 ?        Ssl  Jan10   0:01 /usr/libexec/udisks2/udisksd
@@ -332,14 +332,14 @@ root     1306005  0.0  0.0      0     0 ?        I    Jan16   0:15 [kworker/12:1
 root     1313531  0.0  0.0      0     0 ?        I    Jan16   0:15 [kworker/5:1-rcu_gp]
 root     1316523  0.0  0.0      0     0 ?        I    Jan16   0:02 [kworker/20:1-events]
 root     1316595  0.0  0.0      0     0 ?        I    Jan16   0:10 [kworker/20:2-events]
-root     1317973  0.0  0.0      0     0 ?        I    Jan16   0:20 [kworker/9:1-cgroup_destroy]
-root     1318076  0.0  0.0      0     0 ?        I    Jan16   0:10 [kworker/7:0-events]
+root     1317973  0.0  0.0      0     0 ?        I    Jan16   0:20 [kworker/9:1-events]
+root     1318076  0.0  0.0      0     0 ?        I    Jan16   0:09 [kworker/7:0-events]
 root     1323412  0.0  0.0      0     0 ?        I    Jan16   0:07 [kworker/18:1-events]
 root     1323574  0.0  0.0      0     0 ?        I    Jan16   0:00 [kworker/14:0-events]
 root     1323600  0.0  0.0      0     0 ?        I    Jan16   0:00 [kworker/31:1-cgroup_pidlist_destroy]
 root     1327700  0.0  0.0      0     0 ?        I    Jan16   0:03 [kworker/29:2-cgroup_destroy]
 root     1329875  0.0  0.0      0     0 ?        I    Jan16   0:13 [kworker/8:2-cgroup_destroy]
-root     1334116  0.0  0.0      0     0 ?        I    Jan16   0:00 [kworker/9:2-cgroup_pidlist_destroy]
+root     1334116  0.0  0.0      0     0 ?        I    Jan16   0:00 [kworker/9:2-events]
 root     1334981  0.0  0.0      0     0 ?        I    Jan16   0:05 [kworker/28:2-events]
 root     1339143  0.0  0.0      0     0 ?        I    Jan16   0:07 [kworker/15:0-events]
 root     1343819  0.0  0.0      0     0 ?        I    02:33   0:00 [kworker/4:0-events]
@@ -370,26 +370,25 @@ root     1358793  0.0  0.0      0     0 ?        I    10:49   0:02 [kworker/u64:
 root     1360001  0.0  0.0      0     0 ?        I    12:01   0:00 [kworker/24:0-events]
 root     1360101  0.0  0.0      0     0 ?        I    12:01   0:00 [kworker/15:1-events]
 root     1360546  0.0  0.0      0     0 ?        I    12:01   0:00 [kworker/10:0-events]
-root     1360577  0.2  0.0      0     0 ?        I    12:02   0:22 [kworker/0:0-events]
+root     1360577  0.2  0.0      0     0 ?        I    12:02   0:21 [kworker/0:0-events]
 root     1360578  0.0  0.0      0     0 ?        I    12:02   0:01 [kworker/1:2-events]
 root     1360590  0.0  0.0      0     0 ?        I    12:02   0:00 [kworker/12:0-events]
 root     1361790  0.0  0.0      0     0 ?        I    13:01   0:00 [kworker/22:2-events]
 root     1361841  0.0  0.0      0     0 ?        I    13:02   0:00 [kworker/2:2-events]
 root     1361846  0.0  0.0      0     0 ?        I    13:02   0:00 [kworker/19:2-events]
 root     1362389  0.0  0.0      0     0 ?        I    13:32   0:00 [kworker/u65:1-nfsiod]
+root     1362816  0.0  0.0      0     0 ?        I    13:59   0:01 [kworker/u66:1-events_power_efficient]
 root     1362868  0.0  0.0      0     0 ?        I    14:02   0:00 [kworker/5:0-events]
 root     1362871  0.0  0.0      0     0 ?        I    14:02   0:00 [kworker/7:2-events]
 root     1363031  0.0  0.0      0     0 ?        I    14:13   0:00 [kworker/u64:0-ext4-rsv-conversion]
 root     1363085  0.0  0.0      0     0 ?        I    14:16   0:00 [kworker/u65:2-rpciod]
-root     1363308  0.0  0.0      0     0 ?        I    14:30   0:00 [kworker/u66:2-flush-253:0]
-root     1363398  0.3  0.0      0     0 ?        I    14:35   0:02 [kworker/17:2-events]
-root     1363499  0.3  0.0      0     0 ?        I    14:41   0:01 [kworker/17:0-events]
+root     1363295  0.2  0.0      0     0 ?        I    14:29   0:02 [kworker/17:1-events]
+root     1363308  0.0  0.0      0     0 ?        I    14:30   0:00 [kworker/u66:2-rpciod]
+root     1363398  0.5  0.0      0     0 ?        I    14:35   0:02 [kworker/17:2-events]
+root     1363435  0.0  0.0      0     0 ?        I    14:37   0:00 [kworker/u65:0-rpciod]
+root     1363499  0.4  0.0      0     0 ?        I    14:41   0:00 [kworker/17:0-events]
 root     1363513  0.0  0.0      0     0 ?        I    14:41   0:00 [kworker/u66:0-rpciod]
 root     1363546  0.0  0.0      0     0 ?        I    14:42   0:00 [kworker/31:2-events]
-root     1363559  0.0  0.0      0     0 ?        I    14:42   0:00 [kworker/9:0-events]
-root     1363563  0.0  0.0 273948  6196 ?        Sl   14:42   0:00 slurmstepd: [48920.batch]
-greenBe+ 1363567  0.0  0.0   7372  3528 ?        S    14:42   0:00 /bin/bash /var/spool/slurmd/job48920/slurm_script run.dpp-local-nc4_gl6-40.cfg
-root     1363603  0.1  0.0      0     0 ?        I    14:44   0:00 [kworker/0:1-events]
-root     1363625  0.0  0.0      0     0 ?        I    14:45   0:00 [kworker/7:1-events]
-root     1363643  0.0  0.0      0     0 ?        I    14:46   0:00 [kworker/6:2-events]
-greenBe+ 1363655  0.0  0.0  10072  3604 ?        R    14:47   0:00 ps aux
+root     1363550  0.0  0.0 141848  5908 ?        Sl   14:42   0:00 slurmstepd: [48919.batch]
+greenBe+ 1363554  0.0  0.0   7372  3576 ?        S    14:42   0:00 /bin/bash /var/spool/slurmd/job48919/slurm_script run.daa-local-nc2_gl6-32.cfg
+greenBe+ 1363556  0.0  0.0  10072  3544 ?        R    14:42   0:00 ps aux
