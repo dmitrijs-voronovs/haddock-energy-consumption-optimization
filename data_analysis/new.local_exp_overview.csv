@@ -1,0 +1,7 @@
+Workflow,mode,ncores,node,n_trials,trials_list
+daa,local,4,gl6,2,"[32, 33]"
+daa,local,8,gl6,2,"[32, 38]"
+dpp,local,4,gl6,1,[35]
+dpp,local,8,gl6,1,[34]
+dpp,local,16,gl6,5,"[32, 33, 35, 36, 40]"
+dpp,local,32,gl6,3,"[33, 37, 39]"
