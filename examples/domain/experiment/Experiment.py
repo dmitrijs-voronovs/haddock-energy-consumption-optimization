@@ -36,7 +36,8 @@ class Experiment(ABC):
 
     def get_command_for_haddock_execution(self, config: 'Config') -> str:
         run_dir = f"{config.run_dir}.info"
-        return f'--wrap="(perf stat -e power/energy-pkg/,power/energy-ram/ haddock3 \'{config.name}\' > {run_dir}/haddock.output.log) > {run_dir}/perf_stat.txt 2>&1"'
+        # return f'--wrap="(perf stat -e power/energy-pkg/,power/energy-ram/ haddock3 \'{config.name}\' > {run_dir}/haddock.output.log) > {run_dir}/perf_stat.txt 2>&1"'
+        return f'--wrap="(perf stat -e power/energy-pkg/,power/energy-ram/ sleep 10 && echo 10 > {run_dir}/haddock.output.log) > {run_dir}/perf_stat.txt 2>&1"'
 
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
         warmup_suffix = ' warmup' if config.is_warmup else ''

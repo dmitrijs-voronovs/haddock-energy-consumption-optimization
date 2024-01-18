@@ -16,9 +16,8 @@ nohup watch -n $interval 'cat /proc/cpuinfo | grep MHz' > cpu_frequency.log 2>&1
 echo $! > pid.cpu_frequency.txt
 
 echo "Cooling down for 5 minutes..."
-sleep 300
-infodir="$rundir.info"
-mkdir $infodir
+sleep 20
+
 scontrol show nodes > $infodir/nodes_info.before.txt
 ps aux > $infodir/proc_info.before.txt
 
