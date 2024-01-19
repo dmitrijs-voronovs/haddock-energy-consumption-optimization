@@ -12,7 +12,7 @@ echo $! > $infodir/pid.proc_utilization.txt
 nohup sar -r $interval > $infodir/mem_utilization.log 2>&1 &
 echo $! > $infodir/pid.mem_utilization.txt
 
-nohup watch -n $interval 'cat /proc/cpuinfo | grep MHz' > $infodir/cpu_frequency.log 2>&1 &
+nohup script -q -c 'watch -n $interval "cat /proc/cpuinfo | grep MHz"' > $infodir/cpu_frequency.log 2>&1 &
 echo $! > $infodir/pid.cpu_frequency.txt
 
 echo "Cooling down for 5 minutes..."
