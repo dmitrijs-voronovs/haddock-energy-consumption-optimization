@@ -149,3 +149,4 @@ docs/modules/general_module_params.rst
 docs/reference/core/mandatory_parameters.rst
 haddock3-docs/
 /.env
+!examples/scripts
