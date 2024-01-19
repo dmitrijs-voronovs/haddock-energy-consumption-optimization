@@ -36,8 +36,10 @@ class PathRegistry:
 
     COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
     COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"
+    COLLECT_HARDWARE_INFO = "measure_hardware.sh"
 
     @staticmethod
     def info_scripts():
         return [f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_AFTER_SH}",
-                f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_BEFORE_SH}"]
+                f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_BEFORE_SH}",
+                f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_HARDWARE_INFO}"]
