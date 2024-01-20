@@ -3,6 +3,7 @@ from typing import List
 
 NODE_NAME_MAP = {
     "gl2": "GreenLab-STF",
+    "ss2": "superserver2",
     # Add other mappings here
 }
 
