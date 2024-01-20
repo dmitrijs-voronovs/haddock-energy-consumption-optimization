@@ -1,0 +1,4 @@
+/var/spool/slurmd/job49273/slurm_script: line 6: kill: (1418109) - No such process
+/var/spool/slurmd/job49273/slurm_script: line 7: kill: (1418111) - No such process
+/var/spool/slurmd/job49273/slurm_script: line 8: kill: (1418113) - No such process
+Collecting info for run.dpp-local-nc16_gl5-25.cfg (after run) done.

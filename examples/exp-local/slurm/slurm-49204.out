@@ -1,0 +1,9 @@
+cat: pid.proc_utilization.txt: No such file or directory
+/var/spool/slurmd/job49204/slurm_script: line 6: kill: `': not a pid or valid job spec
+cat: pid.mem_utilization.txt: No such file or directory
+/var/spool/slurmd/job49204/slurm_script: line 7: kill: `': not a pid or valid job spec
+cat: pid.cpu_frequency.txt: No such file or directory
+/var/spool/slurmd/job49204/slurm_script: line 8: kill: `': not a pid or valid job spec
+/var/spool/slurmd/job49204/slurm_script: line 10: run.dpp-local-nc32_gl2-test.warmup.cfg.info/nodes_info.after.txt: No such file or directory
+/var/spool/slurmd/job49204/slurm_script: line 11: run.dpp-local-nc32_gl2-test.warmup.cfg.info/proc_info.after.txt: No such file or directory
+Collecting info for run.dpp-local-nc32_gl2-test.warmup.cfg (after run) done.

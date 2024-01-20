@@ -1,0 +1,3 @@
+mkdir: cannot create directory ‘run.daa-local-nc4_gl2-test.cfg.info’: File exists
+Cooling down for 5 minutes...
+Collecting info for run.daa-local-nc4_gl2-test.cfg (before run) done. Ready to run.
