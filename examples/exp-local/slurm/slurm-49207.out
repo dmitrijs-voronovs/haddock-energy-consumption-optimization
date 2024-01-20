@@ -1,0 +1,7 @@
+cat: pid.proc_utilization.txt: No such file or directory
+/var/spool/slurmd/job49207/slurm_script: line 6: kill: `': not a pid or valid job spec
+cat: pid.mem_utilization.txt: No such file or directory
+/var/spool/slurmd/job49207/slurm_script: line 7: kill: `': not a pid or valid job spec
+cat: pid.cpu_frequency.txt: No such file or directory
+/var/spool/slurmd/job49207/slurm_script: line 8: kill: `': not a pid or valid job spec
+Collecting info for run.daa-local-nc4_gl2-test.cfg (after run) done.

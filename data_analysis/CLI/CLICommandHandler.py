@@ -137,19 +137,7 @@ class CLICommandHandler:
 
             if Path(destination_dir).exists():
                 print(f"{destination_dir=} exists. Calculating size...")
-                local_dir_size = sum(f.stat().st_size for f in Path(destination_dir).glob('**/*') if f.is_file())
-
-                if '.info' in directory:
-                    remote_dir_size = int(
-                        self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
-                else:
-                    remote_dir_size = int(
-                        self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
-
-                same_size = remote_dir_size == local_dir_size
-                print(f"{remote_dir_size=}, {local_dir_size=}, same size: {same_size}")
-
-                if same_size:
+                if self.compare_dir_sizes(destination_dir, directory, exp_dir):
                     continue
 
             files = self.client.execute_commands(
@@ -158,6 +146,18 @@ class CLICommandHandler:
             files_abs_path = [f"{exp_dir}/{directory}/{file}" for file in files]
             print(files_abs_path)
             self.client.get_files(files_abs_path, destination_dir)
+
+    def compare_dir_sizes(self, destination_dir, directory, exp_dir):
+        local_dir_size = sum(f.stat().st_size for f in Path(destination_dir).glob('**/*') if f.is_file())
+        if '.info' in directory:
+            remote_dir_size = int(
+                self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
+        else:
+            remote_dir_size = int(
+                self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
+        same_size = remote_dir_size == local_dir_size
+        print(f"{remote_dir_size=}, {local_dir_size=}, same size: {same_size}")
+        return same_size
 
     def get_slurm_files(self, exp: 'ExperimentDir', subdir='slurm'):
         exp_dir = ExperimentDir.dir(exp)

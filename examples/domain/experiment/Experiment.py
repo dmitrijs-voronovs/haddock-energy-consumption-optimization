@@ -5,9 +5,12 @@ from typing import List
 from examples.domain.config.Config import Config
 from examples.domain.experiment.PathRegistry import PathRegistry
 
+TRIALS_PER_CONFIG = 10
+
 
 class Experiment(ABC):
-    def __init__(self, base_dir: str = '.'):
+    def __init__(self, base_dir: str = '.', trials_per_config: int = TRIALS_PER_CONFIG):
+        self.trials_per_config = trials_per_config
         self.base_dir = base_dir
         self.configs = self.create_configs()
         self.warmup_config = self.create_warmup_config()
@@ -36,7 +39,7 @@ class Experiment(ABC):
 
     def get_command_for_haddock_execution(self, config: 'Config') -> str:
         run_dir = f"{config.run_dir}.info"
-        return f'--wrap="(perf stat -e power/energy-pkg/,power/energy-ram/ haddock3 \'{config.name}\' > {run_dir}/haddock.output.log) > {run_dir}/perf_stat.txt 2>&1"'
+        return f'--wrap="(sh {PathRegistry.COLLECT_HARDWARE_INFO} {config.run_dir} && perf stat -e power/energy-pkg/,power/energy-ram/ haddock3 \'{config.name}\' > {run_dir}/haddock.output.log) > {run_dir}/perf_stat.txt 2>&1"'
 
     def convert_config_to_create_workflow_command(self, config: Config) -> str:
         warmup_suffix = ' warmup' if config.is_warmup else ''
@@ -64,7 +67,9 @@ class Experiment(ABC):
         job_check_after_id = f"job{job_idx}_2"
         first_job_idx = 0
 
-        dependent_job_id = job_prev_id if job_idx > first_job_idx else self.get_experiment_job_dependency()
+        n_job_prev_ids = [f"$job{i}_2" for i in range(max([0, job_idx - self.trials_per_config * 2]), job_idx)]
+
+        dependent_job_id = n_job_prev_ids if job_idx > first_job_idx else self.get_experiment_job_dependency()
         return [self.__get_slurm_command(job_check_before_id, f"info.before.{config.name}", config.node_names,
                                          len(config.nodes),
                                          f'{PathRegistry.COLLECT_INFO_BEFORE_SH} "{config.run_dir}"',
@@ -103,7 +108,15 @@ class Experiment(ABC):
             file.write(self.__get_check_jobs_command(main_job_ids))
             file.write(self.__get_check_jobs_command(all_job_ids, full=True))
 
-    def __get_formatted_dependency(self, dependent_job_id):
+    def __get_formatted_dependency(self, dependent_job_id: str | List[str]):
+        # if is list
+        if isinstance(dependent_job_id, list):
+            dependency = ":".join(dependent_job_id)
+            if dependency == '':
+                raise ValueError("Empty dependency list")
+
+            return f" --dependency=afterany:{dependency}"
+
         dependency = ""
         if dependent_job_id:
             var_sign = "$"
@@ -112,7 +125,8 @@ class Experiment(ABC):
             dependency = f" --dependency=afterany:{var_sign}{dependent_job_id}"
         return dependency
 
-    def __get_slurm_command(self, id: str, name: str, nodes: str, ncores: int, command, dependent_job_id: str = None):
+    def __get_slurm_command(self, id: str, name: str, nodes: str, ncores: int, command,
+                            dependent_job_id: str | List[str] = None):
         dependency = self.__get_formatted_dependency(dependent_job_id)
 
         job_id_extraction_pipe = "| awk '{{print $NF}}'"
@@ -122,7 +136,7 @@ class Experiment(ABC):
     def get_sacct_output_format(main_fields_only: bool = False):
         output_format_main_field = "jobid,jobname%60,cluster,Node%24,state,start,end,ConsumedEnergy,AveRSS,AveDiskRead,AveDiskWrite,AveVMSize,SystemCPU,UserCPU,AveCPU,elapsed,NCPUS"
         output_format_secondary_fields = "Account,AdminComment,AllocCPUS,AllocNodes,AllocTRES,AssocID,AveCPUFreq,AvePages,BlockID,Comment,Constraints,ConsumedEnergyRaw,Container,CPUTime,CPUTimeRAW,DBIndex,DerivedExitCode,ElapsedRaw,Eligible,ExitCode,FailedNode,Flags,GID,Group,JobIDRaw,Layout,MaxDiskRead,MaxDiskReadNode,MaxDiskReadTask,MaxDiskWrite,MaxDiskWriteNode,MaxDiskWriteTask,MaxPages,MaxPagesNode,MaxPagesTask,MaxRSS,MaxRSSNode,MaxRSSTask,MaxVMSize,MaxVMSizeNode,MaxVMSizeTask,McsLabel,MinCPU,MinCPUNode,MinCPUTask,NNodes,NodeList,NTasks,Partition,Planned,PlannedCPU,PlannedCPURAW,Priority,QOS,QOSRAW,Reason,ReqCPUFreq,ReqCPUFreqGov,ReqCPUFreqMax,ReqCPUFreqMin,ReqCPUS,ReqMem,ReqNodes,ReqTRES,Reservation,ReservationId,Suspended,SystemComment,Timelimit,TimelimitRaw,TotalCPU,TRESUsageInAve,TRESUsageInMax,TRESUsageInMaxNode,TRESUsageInMaxTask,TRESUsageInMin,TRESUsageInMinNode,TRESUsageInMinTask,TRESUsageInTot,TRESUsageOutAve,TRESUsageOutMax,TRESUsageOutMaxNode,TRESUsageOutMaxTask,TRESUsageOutMin,TRESUsageOutMinNode,TRESUsageOutMinTask,TRESUsageOutTot,UID,User,WCKey,WCKeyID,WorkDir,Submit,SubmitLine"
-        return output_format_main_field if main_fields_only else f"{output_format_main_field},{'%100,'.join(output_format_secondary_fields.split(','))}%500"
+        return output_format_main_field if main_fields_only else f"{output_format_main_field},{'%100,'.join(output_format_secondary_fields.split(','))}%1000"
 
     def __get_check_jobs_command(self, job_ids, full: bool = False):
         experiment_name = PathRegistry.check_job_script(self.ID, full)

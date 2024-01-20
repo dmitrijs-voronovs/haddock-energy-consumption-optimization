@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[14]:
 
 
 from pathlib import Path
@@ -11,14 +11,14 @@ import regex as re
 from IPython.core.display_functions import display
 
 
-# In[2]:
+# In[15]:
 
 
-data_dir = "./exp-local"
+data_dir = "./exp-local/data/old"
 
 
 def import_data(dir):
-    all_files = Path(dir).glob('*.txt')
+    all_files = Path(dir).glob('*data.txt')
     all_data = [pd.read_fwf(path, skiprows=[1], index_col=None) for path in all_files]
     return pd.concat(all_data, axis=0, ignore_index=True)
 
@@ -27,7 +27,7 @@ data = import_data(data_dir)
 data
 
 
-# In[3]:
+# In[16]:
 
 
 def convert_to_numeric(value):
@@ -55,7 +55,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[4]:
+# In[17]:
 
 
 def filter_out_completed_jobs(dat):
@@ -84,7 +84,7 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[5]:
+# In[18]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
@@ -109,14 +109,14 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[6]:
+# In[19]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
 
 
-# In[7]:
+# In[20]:
 
 
 collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).describe().reset_index()
@@ -125,7 +125,7 @@ collected_data_stats.to_csv(
 collected_data_stats
 
 
-# In[22]:
+# In[21]:
 
 
 # All collected data
@@ -136,7 +136,7 @@ collected_data.to_csv('local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[12]:
+# In[22]:
 
 
 def to_local_config_class(workflow, node, trial, ncores, warmup=False):
@@ -163,7 +163,7 @@ def get_configs_code_for_new_experiment(node, target_total_n, start_idx):
                                                                       max_ncores(node), warmup=True)
 
 
-# In[13]:
+# In[23]:
 
 
 TOTAL_EXPERIMENTS_PER_EPOCH = 10
@@ -195,7 +195,7 @@ class {get_class_name(node, epoch)}(LocalExperiment):
     return class_definition if configs else None
 
 
-# In[14]:
+# In[24]:
 
 
 # new experiment epochs
@@ -217,7 +217,7 @@ generate_experiment_classes({
 })
 
 
-# In[ ]:
+# In[25]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -226,19 +226,19 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[ ]:
+# In[26]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[ ]:
+# In[27]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[ ]:
+# In[28]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -249,7 +249,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 fig.savefig('boxplot.png')
 
 
-# In[ ]:
+# In[29]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.

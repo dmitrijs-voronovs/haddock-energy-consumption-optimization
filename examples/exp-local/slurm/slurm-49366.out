@@ -1,0 +1,10 @@
+cat: run.dpp-local-nc4_gl5-28.cfg.info/pid.proc_utilization.txt: No such file or directory
+/var/spool/slurmd/job49366/slurm_script: line 6: kill: `': not a pid or valid job spec
+cat: run.dpp-local-nc4_gl5-28.cfg.info/pid.mem_utilization.txt: No such file or directory
+/var/spool/slurmd/job49366/slurm_script: line 7: kill: `': not a pid or valid job spec
+cat: run.dpp-local-nc4_gl5-28.cfg.info/pid.cpu_frequency.txt: No such file or directory
+/var/spool/slurmd/job49366/slurm_script: line 8: kill: `': not a pid or valid job spec
+rm: cannot remove 'run.dpp-local-nc4_gl5-28.cfg.info/pid.*.txt': No such file or directory
+/var/spool/slurmd/job49366/slurm_script: line 12: run.dpp-local-nc4_gl5-28.cfg.info/nodes_info.after.txt: No such file or directory
+/var/spool/slurmd/job49366/slurm_script: line 13: run.dpp-local-nc4_gl5-28.cfg.info/proc_info.after.txt: No such file or directory
+Collecting info for run.dpp-local-nc4_gl5-28.cfg (after run) done.

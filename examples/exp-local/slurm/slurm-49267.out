@@ -1,0 +1,8 @@
+cat: run.daa-local-nc4_gl5-24.cfg.info/pid.proc_utilization.txt: No such file or directory
+/var/spool/slurmd/job49267/slurm_script: line 6: kill: `': not a pid or valid job spec
+cat: run.daa-local-nc4_gl5-24.cfg.info/pid.mem_utilization.txt: No such file or directory
+/var/spool/slurmd/job49267/slurm_script: line 7: kill: `': not a pid or valid job spec
+cat: run.daa-local-nc4_gl5-24.cfg.info/pid.cpu_frequency.txt: No such file or directory
+/var/spool/slurmd/job49267/slurm_script: line 8: kill: `': not a pid or valid job spec
+rm: cannot remove 'run.daa-local-nc4_gl5-24.cfg.info/pid.*.txt': No such file or directory
+Collecting info for run.daa-local-nc4_gl5-24.cfg (after run) done.

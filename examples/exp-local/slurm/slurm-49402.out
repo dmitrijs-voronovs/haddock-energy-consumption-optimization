@@ -1,0 +1,4 @@
+/var/spool/slurmd/job49402/slurm_script: line 6: kill: (1648314) - No such process
+/var/spool/slurmd/job49402/slurm_script: line 7: kill: (1648316) - No such process
+/var/spool/slurmd/job49402/slurm_script: line 8: kill: (1648318) - No such process
+Collecting info for run.dpp-local-nc32_gl5-31.warmup.cfg (after run) done.

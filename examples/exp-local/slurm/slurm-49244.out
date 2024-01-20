@@ -1,0 +1,4 @@
+mkdir: cannot create directory ‘run.daa-local-nc4_gl2-test.cfg.info’: File exists
+/var/spool/slurmd/job49244/slurm_script: line 11: disown: %2: no such job
+Cooling down for 5 minutes...
+Collecting info for run.daa-local-nc4_gl2-test.cfg (before run) done. Ready to run.
