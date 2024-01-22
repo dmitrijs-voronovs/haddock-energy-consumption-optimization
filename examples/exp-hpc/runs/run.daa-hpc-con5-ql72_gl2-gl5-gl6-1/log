@@ -1,0 +1,190 @@
+[2024-01-11 15:56:17,569 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-11 15:56:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-11 15:56:26,659 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-11 15:56:26,659 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-11 15:56:26,660 libworkflow INFO] Reading instructions step 2_caprieval
+[2024-01-11 15:56:26,660 libworkflow INFO] Reading instructions step 3_seletop
+[2024-01-11 15:56:26,660 libworkflow INFO] Reading instructions step 4_caprieval
+[2024-01-11 15:56:26,660 libworkflow INFO] Reading instructions step 5_flexref
+[2024-01-11 15:56:26,660 libworkflow INFO] Reading instructions step 6_caprieval
+[2024-01-11 15:56:26,661 libworkflow INFO] Reading instructions step 7_emref
+[2024-01-11 15:56:26,661 libworkflow INFO] Reading instructions step 8_caprieval
+[2024-01-11 15:56:26,661 libworkflow INFO] Reading instructions step 9_clustfcc
+[2024-01-11 15:56:26,661 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2024-01-11 15:56:26,661 libworkflow INFO] Reading instructions step 11_caprieval
+[2024-01-11 15:56:26,753 base_cns_module INFO] Running [topoaa] module
+[2024-01-11 15:56:26,753 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2024-01-11 15:56:26,757 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+[2024-01-11 15:56:26,778 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+[2024-01-11 15:56:26,778 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2024-01-11 15:56:26,781 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+[2024-01-11 15:56:26,796 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+[2024-01-11 15:56:26,796 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2024-01-11 15:56:26,797 libhpc INFO] Concatenating, each .job will produce 5 (or less) models
+[2024-01-11 15:56:26,797 libhpc INFO] > Running batch 1/1
+[2024-01-11 15:56:26,814 libutil ERROR] list index out of range
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 215, in _run
+    engine.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libhpc.py", line 177, in run
+    worker.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libhpc.py", line 101, in run
+    self.job_id = int(p.stdout.decode("utf-8").split()[-1])
+IndexError: list index out of range
+[2024-01-11 15:56:26,835 libutil ERROR] list index out of range
+[2024-01-11 15:56:26,835 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-11 15:56:26,840 libutil INFO] Finished at 11/01/2024 15:56:26. For any help contact us at https://github.com/haddocking/haddock3/issues. Adéu-siau! Ciao! Au revoir!.
+[2024-01-11 15:58:01,529 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-11 15:58:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-11 15:58:01,562 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/00_topoaa exists and it will be REMOVED!
+[2024-01-11 15:58:01,563 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/00_topoaa exists and it will be REMOVED!
+[2024-01-11 15:58:01,563 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/01_rigidbody exists and it will be REMOVED!
+[2024-01-11 15:58:01,564 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/02_caprieval exists and it will be REMOVED!
+[2024-01-11 15:58:01,564 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/04_caprieval exists and it will be REMOVED!
+[2024-01-11 15:58:01,564 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/05_flexref exists and it will be REMOVED!
+[2024-01-11 15:58:01,565 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/06_caprieval exists and it will be REMOVED!
+[2024-01-11 15:58:01,565 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/07_emref exists and it will be REMOVED!
+[2024-01-11 15:58:01,566 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/08_caprieval exists and it will be REMOVED!
+[2024-01-11 15:58:01,566 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/11_caprieval exists and it will be REMOVED!
+[2024-01-11 15:58:01,567 prepare_run INFO] Uncompressing previous output files for folders: 
+[2024-01-11 15:58:10,128 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-11 15:58:10,129 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-11 15:58:10,129 libworkflow INFO] Reading instructions step 2_caprieval
+[2024-01-11 15:58:10,129 libworkflow INFO] Reading instructions step 3_seletop
+[2024-01-11 15:58:10,129 libworkflow INFO] Reading instructions step 4_caprieval
+[2024-01-11 15:58:10,129 libworkflow INFO] Reading instructions step 5_flexref
+[2024-01-11 15:58:10,130 libworkflow INFO] Reading instructions step 6_caprieval
+[2024-01-11 15:58:10,130 libworkflow INFO] Reading instructions step 7_emref
+[2024-01-11 15:58:10,130 libworkflow INFO] Reading instructions step 8_caprieval
+[2024-01-11 15:58:10,130 libworkflow INFO] Reading instructions step 9_clustfcc
+[2024-01-11 15:58:10,131 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2024-01-11 15:58:10,131 libworkflow INFO] Reading instructions step 11_caprieval
+[2024-01-11 15:58:10,218 base_cns_module INFO] Running [topoaa] module
+[2024-01-11 15:58:10,218 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2024-01-11 15:58:10,222 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+[2024-01-11 15:58:10,244 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+[2024-01-11 15:58:10,244 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2024-01-11 15:58:10,247 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+[2024-01-11 15:58:10,262 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+[2024-01-11 15:58:10,263 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2024-01-11 15:58:10,263 libhpc INFO] Concatenating, each .job will produce 5 (or less) models
+[2024-01-11 15:58:10,263 libhpc INFO] > Running batch 1/1
+[2024-01-11 15:58:10,280 libutil ERROR] list index out of range
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 215, in _run
+    engine.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libhpc.py", line 178, in run
+    worker.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libhpc.py", line 102, in run
+    self.job_id = int(p.stdout.decode("utf-8").split()[-1])
+IndexError: list index out of range
+[2024-01-11 15:58:10,282 libutil ERROR] list index out of range
+[2024-01-11 15:58:10,282 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-11 15:58:10,282 libutil INFO] Finished at 11/01/2024 15:58:10. For any help contact us at https://github.com/haddocking/haddock3/issues. Au revoir! Dovidenia! Até logo!.
+[2024-01-11 15:59:19,583 cli INFO] 
+##############################################
+#                                            #
+#                 HADDOCK 3                  #
+#                                            #
+##############################################
+
+Starting HADDOCK 3.0.0 on 2024-01-11 15:59:00
+
+Python 3.9.18 (main, Sep 11 2023, 13:41:44) 
+[GCC 11.2.0]
+
+[2024-01-11 15:59:19,616 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/00_topoaa exists and it will be REMOVED!
+[2024-01-11 15:59:19,617 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/00_topoaa exists and it will be REMOVED!
+[2024-01-11 15:59:19,618 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/01_rigidbody exists and it will be REMOVED!
+[2024-01-11 15:59:19,618 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/02_caprieval exists and it will be REMOVED!
+[2024-01-11 15:59:19,618 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/04_caprieval exists and it will be REMOVED!
+[2024-01-11 15:59:19,619 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/05_flexref exists and it will be REMOVED!
+[2024-01-11 15:59:19,619 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/06_caprieval exists and it will be REMOVED!
+[2024-01-11 15:59:19,620 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/07_emref exists and it will be REMOVED!
+[2024-01-11 15:59:19,620 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/08_caprieval exists and it will be REMOVED!
+[2024-01-11 15:59:19,620 libutil WARNING] run.daa-hpc-con5-ql72_gl2-gl5-gl6-1/data/11_caprieval exists and it will be REMOVED!
+[2024-01-11 15:59:19,621 prepare_run INFO] Uncompressing previous output files for folders: 
+[2024-01-11 15:59:28,074 libworkflow INFO] Reading instructions step 0_topoaa
+[2024-01-11 15:59:28,075 libworkflow INFO] Reading instructions step 1_rigidbody
+[2024-01-11 15:59:28,075 libworkflow INFO] Reading instructions step 2_caprieval
+[2024-01-11 15:59:28,075 libworkflow INFO] Reading instructions step 3_seletop
+[2024-01-11 15:59:28,076 libworkflow INFO] Reading instructions step 4_caprieval
+[2024-01-11 15:59:28,076 libworkflow INFO] Reading instructions step 5_flexref
+[2024-01-11 15:59:28,076 libworkflow INFO] Reading instructions step 6_caprieval
+[2024-01-11 15:59:28,076 libworkflow INFO] Reading instructions step 7_emref
+[2024-01-11 15:59:28,076 libworkflow INFO] Reading instructions step 8_caprieval
+[2024-01-11 15:59:28,077 libworkflow INFO] Reading instructions step 9_clustfcc
+[2024-01-11 15:59:28,077 libworkflow INFO] Reading instructions step 10_seletopclusts
+[2024-01-11 15:59:28,077 libworkflow INFO] Reading instructions step 11_caprieval
+[2024-01-11 15:59:28,163 base_cns_module INFO] Running [topoaa] module
+[2024-01-11 15:59:28,164 __init__ INFO] [topoaa] Molecule 1: 4G6K_fv.pdb
+[2024-01-11 15:59:28,168 __init__ INFO] [topoaa] Sanitizing molecule 4G6K_fv.pdb
+[2024-01-11 15:59:28,188 __init__ INFO] [topoaa] Topology CNS input created in 4G6K_fv.inp
+[2024-01-11 15:59:28,189 __init__ INFO] [topoaa] Molecule 2: 4I1B-matched.pdb
+[2024-01-11 15:59:28,191 __init__ INFO] [topoaa] Sanitizing molecule 4I1B-matched.pdb
+[2024-01-11 15:59:28,207 __init__ INFO] [topoaa] Topology CNS input created in 4I1B-matched.inp
+[2024-01-11 15:59:28,207 __init__ INFO] [topoaa] Running CNS Jobs n=2
+[2024-01-11 15:59:28,207 libhpc INFO] Concatenating, each .job will produce 5 (or less) models
+[2024-01-11 15:59:28,207 libhpc INFO] > Running batch 1/1
+[2024-01-11 15:59:28,224 libutil ERROR] list index out of range
+Traceback (most recent call last):
+  File "/home/greenBeans/haddock3/src/haddock/libs/libutil.py", line 310, in log_error_and_exit
+    yield
+  File "/home/greenBeans/haddock3/src/haddock/clis/cli.py", line 178, in main
+    workflow.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 38, in run
+    step.execute()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libworkflow.py", line 140, in execute
+    self.module.run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/base_cns_module.py", line 59, in run
+    self._run()
+  File "/home/greenBeans/haddock3/src/haddock/modules/topology/topoaa/__init__.py", line 215, in _run
+    engine.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libhpc.py", line 178, in run
+    worker.run()
+  File "/home/greenBeans/haddock3/src/haddock/libs/libhpc.py", line 102, in run
+    self.job_id = int(p.stdout.decode("utf-8").split()[-1])
+IndexError: list index out of range
+[2024-01-11 15:59:28,226 libutil ERROR] list index out of range
+[2024-01-11 15:59:28,226 libutil ERROR] An error has occurred, see log file. And contact the developers if needed.
+[2024-01-11 15:59:28,227 libutil INFO] Finished at 11/01/2024 15:59:28. For any help contact us at https://github.com/haddocking/haddock3/issues. Tot ziens! Ciao! Adéu-siau!.

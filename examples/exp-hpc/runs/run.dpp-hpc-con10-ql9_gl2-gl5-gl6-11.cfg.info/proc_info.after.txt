@@ -1,0 +1,222 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0 168448 13432 ?        Ss    2023   9:56 /lib/systemd/systemd --system --deserialize 48 quit splash
+root           2  0.0  0.0      0     0 ?        S     2023   0:10 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<    2023   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<    2023   0:00 [rcu_par_gp]
+root           5  0.0  0.0      0     0 ?        I<    2023   0:00 [slub_flushwq]
+root           6  0.0  0.0      0     0 ?        I<    2023   0:00 [netns]
+root           8  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/0:0H-events_highpri]
+root          10  0.0  0.0      0     0 ?        I<    2023   0:00 [mm_percpu_wq]
+root          11  0.0  0.0      0     0 ?        S     2023   0:00 [rcu_tasks_rude_]
+root          12  0.0  0.0      0     0 ?        S     2023   0:00 [rcu_tasks_trace]
+root          13  0.0  0.0      0     0 ?        S     2023   1:33 [ksoftirqd/0]
+root          14  0.0  0.0      0     0 ?        I     2023  15:24 [rcu_sched]
+root          15  0.0  0.0      0     0 ?        S     2023   0:47 [migration/0]
+root          16  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/0]
+root          18  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/0]
+root          19  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/1]
+root          20  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/1]
+root          21  0.0  0.0      0     0 ?        S     2023   0:47 [migration/1]
+root          22  0.0  0.0      0     0 ?        S     2023   0:55 [ksoftirqd/1]
+root          24  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/1:0H-events_highpri]
+root          25  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/2]
+root          26  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/2]
+root          27  0.0  0.0      0     0 ?        S     2023   0:47 [migration/2]
+root          28  0.0  0.0      0     0 ?        S     2023   0:38 [ksoftirqd/2]
+root          30  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/2:0H-events_highpri]
+root          31  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/3]
+root          32  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/3]
+root          33  0.0  0.0      0     0 ?        S     2023   0:48 [migration/3]
+root          34  0.0  0.0      0     0 ?        S     2023   0:40 [ksoftirqd/3]
+root          36  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/3:0H-events_highpri]
+root          37  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/4]
+root          38  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/4]
+root          39  0.0  0.0      0     0 ?        S     2023   0:46 [migration/4]
+root          40  0.0  0.0      0     0 ?        S     2023   0:43 [ksoftirqd/4]
+root          42  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/4:0H-events_highpri]
+root          43  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/5]
+root          44  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/5]
+root          45  0.0  0.0      0     0 ?        S     2023   0:46 [migration/5]
+root          46  0.0  0.0      0     0 ?        S     2023   1:07 [ksoftirqd/5]
+root          48  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/5:0H-events_highpri]
+root          49  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/6]
+root          50  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/6]
+root          51  0.0  0.0      0     0 ?        S     2023   0:46 [migration/6]
+root          52  0.0  0.0      0     0 ?        S     2023   0:30 [ksoftirqd/6]
+root          54  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/6:0H-events_highpri]
+root          55  0.0  0.0      0     0 ?        S     2023   0:00 [cpuhp/7]
+root          56  0.0  0.0      0     0 ?        S     2023   0:00 [idle_inject/7]
+root          57  0.0  0.0      0     0 ?        S     2023   0:48 [migration/7]
+root          58  0.0  0.0      0     0 ?        S     2023   0:25 [ksoftirqd/7]
+root          60  0.0  0.0      0     0 ?        I<    2023   0:00 [kworker/7:0H-events_highpri]
+root          61  0.0  0.0      0     0 ?        S     2023   0:00 [kdevtmpfs]
+root          62  0.0  0.0      0     0 ?        I<    2023   0:00 [inet_frag_wq]
+root          63  0.0  0.0      0     0 ?        S     2023   0:00 [kauditd]
+root          64  0.0  0.0      0     0 ?        S     2023   0:07 [khungtaskd]
+root          65  0.0  0.0      0     0 ?        S     2023   0:00 [oom_reaper]
+root          66  0.0  0.0      0     0 ?        I<    2023   0:00 [writeback]
+root          67  0.0  0.0      0     0 ?        S     2023  22:30 [kcompactd0]
+root          68  0.0  0.0      0     0 ?        SN    2023   0:00 [ksmd]
+root          69  0.0  0.0      0     0 ?        SN    2023   1:22 [khugepaged]
+root         116  0.0  0.0      0     0 ?        I<    2023   0:00 [kintegrityd]
+root         117  0.0  0.0      0     0 ?        I<    2023   0:00 [kblockd]
+root         118  0.0  0.0      0     0 ?        I<    2023   0:00 [blkcg_punt_bio]
+root         119  0.0  0.0      0     0 ?        I<    2023   0:00 [tpm_dev_wq]
+root         120  0.0  0.0      0     0 ?        I<    2023   0:00 [ata_sff]
+root         121  0.0  0.0      0     0 ?        I<    2023   0:00 [md]
+root         122  0.0  0.0      0     0 ?        I<    2023   0:00 [edac-poller]
+root         123  0.0  0.0      0     0 ?        I<    2023   0:00 [devfreq_wq]
+root         125  0.0  0.0      0     0 ?        S     2023   0:00 [watchdogd]
+root         127  0.0  0.0      0     0 ?        I<    2023   1:26 [kworker/0:1H-kblockd]
+root         129  0.0  0.0      0     0 ?        S     2023   0:44 [kswapd0]
+root         130  0.0  0.0      0     0 ?        S     2023   0:00 [ecryptfs-kthrea]
+root         133  0.0  0.0      0     0 ?        I<    2023   0:00 [kthrotld]
+root         138  0.0  0.0      0     0 ?        I<    2023   0:00 [acpi_thermal_pm]
+root         140  0.0  0.0      0     0 ?        I<    2023   0:00 [vfio-irqfd-clea]
+root         143  0.0  0.0      0     0 ?        I<    2023   0:00 [mld]
+root         144  0.0  0.0      0     0 ?        I<    2023   0:00 [ipv6_addrconf]
+root         156  0.0  0.0      0     0 ?        I<    2023   0:00 [kstrp]
+root         159  0.0  0.0      0     0 ?        I<    2023   0:00 [zswap-shrink]
+root         165  0.0  0.0      0     0 ?        I<    2023   0:00 [charger_manager]
+root         187  0.0  0.0      0     0 ?        I<    2023   0:20 [kworker/1:1H-kblockd]
+root         212  0.0  0.0      0     0 ?        I<    2023   0:17 [kworker/3:1H-kblockd]
+root         225  0.0  0.0      0     0 ?        I<    2023   0:16 [kworker/4:1H-kblockd]
+root         231  0.0  0.0      0     0 ?        I<    2023   0:15 [kworker/7:1H-kblockd]
+root         237  0.0  0.0      0     0 ?        I<    2023   0:15 [kworker/5:1H-kblockd]
+root         239  0.0  0.0      0     0 ?        I<    2023   0:17 [kworker/6:1H-kblockd]
+root         254  0.0  0.0      0     0 ?        S     2023   0:00 [scsi_eh_0]
+root         255  0.0  0.0      0     0 ?        I<    2023   0:00 [scsi_tmf_0]
+root         256  0.0  0.0      0     0 ?        S     2023   0:00 [scsi_eh_1]
+root         257  0.0  0.0      0     0 ?        I<    2023   0:00 [scsi_tmf_1]
+root         258  0.0  0.0      0     0 ?        S     2023   0:00 [scsi_eh_2]
+root         259  0.0  0.0      0     0 ?        I<    2023   0:00 [scsi_tmf_2]
+root         260  0.0  0.0      0     0 ?        S     2023   0:00 [scsi_eh_3]
+root         261  0.0  0.0      0     0 ?        I<    2023   0:00 [scsi_tmf_3]
+root         262  0.0  0.0      0     0 ?        S     2023   0:00 [scsi_eh_4]
+root         263  0.0  0.0      0     0 ?        I<    2023   0:00 [scsi_tmf_4]
+root         264  0.0  0.0      0     0 ?        S     2023   0:00 [scsi_eh_5]
+root         265  0.0  0.0      0     0 ?        I<    2023   0:00 [scsi_tmf_5]
+root         271  0.0  0.0      0     0 ?        I<    2023   0:19 [kworker/2:1H-kblockd]
+root         273  0.0  0.0      0     0 ?        I<    2023   0:00 [kdmflush]
+root         274  0.0  0.0      0     0 ?        I<    2023   0:00 [kdmflush]
+root         351  0.0  0.0      0     0 ?        S     2023   4:16 [jbd2/dm-0-8]
+root         352  0.0  0.0      0     0 ?        I<    2023   0:00 [ext4-rsv-conver]
+root         391  0.0  0.5 367252 189048 ?       S<s   2023  58:34 /lib/systemd/systemd-journald
+root         449  0.0  0.0  29768  7436 ?        Ss    2023   0:15 /lib/systemd/systemd-udevd
+root         538  0.0  0.0      0     0 ?        I<    2023   0:00 [ipmi-msghandler]
+root         559  0.0  0.0      0     0 ?        SN    2023   0:00 [kipmi0]
+root         670  0.0  0.0      0     0 ?        I<    2023   0:00 [cryptd]
+root         699  0.0  0.0      0     0 ?        I<    2023   0:00 [ext4-rsv-conver]
+systemd+     767  0.0  0.0  25924 12848 ?        Ss    2023   3:47 /lib/systemd/systemd-resolved
+systemd+     768  0.0  0.0  89376  5524 ?        Ssl   2023   0:16 /lib/systemd/systemd-timesyncd
+root         851  0.0  0.0 242932  7572 ?        Ssl   2023  12:09 /usr/libexec/accounts-daemon
+root         852  0.0  0.0   2812  1132 ?        Ss    2023   0:00 /usr/sbin/acpid
+root         856  0.0  0.0  11416  2716 ?        Ss    2023   1:13 /usr/sbin/cron -f -P
+message+     857  0.0  0.0  13072  6780 ?        Ss    2023   3:03 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         858  0.0  0.0 548668 16264 ?        Ssl   2023  79:17 /usr/sbin/NetworkManager --no-daemon
+root         866  0.0  0.0  82768  3528 ?        Ssl   2023   8:04 /usr/sbin/irqbalance --foreground
+root         869  0.0  0.0 245468 11688 ?        Ssl   2023   2:59 /usr/libexec/polkitd --no-debug
+root         870  0.0  0.0 240064  6168 ?        Ssl   2023   0:00 /usr/libexec/power-profiles-daemon
+root         891  0.0  0.0 236380  3608 ?        Ssl   2023   0:00 /usr/libexec/switcheroo-control
+root         897  0.0  0.0  19028  8816 ?        Ss    2023   0:31 /lib/systemd/systemd-logind
+root         898  0.0  0.0 128596  7820 ?        Ssl   2023  12:05 /usr/sbin/thermald --systemd --dbus-enable --adaptive
+root         899  0.0  0.0 397440 12912 ?        Ssl   2023   7:36 /usr/libexec/udisks2/udisksd
+root         900  0.0  0.0  16492  3976 ?        Ss    2023   0:32 /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+root         973  0.0  0.0 120080 19984 ?        Ssl   2023   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root        1004  0.0  0.0 1878328 18672 ?       Ssl   2023  47:43 /usr/bin/containerd
+root        1005  0.0  0.0 234928  7080 ?        Ssl   2023   0:03 /usr/sbin/lightdm
+root        1006  0.0  0.0 244224  9612 ?        Ssl   2023   0:00 /usr/sbin/ModemManager
+root        1060  0.0  0.0  16688  2460 ?        S     2023   0:00 /usr/sbin/xrdp-sesman
+root        1098  0.0  0.1 1377592 47444 tty7    Ssl+  2023   0:44 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+root        1110  0.0  0.0  10696  1976 tty1     Ss+   2023   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+xrdp        1133  0.0  0.0  14856   716 ?        S     2023   0:00 /usr/sbin/xrdp
+munge       1428  0.0  0.0 206652  2624 ?        Sl    2023  14:04 /usr/sbin/munged
+kernoops    1429  0.0  0.0  13084  2160 ?        Ss    2023   0:08 /usr/sbin/kerneloops --test
+kernoops    1431  0.0  0.0  13084  2188 ?        Ss    2023   0:08 /usr/sbin/kerneloops
+root        1472  0.0  0.1 1814756 46824 ?       Ssl   2023  29:45 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+rtkit       1563  0.0  0.0 155920  2960 ?        SNsl  2023   1:36 /usr/libexec/rtkit-daemon
+root        1567  0.0  0.0 162720 11580 ?        Sl    2023   0:00 lightdm --session-child 16 19
+lightdm     1573  0.0  0.0  18100  9652 ?        Ss    2023   0:03 /lib/systemd/systemd --user
+lightdm     1574  0.0  0.0 169920  2812 ?        S     2023   0:00 (sd-pam)
+lightdm     1587  0.0  0.0  41344  4788 ?        S<sl  2023   0:00 /usr/bin/pipewire
+lightdm     1588  0.0  0.0  25516  4360 ?        Ssl   2023   0:53 /usr/bin/pipewire-media-session
+lightdm     1589  0.0  0.0 1072708 12060 ?       S<sl  2023   0:00 /usr/bin/pulseaudio --daemonize=no --log-target=journal
+lightdm     1593  0.0  0.0  10892  5108 ?        Ss    2023   0:32 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+lightdm     1607  0.0  0.0   2888   952 ?        Ss    2023   0:00 /bin/sh /usr/lib/lightdm/lightdm-greeter-session /usr/sbin/unity-greeter
+lightdm     1608  0.0  0.1 1030872 59788 ?       Sl    2023   4:33 /usr/sbin/unity-greeter
+lightdm     1630  0.0  0.0 309628  6108 ?        Ssl   2023   0:00 /usr/libexec/at-spi-bus-launcher
+lightdm     1631  0.0  0.0 240648  6392 ?        Ssl   2023   0:00 /usr/libexec/gvfsd
+lightdm     1644  0.0  0.0 380888  5232 ?        Sl    2023   0:00 /usr/libexec/gvfsd-fuse /run/user/108/gvfs -f
+lightdm     1649  0.0  0.0  10216  3440 ?        S     2023   0:00 /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 11 --address=unix:path=/run/user/108/at-spi/bus
+lightdm     1672  0.0  0.0 425992 26732 ?        Sl    2023   0:16 nm-applet
+lightdm     1674  0.0  0.0 162680  5500 ?        Sl    2023   0:00 /usr/libexec/at-spi2-registryd --use-gnome-session
+lightdm     1676  0.0  0.0 461292 26436 ?        Sl    2023   1:21 /usr/lib/unity-settings-daemon/unity-settings-daemon
+lightdm     1677  0.0  0.0 156960  4748 ?        Ssl   2023   0:01 /usr/libexec/dconf-service
+lightdm     1680  0.0  0.0 255072  9016 ?        Ssl   2023   0:00 /usr/lib/x86_64-linux-gnu/indicator-application/indicator-application-service
+lightdm     1681  0.0  0.0 385136  5344 ?        Ssl   2023   0:00 /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service
+lightdm     1682  0.0  0.0 371612 12048 ?        Ssl   2023   2:07 /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service
+lightdm     1684  0.0  0.0 927420  8476 ?        Ssl   2023   0:08 /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service
+lightdm     1700  0.0  0.0 847932  9552 ?        Ssl   2023   0:00 /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service
+root        1732  0.0  0.0 242216  6612 ?        Ssl   2023   0:00 /usr/libexec/upowerd
+colord      1741  0.0  0.0 862008 11952 ?        Ssl   2023   0:00 /usr/libexec/colord
+lightdm     1743  0.0  0.0 780992 26096 ?        SNsl  2023   0:26 /usr/libexec/tracker-miner-fs-3
+lightdm     1863  0.0  0.0 317988  8588 ?        Ssl   2023   2:39 /usr/libexec/gvfs-udisks2-volume-monitor
+lightdm     1868  0.0  0.0 315200  5636 ?        Ssl   2023   5:10 /usr/libexec/gvfs-afc-volume-monitor
+lightdm     1873  0.0  0.0 236460  4800 ?        Ssl   2023   0:00 /usr/libexec/gvfs-mtp-volume-monitor
+lightdm     1877  0.0  0.0 237548  4792 ?        Ssl   2023   0:00 /usr/libexec/gvfs-gphoto2-volume-monitor
+lightdm     1881  0.0  0.0 236632  5100 ?        Ssl   2023   0:00 /usr/libexec/gvfs-goa-volume-monitor
+lightdm     1885  0.0  0.0 564692 19912 ?        Sl    2023   0:03 /usr/libexec/goa-daemon
+lightdm     1900  0.0  0.0 338400 10092 ?        Sl    2023   0:19 /usr/libexec/goa-identity-service
+lightdm     2604  0.0  0.0 230708  3344 ?        Sl    2023   0:00 /usr/lib/x86_64-linux-gnu/xfce4/xfconf/xfconfd
+root        5632  0.0  0.0 300616 17228 ?        Ssl   2023   0:47 /usr/libexec/packagekitd
+syslog    877623  0.0  0.0 224336  4908 ?        Ssl   2023  14:15 /usr/sbin/rsyslogd -n -iNONE
+_rpc     1206865  0.0  0.0   8304  3020 ?        Ss    2023   0:12 /sbin/rpcbind -f -w
+root     1207273  0.0  0.0      0     0 ?        I<    2023   0:00 [rpciod]
+root     1207274  0.0  0.0      0     0 ?        I<    2023   0:00 [xprtiod]
+root     1207333  0.0  0.0      0     0 ?        I<    2023   0:00 [nfsiod]
+root     1207341  0.0  0.0      0     0 ?        S     2023   0:01 [NFSv4 callback]
+root     1321396  0.0  0.0 1839840 25636 ?       Ssl   2023  12:49 /usr/lib/snapd/snapd
+avahi    1555773  0.0  0.0   9656  2816 ?        Ss    2023   0:13 avahi-daemon: running [GreenLab-STF.local]
+avahi    1555774  0.0  0.0   9360   512 ?        S     2023   0:00 avahi-daemon: chroot helper
+root     1663245  0.0  0.0   8712  5292 ?        Ss    2023   2:08 /usr/sbin/apache2 -k start
+root     2089495  0.0  0.0  14984  7048 ?        S     2023   0:00 lightdm --session-child 12 21
+lightdm  2089503  0.0  0.0 374576 22232 ?        Ssl   2023   0:00 /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service --use-gtk
+root     2160679  0.0  0.0  10484  4132 ?        Ss    2023   0:00 /usr/lib/bluetooth/bluetoothd
+root     2541803  0.0  0.0      0     0 ?        I<    2023   0:15 [kworker/u17:1-xprtiod]
+root     2635405  0.0  0.0      0     0 ?        I<    2023   0:03 [kworker/u17:0-xprtiod]
+root     2637491  0.0  0.0  15680  9416 ?        Ss    2023   1:05 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+root     2673226  0.0  0.0 186228  6776 ?        Ss    2023   2:32 /usr/local/sbin/slurmd -D -s
+root     2717142  0.0  0.0   2888  1752 ?        Ss    2023   0:00 /bin/sh /snap/cups/1024/scripts/run-cupsd
+root     2717149  0.0  0.0   2888   912 ?        Ss    2023   0:00 /bin/sh /snap/cups/1024/scripts/run-cups-browsed
+root     2717269  0.0  0.0  66616 12484 ?        S     2023   0:00 cupsd -f -s /var/snap/cups/common/etc/cups/cups-files.conf -c /var/snap/cups/common/etc/cups/cupsd.conf
+root     2717273  0.0  0.0   2888   120 ?        S     2023   0:00 /bin/sh /snap/cups/1024/scripts/run-cups-browsed
+www-data 2977560  0.0  0.0 2000264 6408 ?        Sl   00:00   0:00 /usr/sbin/apache2 -k start
+www-data 2977561  0.0  0.0 2000272 6296 ?        Sl   00:00   0:00 /usr/sbin/apache2 -k start
+root     2977623  0.0  0.0  73696 13984 ?        Ss   00:00   0:00 /usr/sbin/cupsd -l
+root     2977624  0.0  0.0 173020 10324 ?        Ssl  00:00   0:00 /usr/sbin/cups-browsed
+root     2992242  0.0  0.0      0     0 ?        I    13:10   0:00 [kworker/u16:2-nfsiod]
+root     2993690  0.0  0.0   3208  1052 ?        S    14:52   0:00 sleep 3600
+root     2994318  0.0  0.0      0     0 ?        I    15:19   0:00 [kworker/7:0-events]
+root     2994386  0.0  0.0      0     0 ?        I    15:19   0:00 [kworker/6:2-mm_percpu_wq]
+root     2994797  0.0  0.0      0     0 ?        I    15:19   0:00 [kworker/5:1-events]
+root     2995152  0.0  0.0      0     0 ?        I    15:24   0:00 [kworker/0:2-cgroup_pidlist_destroy]
+root     2995167  0.0  0.0      0     0 ?        I    15:25   0:00 [kworker/u16:1-rpciod]
+root     2995194  0.0  0.0      0     0 ?        I    15:27   0:00 [kworker/7:2-events]
+root     2995214  0.0  0.0      0     0 ?        I    15:28   0:00 [kworker/4:1-events]
+root     2995229  0.0  0.0      0     0 ?        I    15:29   0:00 [kworker/2:1-events]
+root     2995246  0.0  0.0      0     0 ?        I    15:30   0:00 [kworker/1:0-cgroup_pidlist_destroy]
+root     2995257  0.0  0.0      0     0 ?        I    15:31   0:00 [kworker/6:1-events]
+root     2995260  0.0  0.0      0     0 ?        I    15:31   0:00 [kworker/3:0-cgroup_destroy]
+root     2995280  0.0  0.0      0     0 ?        I    15:32   0:00 [kworker/0:0-cgroup_destroy]
+root     2995343  0.0  0.0      0     0 ?        I    15:33   0:00 [kworker/4:0-events]
+root     2995403  0.0  0.0      0     0 ?        I    15:37   0:00 [kworker/2:0-events]
+root     2995416  0.0  0.0      0     0 ?        I    15:37   0:00 [kworker/5:2-events]
+root     2995443  0.0  0.0      0     0 ?        I    15:38   0:00 [kworker/u16:0-nfsiod]
+root     2995494  0.0  0.0      0     0 ?        I    15:38   0:00 [kworker/1:2-events]
+root     2995507  0.0  0.0      0     0 ?        I    15:38   0:00 [kworker/3:2-events]
+root     2995523  0.0  0.0      0     0 ?        I    15:39   0:00 [kworker/4:2-events]
+root     2995569  0.0  0.0      0     0 ?        I    15:43   0:00 [kworker/6:0-events]
+root     2995620  0.0  0.0      0     0 ?        I    15:44   0:00 [kworker/0:1-events]
+root     2995625  0.0  0.0 182572  5524 ?        Sl   15:44   0:00 slurmstepd: [47057.batch]
+greenBe+ 2995629  0.0  0.0   9972  3308 ?        S    15:44   0:00 /bin/bash /var/spool/slurmd/job47057/slurm_script run.dpp-hpc-con10-ql9_gl2-gl5-gl6-11.cfg
+greenBe+ 2995631  0.0  0.0  14592  4000 ?        R    15:44   0:00 ps aux

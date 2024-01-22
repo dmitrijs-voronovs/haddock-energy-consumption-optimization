@@ -119,8 +119,8 @@ class CLICommandHandler:
     def clean_experiment_dir(self, exp: 'ExperimentDir', full: bool):
         exp_dir = ExperimentDir.dir(exp)
         self.client.put_files([PathRegistry.clean_script()], exp_dir)
-        print(full)
         if full:
+            print("Full directory cleanup")
             self.client.execute_commands(
                 [f'cd {exp_dir}', 'rm -rf run.*', 'rm -rf *.info', 'rm -rf *.cfg', 'rm -rf slurm-*'])
         else:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[47]:
+# In[139]:
 
 
 from pathlib import Path
@@ -11,7 +11,7 @@ import regex as re
 from IPython.core.display_functions import display
 
 
-# In[48]:
+# In[140]:
 
 
 data_dir = "./exp-local/data"
@@ -27,7 +27,7 @@ data = import_data(data_dir)
 data
 
 
-# In[49]:
+# In[141]:
 
 
 def convert_to_numeric(value):
@@ -55,7 +55,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[50]:
+# In[142]:
 
 
 def filter_out_completed_jobs(dat):
@@ -66,7 +66,7 @@ def filter_out_completed_jobs(dat):
 
 def extract_params_from_local_file_name(dat):
     dat[['Workflow', 'mode', 'ncores', 'node', 'trial']] = dat.JobName.str.extract(
-        r'(\w+)-(\w+)-nc(\d+)_(gl\d+)-(\d+).cfg')
+        r'(\w+)-(\w+)-nc(\d+)_(\w+?\d+)-(\d+).cfg')
     dat.ncores = dat.ncores.astype(int)
     dat.trial = dat.trial.astype(int)
     return dat
@@ -84,7 +84,7 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[51]:
+# In[143]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
@@ -98,7 +98,7 @@ data_pending = data_pending[~data_pending.JobName.str.contains("nc2")].reset_ind
 data = pd.concat([data_completed, data_pending], axis=0, ignore_index=True)
 data = data[~data.JobName.str.contains("nc2")].reset_index(drop=True)
 
-# data = data[~data.JobName.str.contains("nc2")].reset_index(drop=True)
+data = data[~data.JobName.str.contains("nc2")].reset_index(drop=True)
 data = extract_params_from_local_file_name(data)
 data_completed = extract_params_from_local_file_name(data_completed)
 data_pending = extract_params_from_local_file_name(data_pending)
@@ -109,7 +109,7 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[52]:
+# In[144]:
 
 
 data = data.dropna(subset=['AveCPU'])
@@ -120,14 +120,14 @@ data['cpu_utilization'] = data['n_ave_cpu'] / data['n_elapsed']
 data
 
 
-# In[53]:
+# In[145]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
 
 
-# In[99]:
+# In[146]:
 
 
 collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).describe().reset_index()
@@ -136,7 +136,7 @@ collected_data_stats.to_csv(
 collected_data_stats
 
 
-# In[100]:
+# In[147]:
 
 
 # All collected data
@@ -147,7 +147,18 @@ collected_data.to_csv('new.local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[97]:
+# In[159]:
+
+
+# All collected data
+collected_data = data_completed.sort_values(
+    by=['Workflow', "node", "ncores"]).groupby(['Workflow', 'mode', 'ncores']).agg(
+    n_trials=('trial', 'count')).reset_index()
+collected_data.to_csv('new.total_local_exp_overview.csv', index=False, header=True)
+collected_data
+
+
+# In[148]:
 
 
 def to_local_config_class(workflow, node, trial, ncores, warmup=False):
@@ -174,7 +185,7 @@ def get_configs_code_for_new_experiment(node, data_of_node, target_total_n, star
                                                                       max_ncores(node), warmup=True)
 
 
-# In[98]:
+# In[149]:
 
 
 TOTAL_EXPERIMENTS_PER_EPOCH = 10
@@ -205,7 +216,7 @@ class {get_class_name(node, epoch)}(LocalExperiment):
     return class_definition if configs else None
 
 
-# In[96]:
+# In[150]:
 
 
 # new experiment epochs
@@ -219,15 +230,14 @@ def generate_experiment_classes(exp_epochs, data_of_node: str):
         with open(file_path, 'w') as file:
             file.write(class_code)
 
+# generate_experiment_classes({
+#     # "gl2": 3,
+#     # "gl6": 3,
+#     "gl5": 3
+# }, data_of_node="gl6")
 
-generate_experiment_classes({
-    # "gl2": 3,
-    # "gl6": 3,
-    "gl5": 3
-}, data_of_node="gl6")
 
-
-# In[59]:
+# In[151]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -236,19 +246,19 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[60]:
+# In[152]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[61]:
+# In[153]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[62]:
+# In[154]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -259,7 +269,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 fig.savefig('new.boxplot.png')
 
 
-# In[63]:
+# In[155]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
@@ -278,7 +288,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('new.boxplot-overview-by-workflows.png')
 
 
-# In[ ]:
+# In[156]:
 
 
 fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(26, 10))
