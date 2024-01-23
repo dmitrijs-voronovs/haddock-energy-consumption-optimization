@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import pandas as pd
 
@@ -23,12 +24,13 @@ class MemoryUtilizationParser(IndividualParser):
 
                     if timestamp_match:
                         timestamp_str = timestamp_match.group(1)
-                        timestamp = pd.to_datetime(timestamp_str)
+                        timestamp = datetime.strptime(timestamp_str, '%H:%M:%S %p')
 
                     if header_match:
                         memory_info = header_match.groups()
                         memory_data.append(
-                            {'Timestamp': timestamp, 'kbmemfree': int(memory_info[0]), 'kbavail': int(memory_info[1]),
+                            {'Timestamp': timestamp.isoformat(), 'kbmemfree': int(memory_info[0]),
+                             'kbavail': int(memory_info[1]),
                              'kbmemused': int(memory_info[2]), '%memused': float(memory_info[3]),
                              'kbbuffers': int(memory_info[4]), 'kbcached': int(memory_info[5]),
                              'kbcommit': int(memory_info[6]), '%commit': float(memory_info[7]),

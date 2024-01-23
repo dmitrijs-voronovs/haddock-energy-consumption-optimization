@@ -9,7 +9,7 @@ from data_analysis.CLI.extractors.Parser import IndividualParser
 class CPUFrequencyParser(IndividualParser):
     @staticmethod
     def extract(file_path: str):
-        timestamp_pattern = re.compile(r'^([a-zA-Z]{3} [a-zA-Z]{3} \d+ \d{2}:\d{2}:\d{2} [APMapm]+ UTC \d{4})')
+        timestamp_pattern = re.compile(r'^([^cpu]\S+\s.+)\s\w{3}(\s\d+)?$')
         cpu_frequency_pattern = re.compile(r'^cpu MHz\s+:\s+(\d+\.\d+)')
 
         timestamp = None
@@ -23,16 +23,17 @@ class CPUFrequencyParser(IndividualParser):
 
                 if timestamp_match:
                     timestamp_str = timestamp_match.group(1)
-                    timestamp = datetime.strptime(timestamp_str, '%a %b %d %I:%M:%S %p %Z %Y')
+                    try:
+                        timestamp = datetime.strptime(timestamp_str, '%a %d %b %Y %I:%M:%S %p')
+                    except ValueError:
+                        timestamp = datetime.strptime(f"{timestamp_str} {timestamp_match.group(2)}",
+                                                      '%a %b %d %I:%M:%S %p %Y')
                     cpu_idx = 0
 
                 if cpu_frequency_match:
                     cpu_frequency_info = cpu_frequency_match.groups()
-                    cpu_frequency_data.append({
-                        'Timestamp': timestamp,
-                        'CPU': cpu_idx,
-                        'CPU MHz': float(cpu_frequency_info[0])
-                    })
+                    cpu_frequency_data.append(
+                        {'Timestamp': timestamp.isoformat(), 'CPU': cpu_idx, 'CPU MHz': float(cpu_frequency_info[0])})
                     cpu_idx += 1
 
         df = pd.DataFrame(cpu_frequency_data)

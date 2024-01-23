@@ -22,12 +22,12 @@ class LogFileParser(IndividualParser):
                 if start_match:
                     timestamp_str, module = start_match.groups()
                     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
-                    events.append({'timestamp': timestamp, 'module': module, 'event': 'start'})
+                    events.append({'timestamp': timestamp.isoformat(), 'module': module, 'event': 'start'})
 
                 if finish_match:
                     timestamp_str, module = finish_match.groups()
                     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
-                    events.append({'timestamp': timestamp, 'module': module, 'event': 'finish'})
+                    events.append({'timestamp': timestamp.isoformat(), 'module': module, 'event': 'finish'})
 
         df = pd.DataFrame(events)
         df = df.sort_values(by='timestamp')
