@@ -1,13 +1,15 @@
 import argparse
 import os
-import re
 import sys
 from importlib import import_module
 from pathlib import Path
 
-import pandas as pd
-
 sys.path.append(os.path.pardir)
+
+from .extractors.EnergyDataParser import EnergyDataParser
+from .extractors.LogFileParser import LogFileParser
+from .extractors.MemoryUtilizationParser import MemoryUtilizationParser
+from .extractors.CPUFrequencyParser import CPUFrequencyParser
 
 from examples.domain.experiment.Experiment import Experiment
 from examples import PathRegistry
@@ -35,8 +37,7 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
                                                  help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
-        run_experiment_parser.add_argument('-n', '--node', type=str, required=True,
-                                           help='Node [example: "gl2", "gl5"]')
+        run_experiment_parser.add_argument('-n', '--node', type=str, required=True, help='Node [example: "gl2", "gl5"]')
         self.add_dir_arg(run_experiment_parser)
         self.add_cls_arg(run_experiment_parser)
 
@@ -75,8 +76,7 @@ class CLICommandHandler:
         elif args.command == 'squeue':
             self.client.execute_commands(['squeue -o "%7A %50j %3t %N"'])
         elif args.command == 'sacct':
-            self.client.execute_commands([
-                f"sacct -o {Experiment.get_sacct_output_format(main_fields_only=True)}"])
+            self.client.execute_commands([f"sacct -o {Experiment.get_sacct_output_format(main_fields_only=True)}"])
         elif args.command == 'scancel':
             self.client.execute_commands(["scancel -t R", "scancel -t PD", "squeue"])
         elif args.command in ['get_log_files', "get-logs"]:
@@ -150,11 +150,9 @@ class CLICommandHandler:
     def compare_dir_sizes(self, destination_dir, directory, exp_dir):
         local_dir_size = sum(f.stat().st_size for f in Path(destination_dir).glob('**/*') if f.is_file())
         if '.info' in directory:
-            remote_dir_size = int(
-                self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
+            remote_dir_size = int(self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
         else:
-            remote_dir_size = int(
-                self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
+            remote_dir_size = int(self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
         same_size = remote_dir_size == local_dir_size
         print(f"{remote_dir_size=}, {local_dir_size=}, same size: {same_size}")
         return same_size
@@ -203,39 +201,30 @@ class CLICommandHandler:
              "echo activate conda", "source $HOME/anaconda3/bin/activate", "conda activate haddock3",
              "echo run experiment", f"sh {run_experiment_script}", "sinfo"])
 
-    def create_experiment_class(self, cls, mode):
+    def create_experiment_class(self, cls: str, exp: 'ExperimentDir'):
+        mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]
         module_name = f"examples.domain.experiment.{mode.value.lower()}.{cls}"
         return getattr(import_module(module_name), cls)
 
     def create_experiment(self, exp: 'ExperimentDir', cls: str):
-        mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]
-        Experiment_Class: 'Experiment' = self.create_experiment_class(cls, mode)(ExperimentDir.host_dir(exp))
+        Experiment_Class: 'Experiment' = self.create_experiment_class(cls, exp)(ExperimentDir.host_dir(exp))
         Experiment_Class.generate_create_job_script().generate_runner()
 
-    @staticmethod
-    def extract_numbers_from_file(file_path):
-        with open(file_path, 'r') as file:
-            content = file.read()
-            numbers = re.findall(r"(?:\d+,?)+\.\d+", content)
-            return [float(num.replace(',', '')) for num in numbers]
-
     def get_info_data(self, exp: 'ExperimentDir', cls: str):
-        mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]
-        ExperimentClass: 'Experiment' = self.create_experiment_class(cls, mode)()
+        ExperimentClass: 'Experiment' = self.create_experiment_class(cls, exp)()
 
-        files = [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.info", "perf_stat.txt")) for cfg in
-                 ExperimentClass.configs]
-        job_data = []
-        for job_name, file in files:
-            try:
-                power_energy_pkg, power_energy_ram, perf_elapsed = self.extract_numbers_from_file(file)
-                job_data.append(
-                    {"JobName": job_name, "power_energy_pkg": power_energy_pkg, "power_energy_ram": power_energy_ram,
-                     "perf_elapsed": perf_elapsed})
-            except Exception as e:
-                print(f"Failed to extract data from file {file}", e)
+        def source_files_config(name):
+            return [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.info", name)) for cfg in
+                    ExperimentClass.configs]
 
-        print(job_data)
-        df = pd.DataFrame(job_data)
         os.makedirs(ExperimentDir.analysis_dir(exp, 'data', 'info'), exist_ok=True)
-        df.to_csv(ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv'), index=False)
+        destination_filename = ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv')
+        get_destination_path = lambda fname: lambda cfg: ExperimentDir.analysis_dir(exp, 'data', 'info', exp.value, cls,
+                                                                                    cfg[0], fname)
+
+        EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename)
+        LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
+        MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
+                                                  get_destination_path('memory.csv'))
+        CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"),
+                                             get_destination_path('cpu.csv'))
