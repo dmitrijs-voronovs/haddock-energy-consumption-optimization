@@ -3,6 +3,7 @@ import os
 import sys
 from importlib import import_module
 from pathlib import Path
+from typing import List
 
 sys.path.append(os.path.pardir)
 
@@ -210,12 +211,28 @@ class CLICommandHandler:
         Experiment_Class: 'Experiment' = self.create_experiment_class(cls, exp)(ExperimentDir.host_dir(exp))
         Experiment_Class.generate_create_job_script().generate_runner()
 
+    def add_date_time_to_memory(self, cfgs: List['Experiment']):
+        """adds date time from cpu_frequency.log first line to mem_utilization.log"""
+        for cfg in cfgs:
+            with open(ExperimentDir.host_dir(cfg.exp, 'runs', f"run.{cfg.run_dir}.parsed", 'cpu.csv'), 'r') as file:
+                first_line = file.readline()
+                date_time = first_line.split(',')[0]
+                with open(ExperimentDir.host_dir(cfg.exp, 'runs', f"run.{cfg.run_dir}.parsed", 'memory.csv'),
+                          'r') as file2:
+                    lines = file2.readlines()
+                    lines.insert(0, date_time + '\n')
+                    with open(ExperimentDir.host_dir(cfg.exp, 'runs', f"run.{cfg.run_dir}.parsed", 'memory.csv'),
+                              'w') as file3:
+                        file3.writelines(lines)
+
     def get_info_data(self, exp: 'ExperimentDir', cls: str):
         ExperimentClass: 'Experiment' = self.create_experiment_class(cls, exp)()
 
         def source_files_config(name):
             return [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.info", name)) for cfg in
                     ExperimentClass.configs]
+
+        # self.add_date_time_to_memory(ExperimentClass.configs) # adds date time from cpu_frequency.log first line to mem_utilization.log
 
         os.makedirs(ExperimentDir.analysis_dir(exp, 'data', 'info'), exist_ok=True)
         destination_filename = ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv')

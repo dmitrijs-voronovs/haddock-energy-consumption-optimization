@@ -1,9 +1,9 @@
 Workflow,mode,ncores,n_trials
 daa,local,4,6
-daa,local,8,6
+daa,local,8,8
 daa,local,16,1
 daa,local,32,4
-dpp,local,4,6
-dpp,local,8,6
-dpp,local,16,8
+dpp,local,4,7
+dpp,local,8,9
+dpp,local,16,10
 dpp,local,32,6

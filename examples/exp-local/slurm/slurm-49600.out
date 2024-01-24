@@ -1,0 +1,4 @@
+/var/spool/slurmd/job49600/slurm_script: line 6: kill: (259085) - No such process
+/var/spool/slurmd/job49600/slurm_script: line 7: kill: (259086) - No such process
+/var/spool/slurmd/job49600/slurm_script: line 8: kill: (259087) - No such process
+Collecting info for run.daa-local-nc8_ss2-5.cfg (after run) done.

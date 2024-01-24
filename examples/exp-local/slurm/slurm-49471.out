@@ -1,0 +1,3 @@
+/var/spool/slurmd/job49471/slurm_script: line 8: kill: (2602685) - No such process
+ps: write error: No space left on device
+Collecting info for run.dpp-local-nc32_gl5-32.cfg (after run) done.
