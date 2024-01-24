@@ -219,12 +219,11 @@ class CLICommandHandler:
 
         os.makedirs(ExperimentDir.analysis_dir(exp, 'data', 'info'), exist_ok=True)
         destination_filename = ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv')
-        get_destination_path = lambda fname: lambda cfg: ExperimentDir.analysis_dir(exp, 'data', 'info', exp.value, cls,
-                                                                                    cfg[0], fname)
+        get_destination_path = lambda file_name: lambda cfg: ExperimentDir.host_dir(exp, 'runs', f"run.{cfg[0]}.parsed",
+                                                                                    file_name)
 
         EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename)
         LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
         MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
                                                   get_destination_path('memory.csv'))
-        CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"),
-                                             get_destination_path('cpu.csv'))
+        CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"), get_destination_path('cpu.csv'))
