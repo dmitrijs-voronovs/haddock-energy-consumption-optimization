@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[139]:
+# In[19]:
 
 
 from pathlib import Path
@@ -11,7 +11,7 @@ import regex as re
 from IPython.core.display_functions import display
 
 
-# In[140]:
+# In[20]:
 
 
 data_dir = "./exp-local/data"
@@ -27,7 +27,7 @@ data = import_data(data_dir)
 data
 
 
-# In[141]:
+# In[21]:
 
 
 def convert_to_numeric(value):
@@ -55,7 +55,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[142]:
+# In[22]:
 
 
 def filter_out_completed_jobs(dat):
@@ -84,7 +84,7 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[143]:
+# In[23]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
@@ -109,7 +109,7 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[144]:
+# In[24]:
 
 
 data = data.dropna(subset=['AveCPU'])
@@ -117,17 +117,23 @@ data = data.dropna(subset=['AveCPU'])
 data['n_ave_cpu'] = data['AveCPU'].apply(convert_elapsed_time)
 data['n_elapsed'] = data['Elapsed'].apply(convert_elapsed_time)
 data['cpu_utilization'] = data['n_ave_cpu'] / data['n_elapsed']
+
+data_completed = data_completed.dropna(subset=['AveCPU'])
+data_completed['n_ave_cpu'] = data_completed['AveCPU'].apply(convert_elapsed_time)
+data_completed['n_elapsed'] = data_completed['Elapsed'].apply(convert_elapsed_time)
+data_completed['cpu_utilization'] = data_completed['n_ave_cpu'] / data_completed['n_elapsed']
+
 data
 
 
-# In[145]:
+# In[25]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
 
 
-# In[146]:
+# In[26]:
 
 
 collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).describe().reset_index()
@@ -136,7 +142,7 @@ collected_data_stats.to_csv(
 collected_data_stats
 
 
-# In[147]:
+# In[27]:
 
 
 # All collected data
@@ -147,7 +153,7 @@ collected_data.to_csv('new.local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[159]:
+# In[28]:
 
 
 # All collected data
@@ -158,7 +164,7 @@ collected_data.to_csv('new.total_local_exp_overview.csv', index=False, header=Tr
 collected_data
 
 
-# In[148]:
+# In[29]:
 
 
 def to_local_config_class(workflow, node, trial, ncores, warmup=False):
@@ -185,7 +191,7 @@ def get_configs_code_for_new_experiment(node, data_of_node, target_total_n, star
                                                                       max_ncores(node), warmup=True)
 
 
-# In[149]:
+# In[30]:
 
 
 TOTAL_EXPERIMENTS_PER_EPOCH = 10
@@ -216,7 +222,7 @@ class {get_class_name(node, epoch)}(LocalExperiment):
     return class_definition if configs else None
 
 
-# In[150]:
+# In[31]:
 
 
 # new experiment epochs
@@ -237,7 +243,7 @@ def generate_experiment_classes(exp_epochs, data_of_node: str):
 # }, data_of_node="gl6")
 
 
-# In[151]:
+# In[32]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -246,19 +252,19 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[152]:
+# In[33]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[153]:
+# In[34]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[154]:
+# In[35]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
@@ -269,14 +275,15 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 fig.savefig('new.boxplot.png')
 
 
-# In[155]:
+# In[37]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
-fig, ax = plt.subplots(nrows=2, ncols=6, figsize=(26, 10))
+fig, ax = plt.subplots(nrows=2, ncols=7, figsize=(30, 10))
 for j, workflow in enumerate(data_for_analysis.Workflow.unique()):
     for i, column in enumerate(
-            ['ElapsedHours', 'ConsumedEnergyK', 'AveRSSM', 'AveDiskReadM', 'AveDiskWriteM', 'AveVMSizeM']):
+            ['ElapsedHours', 'ConsumedEnergyK', 'AveRSSM', 'AveDiskReadM', 'AveDiskWriteM', 'AveVMSizeM',
+             'cpu_utilization']):
         data_for_analysis[data_for_analysis.Workflow == workflow].boxplot(column=column, by=['ncores', 'node'],
                                                                           ax=ax[j, i])
         ax[j, i].set_title(f"{workflow}-{column}")
@@ -288,12 +295,13 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('new.boxplot-overview-by-workflows.png')
 
 
-# In[156]:
+# In[43]:
 
 
-fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(26, 10))
+fig, ax = plt.subplots(nrows=3, ncols=3, figsize=(26, 15))
 for i, column in enumerate(
-        ['ElapsedHours', 'ConsumedEnergyK', 'AveRSSM', 'AveDiskReadM', 'AveDiskWriteM', 'AveVMSizeM']):
+        ['ElapsedHours', 'ConsumedEnergyK', 'AveRSSM', 'AveDiskReadM', 'AveDiskWriteM', 'AveVMSizeM',
+         'cpu_utilization']):
     data_for_analysis.boxplot(column=column, by=['Workflow', 'ncores', 'node'], ax=ax[i // 3, i % 3])
     ax[i // 3, i % 3].set_title(column)
     ax[i // 3, i % 3].set_xticklabels(ax[i // 3, i % 3].get_xticklabels(), rotation=-60)
