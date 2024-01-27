@@ -7,6 +7,7 @@ from typing import List
 
 sys.path.append(os.path.pardir)
 
+from .extractors.CPUUtilizationParser import CPUUtilizationParser
 from .extractors.EnergyDataParser import EnergyDataParser
 from .extractors.LogFileParser import LogFileParser
 from .extractors.MemoryUtilizationParser import MemoryUtilizationParser
@@ -239,6 +240,8 @@ class CLICommandHandler:
         get_destination_path = lambda file_name: lambda cfg: ExperimentDir.host_dir(exp, 'runs', f"run.{cfg[0]}.parsed",
                                                                                     file_name)
 
+        CPUUtilizationParser.extract_into_file(source_files_config("proc_utilization.log"),
+                                               get_destination_path('cpu_utilization.csv'))
         EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename)
         LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
         MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
