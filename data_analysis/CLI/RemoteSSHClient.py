@@ -76,7 +76,7 @@ class RemoteSSHClient:
     def __get_filepath(self, filepath):
         return str(filepath).replace("\\", "/")
 
-    def execute_commands(self, commands) -> str:
+    def execute_commands(self, commands: List[str]) -> str:
         command = " && ".join(commands)
         try:
             # Execute a command (replace this with your script execution)

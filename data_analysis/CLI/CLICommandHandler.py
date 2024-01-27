@@ -129,40 +129,44 @@ class CLICommandHandler:
             self.client.execute_commands([f'cd {exp_dir}', 'sh clean.sh'])
 
     def get_haddock_log_files(self, exp: 'ExperimentDir', subdir='runs'):
-        exp_dir = ExperimentDir.dir(exp)
-        all_directories = self.client.execute_commands([f'cd {exp_dir}',  # list directories that have pattern run.*
-                                                        'ls -d run.*/', ]).splitlines()
+        all_directories = self.client.execute_commands([f'cd {ExperimentDir.dir(exp)}', 'ls -d run.*/', ]).splitlines()
 
         for directory in all_directories:
             directory = directory.strip("/")
             destination_dir = ExperimentDir.host_dir(exp, subdir, directory)
+            remote_dir = ExperimentDir.dir(exp, directory)
 
             if Path(destination_dir).exists():
-                print(f"{destination_dir=} exists. Calculating size...")
-                if self.compare_dir_sizes(destination_dir, directory, exp_dir):
+                print(f"\n{destination_dir=} exists. Calculating size...")
+                if self.equal_dir_sizes(destination_dir, remote_dir):
                     continue
 
-            files = self.client.execute_commands(
-                [f'cd {exp_dir}', f'cd {directory}',  # list all files-only no directories
-                 'ls -p | grep -v /', ]).splitlines()
-            files_abs_path = [f"{exp_dir}/{directory}/{file}" for file in files]
-            print(files_abs_path)
+            print(f"\nDownloading...{destination_dir=}")
+
+            files = self.client.execute_commands([f'cd {remote_dir}', 'ls -p | grep -v /', ]).splitlines()
+            files_abs_path = [f"{remote_dir}/{file}" for file in files]
+
+            if Path(destination_dir).exists():
+                for file in Path(destination_dir).glob("**/*"):
+                    if file.is_file():
+                        file.unlink()
+                Path(destination_dir).rmdir()
+
+            Path(destination_dir).mkdir(exist_ok=True)
             self.client.get_files(files_abs_path, destination_dir)
 
-    def compare_dir_sizes(self, destination_dir, directory, exp_dir):
-        files_starting_with_pid = r'^(?!pid\.).+$'
+    def equal_dir_sizes(self, local_dir, remote_dir):
         local_dir_size = sum(
-            f.stat().st_size for f in Path(destination_dir).glob(files_starting_with_pid) if f.is_file())
+            f.stat().st_size for f in Path(local_dir).glob("**/*") if f.is_file() and not f.name.startswith('pid.'))
         try:
-            if '.info' in directory:
-                remote_dir_size = int(self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
+            if '.info' in remote_dir:
+                remote_dir_size = int(self.client.execute_commands([f"du -sb {remote_dir}"]).split()[0])
             else:
-                remote_dir_size = int(
-                    self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
+                remote_dir_size = int(self.client.execute_commands([f"du -sb {remote_dir}/log"]).split()[0])
         except:
             remote_dir_size = -1
         same_size = remote_dir_size == local_dir_size
-        print(f"{remote_dir_size=}, {local_dir_size=}, same size: {same_size}")
+        print(f"same size: {same_size}, {remote_dir_size=}, {local_dir_size=}")
         return same_size
 
     def get_slurm_files(self, exp: 'ExperimentDir', subdir='slurm'):
