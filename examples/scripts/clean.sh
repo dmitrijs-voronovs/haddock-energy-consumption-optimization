@@ -3,6 +3,9 @@
 old_directories=$(find . -maxdepth 1 -type d -mtime +3 -name 'run.*' | grep -E '^\.\/run\..+$')
 rm -rf $old_directories
 
+old_files=$(find . -maxdepth 1 -type f -mtime +3 -name 'slurm-*.out')
+rm -rf $old_files
+
 run_directories=$(find . -maxdepth 1 -type d -mtime +1 -name 'run.*' | grep -E '^\.\/run\.[^/.]+$')
 
 # Loop through the directories and perform the cleaning of run-specific files

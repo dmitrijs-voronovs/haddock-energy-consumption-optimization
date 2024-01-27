@@ -150,11 +150,17 @@ class CLICommandHandler:
             self.client.get_files(files_abs_path, destination_dir)
 
     def compare_dir_sizes(self, destination_dir, directory, exp_dir):
-        local_dir_size = sum(f.stat().st_size for f in Path(destination_dir).glob('**/*') if f.is_file())
-        if '.info' in directory:
-            remote_dir_size = int(self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
-        else:
-            remote_dir_size = int(self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
+        files_starting_with_pid = r'^(?!pid\.).+$'
+        local_dir_size = sum(
+            f.stat().st_size for f in Path(destination_dir).glob(files_starting_with_pid) if f.is_file())
+        try:
+            if '.info' in directory:
+                remote_dir_size = int(self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}"]).split()[0])
+            else:
+                remote_dir_size = int(
+                    self.client.execute_commands([f'cd {exp_dir}', f"du -sb {directory}/log"]).split()[0])
+        except:
+            remote_dir_size = -1
         same_size = remote_dir_size == local_dir_size
         print(f"{remote_dir_size=}, {local_dir_size=}, same size: {same_size}")
         return same_size
