@@ -1,5 +1,6 @@
 import os
 from abc import ABC, abstractmethod
+from datetime import datetime, timedelta
 from typing import List, Tuple, Callable
 
 
@@ -30,3 +31,15 @@ class IndividualParser(Parser, ABC):
                 pass
             except Exception as e:
                 print(f"{cls.__name__}: Failed to extract data from file {file}", e)
+
+    @staticmethod
+    def get_next_timestamp(prev_date, date, timestamp_str):
+        time = datetime.strptime(timestamp_str, '%I:%M:%S %p').time()
+        timestamp = datetime.combine(date, time)
+
+        new_date = date
+        # Check if day has changed
+        if prev_date and timestamp < datetime.fromisoformat(prev_date):
+            new_date += timedelta(days=1)
+            timestamp = datetime.combine(new_date, time)
+        return timestamp, new_date

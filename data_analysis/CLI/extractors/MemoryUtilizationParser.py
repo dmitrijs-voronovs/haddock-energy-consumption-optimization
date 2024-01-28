@@ -2,18 +2,18 @@ import re
 
 import pandas as pd
 
-from data_analysis.CLI.extractors.CPUUtilizationParser import CPUUtilizationParser
+from data_analysis.CLI.extractors.Helper import Helper
 from data_analysis.CLI.extractors.Parser import IndividualParser
 
 
 class MemoryUtilizationParser(IndividualParser):
-    @staticmethod
-    def extract(file_path: str):
+    @classmethod
+    def extract(cls, file_path: str):
         timestamp_pattern = re.compile(r'^(\d{2}:\d{2}:\d{2} [APMapm]+)')
         param_pattern = re.compile(
             r'\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\d+)$')
 
-        date = CPUUtilizationParser.get_start_date(file_path)
+        date = Helper.get_start_date(file_path)
         memory_data = []
 
         with open(file_path, 'r') as file:
@@ -24,7 +24,7 @@ class MemoryUtilizationParser(IndividualParser):
                 if timestamp_match:
                     timestamp_str = timestamp_match.group(1)
                     prev_date = memory_data[-1]['Timestamp'] if memory_data else None
-                    timestamp, date = CPUUtilizationParser.get_timestamp(prev_date, date, timestamp_str)
+                    timestamp, date = cls.get_next_timestamp(prev_date, date, timestamp_str)
 
                 if header_match:
                     memory_info = header_match.groups()
