@@ -10,14 +10,14 @@ class Parser(ABC):
         pass
 
 
-class CombinedParser(Parser):
+class CombinedParser(Parser, ABC):
     @staticmethod
     @abstractmethod
     def extract_into_file(src: List[Tuple[str, str]], destination_path: str):
         pass
 
 
-class IndividualParser(Parser):
+class IndividualParser(Parser, ABC):
     @classmethod
     def extract_into_file(cls, src: List[Tuple[str, str]], get_destination_path: Callable[[Tuple[str, str]], str]):
         for job_name, file in src:

@@ -35,11 +35,7 @@ class CPUUtilizationParser(IndividualParser):
         header_pattern = re.compile(
             r'^(\S+\s*\S+)\s+(\d+|all)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$')
 
-        try:
-            date = CPUUtilizationParser.get_start_date(file_path)
-        except ValueError:
-            date = datetime.now().date()
-
+        date = CPUUtilizationParser.get_start_date(file_path)
         cpu_data = []
 
         with open(file_path, 'r') as file:

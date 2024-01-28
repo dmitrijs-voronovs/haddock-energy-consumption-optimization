@@ -40,7 +40,8 @@ class CPUFrequencyParser(IndividualParser):
                 if cpu_frequency_match:
                     cpu_frequency_info = cpu_frequency_match.groups()
                     cpu_frequency_data.append(
-                        {'Timestamp': timestamp.isoformat(), 'CPU': cpu_idx, 'CPU MHz': float(cpu_frequency_info[0])})
+                        {'Timestamp': timestamp.isoformat(), 'CPU': cpu_idx,
+                         'CPU MHz': float(cpu_frequency_info[0])})
                     cpu_idx += 1
 
         df = pd.DataFrame(cpu_frequency_data)
