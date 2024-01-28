@@ -10,7 +10,6 @@ import pandas as pd
 import regex as re
 from IPython.core.display_functions import display
 
-
 # In[15]:
 
 
@@ -108,13 +107,11 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 
 display(data_completed, data_pending, data)
 
-
 # In[19]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
-
 
 # In[20]:
 
@@ -123,7 +120,6 @@ collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'no
 collected_data_stats.to_csv(
     'local_exp_overview_stats.csv', header=True)
 collected_data_stats
-
 
 # In[21]:
 
@@ -216,7 +212,6 @@ generate_experiment_classes({
     "gl5": 2
 })
 
-
 # In[25]:
 
 
@@ -225,18 +220,15 @@ data_completed['n_trials_completed'] = data_completed.sort_values(
 data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
-
 # In[26]:
 
 
 import matplotlib.pyplot as plt
 
-
 # In[27]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
-
 
 # In[28]:
 
@@ -247,7 +239,6 @@ data_for_analysis.boxplot(column='ElapsedSeconds', by=['Workflow', 'ncores', 'no
 ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 # save
 fig.savefig('boxplot.png')
-
 
 # In[29]:
 
@@ -267,7 +258,6 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 
 fig.savefig('boxplot-overview-by-workflows.png')
 
-
 # In[ ]:
 
 
@@ -282,9 +272,4 @@ fig.subplots_adjust(hspace=0.6)
 
 fig.savefig('boxplot-overview.png')
 
-
 # In[ ]:
-
-
-
-

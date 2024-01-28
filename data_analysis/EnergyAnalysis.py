@@ -8,7 +8,6 @@ from pathlib import Path
 
 import pandas as pd
 
-
 # In[34]:
 
 
@@ -34,7 +33,6 @@ def extract_params_from_local_file_name(dat):
 
 data = extract_params_from_local_file_name(data)
 data
-
 
 # In[33]:
 
@@ -64,7 +62,6 @@ axs[2].bar(data['JobName'], data.perf_elapsed)
 axs[2].set_title('perf_elapsed')
 axs[2].set_xticklabels(axs[2].get_xticklabels(), rotation=-75)
 
-
 # In[41]:
 
 
@@ -92,9 +89,4 @@ axs[2].set_xticklabels(axs[2].get_xticklabels(), rotation=-75)
 # save it to file
 plt.savefig('energy.boxplots.png')
 
-
 # In[ ]:
-
-
-
-

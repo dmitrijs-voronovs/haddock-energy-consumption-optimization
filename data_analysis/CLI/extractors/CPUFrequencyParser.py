@@ -7,9 +7,21 @@ from data_analysis.CLI.extractors.Parser import IndividualParser
 
 
 class CPUFrequencyParser(IndividualParser):
+    timestamp_pattern = re.compile(r'^([^cpu]\S+\s.+)\s\w{3}(\s\d+)?$')
+
+    @staticmethod
+    def extract_timestamp(timestamp_match):
+        """Handles multiple timestamp formats"""
+        timestamp_str = timestamp_match.group(1)
+        try:
+            timestamp = datetime.strptime(timestamp_str, '%a %d %b %Y %I:%M:%S %p')
+        except ValueError:
+            timestamp = datetime.strptime(f"{timestamp_str} {timestamp_match.group(2)}",
+                                          '%a %b %d %I:%M:%S %p %Y')
+        return timestamp
+
     @staticmethod
     def extract(file_path: str):
-        timestamp_pattern = re.compile(r'^([^cpu]\S+\s.+)\s\w{3}(\s\d+)?$')
         cpu_frequency_pattern = re.compile(r'^cpu MHz\s+:\s+(\d+\.\d+)')
 
         timestamp = None
@@ -18,16 +30,11 @@ class CPUFrequencyParser(IndividualParser):
 
         with open(file_path, 'r') as file:
             for line in file:
-                timestamp_match = timestamp_pattern.match(line)
+                timestamp_match = CPUFrequencyParser.timestamp_pattern.match(line)
                 cpu_frequency_match = cpu_frequency_pattern.match(line)
 
                 if timestamp_match:
-                    timestamp_str = timestamp_match.group(1)
-                    try:
-                        timestamp = datetime.strptime(timestamp_str, '%a %d %b %Y %I:%M:%S %p')
-                    except ValueError:
-                        timestamp = datetime.strptime(f"{timestamp_str} {timestamp_match.group(2)}",
-                                                      '%a %b %d %I:%M:%S %p %Y')
+                    timestamp = CPUFrequencyParser.extract_timestamp(timestamp_match)
                     cpu_idx = 0
 
                 if cpu_frequency_match:

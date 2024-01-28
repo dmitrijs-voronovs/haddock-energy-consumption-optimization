@@ -24,7 +24,7 @@ class MemoryUtilizationParser(IndividualParser):
 
                     if timestamp_match:
                         timestamp_str = timestamp_match.group(1)
-                        timestamp = datetime.strptime(timestamp_str, '%H:%M:%S %p')
+                        timestamp = datetime.strptime(timestamp_str, '%I:%M:%S %p')
 
                     if header_match:
                         memory_info = header_match.groups()

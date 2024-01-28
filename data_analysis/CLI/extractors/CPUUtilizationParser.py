@@ -1,18 +1,44 @@
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
+from pathlib import Path
 
 import pandas as pd
 
+from data_analysis.CLI.extractors.CPUFrequencyParser import CPUFrequencyParser
 from data_analysis.CLI.extractors.Parser import IndividualParser
 
 
 class CPUUtilizationParser(IndividualParser):
     @staticmethod
+    def get_start_date(file_path):
+        timestamp_file = Path(file_path).parent / 'cpu_frequency.log'
+        with open(timestamp_file, 'r') as file:
+            timestamp_line = file.readline()
+            timestamp_match = CPUFrequencyParser.timestamp_pattern.match(timestamp_line)
+            timestamp = CPUFrequencyParser.extract_timestamp(timestamp_match)
+            return timestamp.date()
+
+    @staticmethod
+    def get_timestamp(prev_timestamp, date, time):
+        timestamp = datetime.combine(date, time)
+
+        new_date = date
+        # Check if day has changed
+        if prev_timestamp and timestamp < datetime.fromisoformat(prev_timestamp):
+            new_date += timedelta(days=1)
+            timestamp = datetime.combine(new_date, time)
+        return timestamp, new_date
+
+    @staticmethod
     def extract(file_path: str):
         header_pattern = re.compile(
             r'^(\S+\s*\S+)\s+(\d+|all)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$')
 
-        timestamp = None
+        try:
+            date = CPUUtilizationParser.get_start_date(file_path)
+        except ValueError:
+            date = datetime.now().date()
+
         cpu_data = []
 
         with open(file_path, 'r') as file:
@@ -22,7 +48,9 @@ class CPUUtilizationParser(IndividualParser):
 
                     if match:
                         timestamp_str = match.group(1)
-                        timestamp = datetime.strptime(timestamp_str, '%H:%M:%S %p')
+                        prev_timestamp = cpu_data[-1]['Timestamp'] if cpu_data else None
+                        time = datetime.strptime(timestamp_str, '%I:%M:%S %p').time()
+                        timestamp, date = CPUUtilizationParser.get_timestamp(prev_timestamp, date, time)
 
                         cpu_info = match.groups()
                         cpu_data.append(
