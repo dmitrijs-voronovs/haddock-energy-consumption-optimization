@@ -34,11 +34,12 @@ class PathRegistry:
     def clean_script():
         return f"{PathRegistry.script_folder()}/clean.sh"
 
-    DATA_ANALYSIS_FOLDER = "../data_analysis"
+    DATA_ANALYSIS_FOLDER = "."
+    EXECUTION_ANALYSIS_SCRIPT_FILENAME = "execution-analysis.py"
 
     @staticmethod
     def execution_analysis_script():
-        return f"{PathRegistry.DATA_ANALYSIS_FOLDER}/execution-analysis.py"
+        return f"{PathRegistry.DATA_ANALYSIS_FOLDER}/run_analysis/{PathRegistry.EXECUTION_ANALYSIS_SCRIPT_FILENAME}"
 
     COLLECT_INFO_AFTER_SH = "collect-info.after.sh"
     COLLECT_INFO_BEFORE_SH = "collect-info.before.sh"

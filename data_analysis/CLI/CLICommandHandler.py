@@ -1,9 +1,11 @@
 import argparse
 import os
+import shutil
+import subprocess
 import sys
 from importlib import import_module
+from multiprocessing import Pool
 from pathlib import Path
-from typing import List
 
 sys.path.append(os.path.pardir)
 
@@ -61,6 +63,10 @@ class CLICommandHandler:
         self.add_dir_arg(get_info_data_parser)
         self.add_cls_arg(get_info_data_parser)
 
+        generate_run_diagrams_parser = subparsers.add_parser('generate_run_diagrams', aliases=["gen-run-diagrams"],
+                                                             help='Generate individual run diagrams')
+        self.add_dir_arg(generate_run_diagrams_parser)
+
         subparsers.add_parser('sinfo', help='Slurm node information')
         subparsers.add_parser('squeue', help='Check slurm queue')
         subparsers.add_parser('sacct', help='Query slurm accountant to get experiment data')
@@ -91,6 +97,8 @@ class CLICommandHandler:
             self.create_experiment(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['get_info_data', "get-info"]:
             self.get_info_data(ExperimentDir.value_to_enum(args.dir), args.cls)
+        elif args.command in ['generate_run_diagrams', "gen-run-diagrams"]:
+            self.generate_run_diagrams(ExperimentDir.value_to_enum(args.dir))
         elif args.command in ['run_experiment', "run-exp"]:
             exp_dir = ExperimentDir.value_to_enum(args.dir)
             if args.node == DEFAULT_NODE:
@@ -222,28 +230,12 @@ class CLICommandHandler:
         Experiment_Class: 'Experiment' = self.create_experiment_class(cls, exp)(ExperimentDir.host_dir(exp))
         Experiment_Class.generate_create_job_script().generate_runner()
 
-    def add_date_time_to_memory(self, cfgs: List['Experiment']):
-        """adds date time from cpu_frequency.log first line to mem_utilization.log"""
-        for cfg in cfgs:
-            with open(ExperimentDir.host_dir(cfg.exp, 'runs', f"run.{cfg.run_dir}.parsed", 'cpu.csv'), 'r') as file:
-                first_line = file.readline()
-                date_time = first_line.split(',')[0]
-                with open(ExperimentDir.host_dir(cfg.exp, 'runs', f"run.{cfg.run_dir}.parsed", 'memory.csv'),
-                          'r') as file2:
-                    lines = file2.readlines()
-                    lines.insert(0, date_time + '\n')
-                    with open(ExperimentDir.host_dir(cfg.exp, 'runs', f"run.{cfg.run_dir}.parsed", 'memory.csv'),
-                              'w') as file3:
-                        file3.writelines(lines)
-
     def get_info_data(self, exp: 'ExperimentDir', cls: str):
         ExperimentClass: 'Experiment' = self.create_experiment_class(cls, exp)()
 
         def source_files_config(name):
             return [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.info", name)) for cfg in
                     ExperimentClass.configs]
-
-        # self.add_date_time_to_memory(ExperimentClass.configs) # adds date time from cpu_frequency.log first line to mem_utilization.log
 
         os.makedirs(ExperimentDir.analysis_dir(exp, 'data', 'info'), exist_ok=True)
         destination_filename = ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv')
@@ -257,3 +249,22 @@ class CLICommandHandler:
         MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
                                                   get_destination_path('memory.csv'))
         CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"), get_destination_path('cpu.csv'))
+
+    @staticmethod
+    def generate_run_diagram(parsed_data_dir):
+        print(f"Generating run diagrams for: {parsed_data_dir}")
+        script_file = PathRegistry.execution_analysis_script()
+        shutil.copy(script_file, Path(parsed_data_dir) / PathRegistry.EXECUTION_ANALYSIS_SCRIPT_FILENAME)
+        try:
+            subprocess.run(['python', PathRegistry.EXECUTION_ANALYSIS_SCRIPT_FILENAME], cwd=parsed_data_dir)
+        except Exception as e:
+            print(f"Error while generating run diagrams for: {parsed_data_dir} \n {e}")
+
+    @staticmethod
+    def generate_run_diagrams(exp: 'ExperimentDir'):
+        exp_dir = Path(ExperimentDir.host_dir(exp)) / 'runs'
+        parsed_data_dirs = list(exp_dir.glob('run.*.parsed'))
+
+        # Create a multiprocessing Pool
+        with Pool() as p:
+            p.map(CLICommandHandler.generate_run_diagram, parsed_data_dirs)
