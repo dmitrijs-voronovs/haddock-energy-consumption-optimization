@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[112]:
+# In[126]:
 
 
 import re
@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-# In[113]:
+# In[136]:
 
 
 CPU_FREQ_FILE = 'cpu.csv'
@@ -21,6 +21,7 @@ MEM_UTILIZATION_FILE = 'memory.csv'
 STEPS_FILE = 'steps.csv'
 
 steps_df = pd.read_csv(STEPS_FILE)
+steps_df['timestamp'] = pd.to_datetime(steps_df['timestamp'])
 
 
 def merge_with_steps(file):
@@ -28,7 +29,6 @@ def merge_with_steps(file):
     cpu_df = pd.read_csv(file)
     # Convert 'Timestamp' columns to datetime objects
     cpu_df['Timestamp'] = pd.to_datetime(cpu_df['Timestamp'])
-    steps_df['timestamp'] = pd.to_datetime(steps_df['timestamp'])
     # Merge dataframes on the closest timestamp
     merged_df = pd.merge_asof(cpu_df, steps_df, left_on='Timestamp', right_on='timestamp', direction='backward')
     # Drop redundant timestamp column
@@ -39,13 +39,7 @@ def merge_with_steps(file):
     return cpu_df, merged_df
 
 
-cpu_freq_df, cpu_freq_merged_df = merge_with_steps(CPU_FREQ_FILE)
-cpu_util_df, cpu_util_merged_df = merge_with_steps(CPU_UTILIZATION_FILE)
-mem_util_df, mem_util_merged_df = merge_with_steps(MEM_UTILIZATION_FILE)
-
-
-
-# In[114]:
+# In[137]:
 
 
 def format_timedelta(td):
@@ -71,10 +65,13 @@ for index in range(0, len(steps_df), 2):
     labels.append(f"{steps_df.loc[index, 'module']} ({duration_str})")
 
 
-# In[115]:
+# In[174]:
 
 
 num_data_points = 160
+num_ticks = 8
+
+cpu_freq_df, cpu_freq_merged_df = merge_with_steps(CPU_FREQ_FILE)
 
 field_name = 'CPU MHz'
 data_df = cpu_freq_df
@@ -95,7 +92,7 @@ avg_freq = data_df.groupby(pd.Grouper(key='Timestamp', freq=f'{freq}Min'))[field
 fig, ax1 = plt.subplots(figsize=(15, 6))
 
 ax1.plot(avg_freq['Timestamp'], avg_freq[field_name], marker='o', linestyle='-',
-         label=f'{y_label} ({freq}-min intervals)')
+         label=f'{y_label}')
 
 # Set the second x-axis for steps
 ax2 = ax1.twiny()
@@ -108,10 +105,13 @@ ax2.set_xticklabels(labels, rotation=75, fontsize=10, ha="left")
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
 
 # Set custom x-axis and y-axis ticks for better visualization
-x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), freq=f'{freq}Min')
+x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), periods=num_ticks)
+x_ticks = x_ticks.union([data_df['Timestamp'].min()])
+ax1.set_xticks(x_ticks)
 
 # Trim the right and left part of the graph
-ax1.set_xlim([steps_df['timestamp'].min(), steps_df['timestamp'].max()])
+ax1.set_xlim(
+    [steps_df['timestamp'].min() - pd.Timedelta(minutes=1), steps_df['timestamp'].max() + pd.Timedelta(minutes=1)])
 ax2.set_xlim(ax1.get_xlim())
 
 # Add vertical lines
@@ -134,10 +134,10 @@ plt.tight_layout()
 fig.savefig(png)
 
 
-# In[121]:
+# In[156]:
 
 
-num_data_points = 160
+cpu_util_df, cpu_util_merged_df = merge_with_steps(CPU_UTILIZATION_FILE)
 
 field_name = '%user_%system'
 
@@ -162,7 +162,7 @@ avg_freq = data_df.groupby(pd.Grouper(key='Timestamp', freq=f'{freq}Min'))[field
 fig, ax1 = plt.subplots(figsize=(15, 6))
 
 ax1.plot(avg_freq['Timestamp'], avg_freq[field_name], marker='o', linestyle='-',
-         label=f'{y_label} ({freq}-min intervals)')
+         label=f'{y_label}')
 
 # Set the second x-axis for steps
 ax2 = ax1.twiny()
@@ -175,10 +175,13 @@ ax2.set_xticklabels(labels, rotation=75, fontsize=10, ha="left")
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
 
 # Set custom x-axis and y-axis ticks for better visualization
-x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), freq=f'{freq}Min')
+x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), periods=num_ticks)
+x_ticks = x_ticks.union([data_df['Timestamp'].min()])
+ax1.set_xticks(x_ticks)
 
 # Trim the right and left part of the graph
-ax1.set_xlim([steps_df['timestamp'].min(), steps_df['timestamp'].max()])
+ax1.set_xlim(
+    [steps_df['timestamp'].min() - pd.Timedelta(minutes=1), steps_df['timestamp'].max() + pd.Timedelta(minutes=1)])
 ax2.set_xlim(ax1.get_xlim())
 
 # Add vertical lines
@@ -201,7 +204,7 @@ plt.tight_layout()
 fig.savefig(png)
 
 
-# In[125]:
+# In[175]:
 
 
 num_data_points = 30
@@ -237,7 +240,7 @@ for cpu in cpu_util_df_every[idx_field_name].unique():
     avg_freq = data_df.groupby(pd.Grouper(key='Timestamp', freq=f'{freq}Min'))[field_name].mean().reset_index()
 
     ax1.plot(avg_freq['Timestamp'], avg_freq[field_name], marker='o', linestyle='-',
-             label=f'CPU {cpu} {field_name} ({freq}-min intervals)')
+             label=f'CPU {cpu} {field_name}')
 
 # Set the second x-axis for steps
 ax2 = ax1.twiny()
@@ -250,10 +253,13 @@ ax2.set_xticklabels(labels, rotation=75, fontsize=10, ha="left")
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
 
 # Set custom x-axis and y-axis ticks for better visualization
-x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), freq=f'{freq}Min')
+x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), periods=num_ticks)
+x_ticks = x_ticks.union([data_df['Timestamp'].min()])
+ax1.set_xticks(x_ticks)
 
 # Trim the right and left part of the graph
-ax1.set_xlim([steps_df['timestamp'].min(), steps_df['timestamp'].max()])
+ax1.set_xlim(
+    [steps_df['timestamp'].min() - pd.Timedelta(minutes=1), steps_df['timestamp'].max() + pd.Timedelta(minutes=1)])
 ax2.set_xlim(ax1.get_xlim())
 
 # Add vertical lines
@@ -270,7 +276,8 @@ ax1.set_xlabel('Timestamp')
 ax1.set_ylabel(y_label)
 # ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 # ax1.legend()
-plt.title(f"{CONFIG}: {title} ({freq}-min intervals)")
+n_cores = cpu_util_df_every[idx_field_name].unique().shape[0]
+plt.title(f"{CONFIG}: {title}, {n_cores} cores ({freq}-min intervals)")
 
 # Show the plot
 plt.tight_layout()
@@ -281,6 +288,8 @@ fig.savefig(png)
 
 
 num_data_points = 160
+
+mem_util_df, mem_util_merged_df = merge_with_steps(MEM_UTILIZATION_FILE)
 
 field_name = '%memused'
 data_df = mem_util_df
@@ -301,7 +310,7 @@ avg_freq = data_df.groupby(pd.Grouper(key='Timestamp', freq=f'{freq}Min'))[field
 fig, ax1 = plt.subplots(figsize=(15, 6))
 
 ax1.plot(avg_freq['Timestamp'], avg_freq[field_name], marker='o', linestyle='-',
-         label=f'{y_label} ({freq}-min intervals)')
+         label=f'{y_label}')
 
 # Set the second x-axis for steps
 ax2 = ax1.twiny()
@@ -314,10 +323,13 @@ ax2.set_xticklabels(labels, rotation=75, fontsize=10, ha="left")
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
 
 # Set custom x-axis and y-axis ticks for better visualization
-x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), freq=f'{freq}Min')
+x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), periods=num_ticks)
+x_ticks = x_ticks.union([data_df['Timestamp'].min()])
+ax1.set_xticks(x_ticks)
 
 # Trim the right and left part of the graph
-ax1.set_xlim([steps_df['timestamp'].min(), steps_df['timestamp'].max()])
+ax1.set_xlim(
+    [steps_df['timestamp'].min() - pd.Timedelta(minutes=1), steps_df['timestamp'].max() + pd.Timedelta(minutes=1)])
 ax2.set_xlim(ax1.get_xlim())
 
 # Add vertical lines
@@ -376,11 +388,11 @@ avg_mem_util['%memused'] = scaler.fit_transform(avg_mem_util[['%memused']])
 fig, ax1 = plt.subplots(figsize=(15, 6))
 
 ax1.plot(avg_freq_cpu['Timestamp'], avg_freq_cpu['CPU MHz'], marker='o', linestyle='-',
-         label=f'Normalized CPU MHz ({freq}-min intervals)')
+         label=f'Normalized CPU MHz')
 ax1.plot(avg_util_all['Timestamp'], avg_util_all['%user_%system'], marker='o', linestyle='-',
-         label=f'Normalized CPU Utilization ({freq}-min intervals)')
+         label=f'Normalized CPU Utilization')
 ax1.plot(avg_mem_util['Timestamp'], avg_mem_util['%memused'], marker='o', linestyle='-',
-         label=f'Normalized Memory Usage ({freq}-min intervals)')
+         label=f'Normalized Memory Usage')
 
 # Set the second x-axis for steps
 ax2 = ax1.twiny()
@@ -393,10 +405,13 @@ ax2.set_xticklabels(labels, rotation=75, fontsize=10, ha="left")
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
 
 # Set custom x-axis and y-axis ticks for better visualization
-x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), freq=f'{freq}Min')
+x_ticks = pd.date_range(start=data_df['Timestamp'].min(), end=data_df['Timestamp'].max(), periods=num_ticks)
+x_ticks = x_ticks.union([data_df['Timestamp'].min()])
+ax1.set_xticks(x_ticks)
 
 # Trim the right and left part of the graph
-ax1.set_xlim([steps_df['timestamp'].min(), steps_df['timestamp'].max()])
+ax1.set_xlim(
+    [steps_df['timestamp'].min() - pd.Timedelta(minutes=1), steps_df['timestamp'].max() + pd.Timedelta(minutes=1)])
 ax2.set_xlim(ax1.get_xlim())
 
 # Add vertical lines

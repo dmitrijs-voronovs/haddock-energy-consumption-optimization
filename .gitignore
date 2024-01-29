@@ -151,3 +151,5 @@ docs/reference/core/mandatory_parameters.rst
 haddock3-docs/
 /.env
 !examples/scripts
+/examples/**/execution-analysis.py
+/examples/**/execution-analysis.ipynb
