@@ -10,6 +10,7 @@ import pandas as pd
 import regex as re
 from IPython.core.display_functions import display
 
+
 # In[20]:
 
 
@@ -107,6 +108,7 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 
 display(data_completed, data_pending, data)
 
+
 # In[24]:
 
 
@@ -123,11 +125,13 @@ data_completed['cpu_utilization'] = data_completed['n_ave_cpu'] / data_completed
 
 data
 
+
 # In[25]:
 
 
 jobs_to_eliminate = data[data.ncores == 2]
 " ".join(map(str, list(jobs_to_eliminate.JobID.to_list())))
+
 
 # In[26]:
 
@@ -136,6 +140,7 @@ collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'no
 collected_data_stats.to_csv(
     'new.local_exp_overview_stats.csv', header=True)
 collected_data_stats
+
 
 # In[27]:
 
@@ -146,6 +151,7 @@ collected_data = data_completed.sort_values(
     n_trials=('trial', 'count'), trials_list=('trial', lambda x: sorted(x.tolist()))).reset_index()
 collected_data.to_csv('new.local_exp_overview.csv', index=False, header=True)
 collected_data
+
 
 # In[28]:
 
@@ -230,7 +236,6 @@ def generate_experiment_classes(exp_epochs, data_of_node: str):
         with open(file_path, 'w') as file:
             file.write(class_code)
 
-
 # generate_experiment_classes({
 #     # "gl2": 3,
 #     # "gl6": 3,
@@ -246,15 +251,18 @@ data_completed['n_trials_completed'] = data_completed.sort_values(
 data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
+
 # In[33]:
 
 
 import matplotlib.pyplot as plt
 
+
 # In[34]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
+
 
 # In[35]:
 
@@ -265,6 +273,7 @@ data_for_analysis.boxplot(column='ElapsedSeconds', by=['Workflow', 'ncores', 'no
 ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
 # save
 fig.savefig('new.boxplot.png')
+
 
 # In[37]:
 
@@ -285,6 +294,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 
 fig.savefig('new.boxplot-overview-by-workflows.png')
 
+
 # In[43]:
 
 
@@ -300,4 +310,9 @@ fig.subplots_adjust(hspace=0.6)
 
 fig.savefig('new.boxplot-overview.png')
 
+
 # In[ ]:
+
+
+
+
