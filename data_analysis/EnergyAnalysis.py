@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[29]:
+# In[2]:
 
 
 from pathlib import Path
@@ -9,19 +9,17 @@ from pathlib import Path
 import pandas as pd
 
 
-# In[34]:
+# In[4]:
 
 
-data_dir = "./exp-local/data/info"
-
-
-def import_data(dir):
+def import_perf_data(dir):
     all_files = Path(dir).glob('perf.*.csv')
     all_data = [pd.read_csv(path, index_col=None) for path in all_files]
     return pd.concat(all_data, axis=0, ignore_index=True)
 
 
-data = import_data(data_dir)
+data_dir = "./exp-local/data/info"
+data = import_perf_data(data_dir)
 
 
 def extract_params_from_local_file_name(dat):
