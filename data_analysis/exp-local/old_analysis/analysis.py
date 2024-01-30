@@ -13,7 +13,7 @@ from IPython.core.display_functions import display
 # In[15]:
 
 
-data_dir = "./exp-local/data/old"
+data_dir = "../data/old"
 
 
 def import_data(dir):

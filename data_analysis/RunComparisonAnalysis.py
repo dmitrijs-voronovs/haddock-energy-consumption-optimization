@@ -17,7 +17,6 @@ sys.path.append(str(Path.cwd().parent))
 sys.path.append(str(Path.cwd()))
 from data_analysis.CLI import ExperimentDir
 
-
 # In[3]:
 
 
@@ -54,23 +53,20 @@ for png in pngs:
 df = pd.DataFrame(configs, columns=['cfg_name', 'path', 'workflow', 'mode', 'ncores', 'node', 'trial', 'image_name'])
 df
 
-
 # In[96]:
 
 
 data_gathered = df.groupby(['image_name', 'mode', 'workflow', 'ncores']).size().reset_index(name='count')
-data_gathered.to_csv('gathered_data_stat.csv', index=False)
+data_gathered.to_csv('info.csv', index=False)
 data_gathered
-
 
 # In[97]:
 
 
 data_gathered_by_node = df.groupby(['image_name', 'mode', 'workflow', 'ncores', 'node']).size().reset_index(
     name='count')
-data_gathered_by_node.to_csv('gathered_data_by_node_stat.csv', index=False)
+data_gathered_by_node.to_csv('info.by_node.csv', index=False)
 data_gathered_by_node
-
 
 # In[118]:
 
@@ -80,7 +76,6 @@ image_name = 'run_avg_cpu_util_all.png'
 df_slice = df[(df.workflow == workflow) & (df.image_name == image_name)]
 df_slice
 
-
 # In[119]:
 
 
@@ -89,7 +84,6 @@ df_max = df_grouped.groupby('ncores')['count'].max().reset_index(name='max_count
 total_count = df_max['max_count'].sum()
 # df_max
 display(df_grouped, df_max, total_count)
-
 
 # In[ ]:
 
@@ -154,10 +148,4 @@ for workflow in df.workflow.unique():
         plt.savefig(img_name)
         # plt.show()
 
-
-
 # In[ ]:
-
-
-
-

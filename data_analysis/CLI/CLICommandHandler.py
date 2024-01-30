@@ -1,14 +1,11 @@
 import argparse
 import os
-import re
 import shutil
 import subprocess
 import sys
 from importlib import import_module
+from multiprocessing import Pool
 from pathlib import Path
-
-import pandas as pd
-from matplotlib import pyplot as plt
 
 sys.path.append(os.path.pardir)
 
@@ -67,8 +64,11 @@ class CLICommandHandler:
         self.add_cls_arg(get_info_data_parser)
 
         generate_run_diagrams_parser = subparsers.add_parser('generate_run_diagrams', aliases=["gen-run-diagrams"],
-                                                             help='Generate individual run diagrams')
+                                                             help='Generate individual run diagrams (mem and cpu utilization, cpu frequency)')
         self.add_dir_arg(generate_run_diagrams_parser)
+
+        subparsers.add_parser('generate_diagrams', aliases=['gen-diagrams'],
+                              help='Generate overview diagrams')
 
         subparsers.add_parser('sinfo', help='Slurm node information')
         subparsers.add_parser('squeue', help='Check slurm queue')
@@ -102,6 +102,8 @@ class CLICommandHandler:
             self.get_info_data(ExperimentDir.value_to_enum(args.dir), args.cls)
         elif args.command in ['generate_run_diagrams', "gen-run-diagrams"]:
             self.generate_run_diagrams(ExperimentDir.value_to_enum(args.dir))
+        elif args.command in ['generate_diagrams', "gen-diagrams"]:
+            self.generate_diagrams()
         elif args.command in ['run_experiment', "run-exp"]:
             exp_dir = ExperimentDir.value_to_enum(args.dir)
             if args.node == DEFAULT_NODE:
@@ -265,49 +267,23 @@ class CLICommandHandler:
 
     @staticmethod
     def generate_run_diagrams(exp: 'ExperimentDir'):
-        # exp_dir = Path(ExperimentDir.host_dir(exp)) / 'runs'
-        # parsed_data_dirs = list(exp_dir.glob('run.*.parsed'))
-        #
-        # # Create a multiprocessing Pool
-        # with Pool() as p:
-        #     p.map(CLICommandHandler.generate_run_diagram, parsed_data_dirs)
-        #
-        CLICommandHandler.combine_diagrams(exp)
+        exp_dir = Path(ExperimentDir.host_dir(exp)) / 'runs'
+        parsed_data_dirs = list(exp_dir.glob('run.*.parsed'))
+        # Create a multiprocessing Pool
+        try:
+            with Pool() as p:
+                p.map(CLICommandHandler.generate_run_diagram, parsed_data_dirs)
+        except KeyboardInterrupt:
+            print("KeyboardInterrupt, terminating...")
+            p.terminate()
+            p.join()
+
+        subprocess.call(["jupyter", "nbconvert", "--to", "python", "RunComparisonAnalysis.ipynb"])
+        subprocess.call(["python", "RunComparisonAnalysis.py", exp.value])
 
     @classmethod
-    def combine_diagrams(cls, exp: 'ExperimentDir'):
-        exp_dir = Path(ExperimentDir.host_dir(exp)) / 'runs'
-        pngs = list(exp_dir.glob('run.*.parsed/*png'))
-
-        extract_params_from_config = lambda cfg: re.match(r".+?\.(.+?)-(.+?)(?:-(.+?))_(.+?)-(\d+)\.cfg.+",
-                                                          cfg).groups()
-
-        df = pd.DataFrame(columns=['cfg_name', 'path', 'workflow', 'mode', 'params', 'node', 'trial', 'image_name'])
-
-        for png in pngs:
-            workflow, mode, nc_param, node, trial = extract_params_from_config(png.parent.name)
-            df._append({
-                'cfg_name': re.match(r"^.+\.(.+?)\..+$", png.parent.name).group(1),
-                'path': png,
-                'workflow': workflow,
-                mode: mode,
-                'nc_param': nc_param,
-                'node': node,
-                'trial': trial,
-                'image_name': png.name,
-            }, ignore_index=True)
-
-        # for unique workflogs
-        for workflow in df.workflow.unique():
-            for image_name in df.image_name.unique():
-                #                 x axis - nodes
-                #                y axis - nc_param
-                x_len = len(df[df.workflow == workflow].node.unique())
-                y_len = len(df[df.workflow == workflow].nc_param())
-                fig, ax = plt.subplots(x_len, y_len)
-                for node in df[df.workflow == workflow].node.unique():
-                    for nc_param in df[df.workflow == workflow].nc_param():
-                        ax[node][nc_param].imshow(
-                            df[(df.workflow == workflow) & (df.node == node) & (df.nc_param == nc_param)].path)
-                plt.savefig(f"{workflow}_{image_name}.png")
-                plt.show()
+    def generate_diagrams(cls):
+        subprocess.call(["jupyter", "nbconvert", "--to", "python", "OverallAnalysis.ipynb"])
+        subprocess.call(["python", "OverallAnalysis.py"])
+        subprocess.call(["jupyter", "nbconvert", "--to", "python", "EnergyAnalysis.ipynb"])
+        subprocess.call(["python", "EnergyAnalysis.py"])
