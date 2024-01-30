@@ -1,0 +1,1 @@
+jupyter nbconvert --to python RunComparison.ipynb ** python.exe RunComparison.py
