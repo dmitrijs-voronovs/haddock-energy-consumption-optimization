@@ -7,3 +7,4 @@ python experiment.py get-info -d exp-local -c GL6_4
 python experiment.py get-info -d exp-local -c GL5_4
 python experiment.py get-info -d exp-local -c SS2
 python experiment.py gen-run-diagrams -d exp-local
+python experiment.py gen-plots -d exp-local

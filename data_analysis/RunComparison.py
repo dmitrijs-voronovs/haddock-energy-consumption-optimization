@@ -1,23 +1,33 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[140]:
+# In[9]:
 
 
 import re
+import sys
 from pathlib import Path
 
 import pandas as pd
+from IPython.core.display_functions import display
 from matplotlib import pyplot as plt
 from matplotlib.image import AxesImage
 
+sys.path.append(str(Path.cwd().parent))
+sys.path.append(str(Path.cwd()))
 from data_analysis.CLI import ExperimentDir
 
 
-# In[84]:
+# In[3]:
 
 
 exp = ExperimentDir.LOCAL
+if len(sys.argv) > 1:
+    try:
+        exp = ExperimentDir.value_to_enum(sys.argv[1])
+    except ValueError as e:
+        print(f"Experiment was set to {exp}", e)
+
 exp_dir = Path(ExperimentDir.host_dir(exp)) / 'runs'
 pngs = list(exp_dir.glob('run.*.parsed/*png'))
 
@@ -81,7 +91,7 @@ total_count = df_max['max_count'].sum()
 display(df_grouped, df_max, total_count)
 
 
-# In[167]:
+# In[ ]:
 
 
 scale = 3
@@ -89,6 +99,8 @@ scale = 3
 # for unique workflogs
 for workflow in df.workflow.unique():
     for image_name in df.image_name.unique():
+        img_name = f"{workflow}_{image_name}"
+        print(f"Generating {img_name}")
         df_slice = df[(df.workflow == workflow) & (df.image_name == image_name)]
         df_grouped = df_slice.groupby(['node', 'ncores']).size().reset_index(name='count')
         df_max = df_grouped.groupby('ncores')['count'].max().reset_index(name='max_count')
@@ -139,8 +151,8 @@ for workflow in df.workflow.unique():
                     ax[j, i].set_yticks([])
 
         plt.tight_layout()
-        plt.savefig(f"{workflow}_{image_name}")
-        plt.show()
+        plt.savefig(img_name)
+        # plt.show()
 
 
 
