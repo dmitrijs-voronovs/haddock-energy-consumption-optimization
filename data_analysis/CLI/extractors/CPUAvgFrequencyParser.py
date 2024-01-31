@@ -13,7 +13,7 @@ class CPUAvgFrequencyParser(CombinedParser):
     def extract(file_path: str):
         data = pd.read_csv(file_path)
         data = data.groupby(['CPU']).mean('CPU MHz').mean()
-        float(data['CPU MHz'])
+        return float(data['CPU MHz'])
 
     # TODO: make dynamic by instantiating in constructor and making methods non-static
     DATA_PATH = 'cpu.csv'
