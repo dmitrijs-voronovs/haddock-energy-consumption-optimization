@@ -35,7 +35,7 @@ class PathRegistry:
         return f"{PathRegistry.script_folder()}/clean.sh"
 
     DATA_ANALYSIS_FOLDER = "."
-    EXECUTION_ANALYSIS_SCRIPT_FILENAME = "execution-analysis.py"
+    EXECUTION_ANALYSIS_SCRIPT_FILENAME = "IndividualRunAnalysis.py"
 
     @staticmethod
     def execution_analysis_script():
