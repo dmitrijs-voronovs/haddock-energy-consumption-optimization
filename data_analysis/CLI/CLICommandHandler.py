@@ -262,11 +262,14 @@ class CLICommandHandler:
     def generate_run_diagram(parsed_data_dir):
         print(f"Generating run diagrams for: {parsed_data_dir}")
         script_file = PathRegistry.execution_analysis_script()
-        shutil.copy(script_file, Path(parsed_data_dir) / PathRegistry.EXECUTION_ANALYSIS_SCRIPT_FILENAME)
+        script_destination = Path(parsed_data_dir) / PathRegistry.EXECUTION_ANALYSIS_SCRIPT_FILENAME
+        shutil.copy(script_file, script_destination)
         try:
             subprocess.run(['python', PathRegistry.EXECUTION_ANALYSIS_SCRIPT_FILENAME], cwd=parsed_data_dir)
         except Exception as e:
             print(f"Error while generating run diagrams for: {parsed_data_dir} \n {e}")
+        finally:
+            os.remove(script_destination)
 
     @staticmethod
     def generate_run_diagrams(exp: 'ExperimentDir'):
