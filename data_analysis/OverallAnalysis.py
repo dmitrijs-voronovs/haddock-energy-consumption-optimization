@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[57]:
+# In[75]:
 
 
 from pathlib import Path
@@ -11,15 +11,15 @@ import regex as re
 from IPython.core.display_functions import display
 
 
-# In[58]:
+# In[76]:
 
 
 data_dir = "./exp-local/data"
-perf_data_dir = "./exp-local/data/info"
+info_data_dir = "./exp-local/data/info"
 
 
-def import_perf_data(dir):
-    all_files = Path(dir).glob('perf.*.csv')
+def import_info_data(dir, pattern):
+    all_files = Path(dir).glob(pattern)
     all_data = [pd.read_csv(path, index_col=None) for path in all_files]
     return pd.concat(all_data, axis=0, ignore_index=True)
 
@@ -31,15 +31,17 @@ def import_data(dir):
 
 
 data = import_data(data_dir)
-energy = import_perf_data(perf_data_dir)
+energy = import_info_data(info_data_dir, 'perf.*.csv')
+frequency = import_info_data(info_data_dir, 'cpu_freq_avg.*.csv')
 
 data.JobName = data.JobName.replace('batch', method='ffill')
 data = pd.merge(data, energy, on='JobName', how='left')
+data = pd.merge(data, frequency, on='JobName', how='left')
 
 data
 
 
-# In[25]:
+# In[77]:
 
 
 def convert_to_numeric(value):
@@ -70,7 +72,7 @@ def convert_elapsed_time(elapsed_time):
     return total_seconds
 
 
-# In[33]:
+# In[78]:
 
 
 def filter_out_completed_jobs(dat):
@@ -88,7 +90,7 @@ def extract_params_from_local_file_name(dat):
 
 def append_job_data_columns(dat):
     for column in ['ConsumedEnergy', 'AveRSS', 'AveDiskRead', 'AveDiskWrite', 'AveVMSize', 'power_energy_pkg',
-                   'power_energy_ram']:
+                   'power_energy_ram', 'AVG_CPU_freq_MHz']:
         dat[column] = dat[column].apply(convert_to_numeric)
         dat[f"{column}_K"] = dat[column] / 1000
         dat[f"{column}_M"] = dat[column] / 1_000_000
@@ -99,7 +101,7 @@ def append_job_data_columns(dat):
     return dat
 
 
-# In[34]:
+# In[79]:
 
 
 data = data.loc[:, ~data.columns.str.contains('Unnamed')]
@@ -123,7 +125,7 @@ data_completed = data_completed.sort_values(by=['ncores', 'Workflow'])
 display(data_completed, data_pending, data)
 
 
-# In[35]:
+# In[80]:
 
 
 data = data.dropna(subset=['AveCPU'])
@@ -140,7 +142,7 @@ data_completed['cpu_utilization'] = data_completed['n_ave_cpu'] / data_completed
 display(data, data_completed)
 
 
-# In[38]:
+# In[81]:
 
 
 collected_data_stats = data_completed.groupby(['Workflow', 'mode', 'ncores', 'node']).describe().reset_index()
@@ -149,7 +151,7 @@ collected_data_stats.to_csv(
 collected_data_stats
 
 
-# In[39]:
+# In[82]:
 
 
 # All collected data
@@ -160,7 +162,7 @@ collected_data.to_csv('local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[40]:
+# In[83]:
 
 
 # All collected data
@@ -171,7 +173,7 @@ collected_data.to_csv('total_local_exp_overview.csv', index=False, header=True)
 collected_data
 
 
-# In[41]:
+# In[84]:
 
 
 def to_local_config_class(workflow, node, trial, ncores, warmup=False):
@@ -198,7 +200,7 @@ def get_configs_code_for_new_experiment(node, data_of_node, target_total_n, star
                                                                       max_ncores(node), warmup=True)
 
 
-# In[42]:
+# In[85]:
 
 
 TOTAL_EXPERIMENTS_PER_EPOCH = 10
@@ -229,7 +231,7 @@ class {get_class_name(node, epoch)}(LocalExperiment):
     return class_definition if configs else None
 
 
-# In[43]:
+# In[86]:
 
 
 # new experiment epochs
@@ -250,7 +252,7 @@ def generate_experiment_classes(exp_epochs, data_of_node: str):
 # }, data_of_node="gl6")
 
 
-# In[44]:
+# In[87]:
 
 
 data_completed['n_trials_completed'] = data_completed.sort_values(
@@ -259,45 +261,45 @@ data_completed['n_trials_threshold'] = data_completed['n_trials_completed'] >= 2
 data_completed
 
 
-# In[45]:
+# In[88]:
 
 
 import matplotlib.pyplot as plt
 
 
-# In[46]:
+# In[89]:
 
 
 data_for_analysis = data_completed[data_completed.n_trials_threshold].reset_index(drop=True)
 
 
-# In[48]:
+# In[97]:
 
 
 # draw one plot containing multiple boxplots with data distribution curve for each (workflow,ncores,node) agains EnergyConsumption
 fig, ax = plt.subplots(figsize=(7, 4))
 data_for_analysis.boxplot(column='ElapsedSeconds', by=['Workflow', 'ncores', 'node'], ax=ax)
-ax.set_xticklabels(ax.get_xticklabels(), rotation=-60)
+ax.set_xticklabels(ax.get_xticklabels(), rotation=-60, ha="left")
 # save
 # fig.savefig('boxplot.png')
 
 
-# In[51]:
+# In[102]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
 columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_K', 'AveRSS_M', 'AveDiskRead_M', 'AveDiskWrite_M', 'AveVMSize_M',
-                   'cpu_utilization', 'power_energy_pkg_K', 'power_energy_ram_K']
+                   'cpu_utilization', 'power_energy_pkg_K', 'power_energy_ram_K', 'AVG_CPU_freq_MHz']
 nrows = 2
 ncols = len(columns_to_plot)
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 4, nrows * 5))
 for j, workflow in enumerate(data_for_analysis.Workflow.unique()):
-    for i, column in enumerate(
-            columns_to_plot):
-        data_for_analysis[data_for_analysis.Workflow == workflow].boxplot(column=column, by=['ncores', 'node'],
-                                                                          ax=ax[j, i])
+    for i, column in enumerate(columns_to_plot):
+        data_for_analysis[data_for_analysis.Workflow == workflow].dropna(subset=column).boxplot(column=column,
+                                                                                                by=['ncores', 'node'],
+                                                                                                ax=ax[j, i])
         ax[j, i].set_title(f"{workflow}-{column}")
-        ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60)
+        ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60, ha="left")
         # next to every boxplot box show data_for_analysis distribution
 
 fig.subplots_adjust(hspace=0.5, wspace=0.25)
@@ -305,7 +307,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('boxplot-overview-by-workflows.png')
 
 
-# In[55]:
+# In[101]:
 
 
 import math
@@ -315,9 +317,14 @@ nrows = math.ceil(len(columns_to_plot) / ncols)
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 8, nrows * 5))
 for i, column in enumerate(
         columns_to_plot):
-    data_for_analysis.boxplot(column=column, by=['Workflow', 'ncores', 'node'], ax=ax[i // 3, i % 3])
+    data_for_analysis.dropna(subset=column).boxplot(column=column, by=['Workflow', 'ncores', 'node'],
+                                                    ax=ax[i // 3, i % 3])
     ax[i // 3, i % 3].set_title(column)
-    ax[i // 3, i % 3].set_xticklabels(ax[i // 3, i % 3].get_xticklabels(), rotation=-60)
+    ax[i // 3, i % 3].set_xticklabels(ax[i // 3, i % 3].get_xticklabels(), rotation=-60, ha="left")
+
+if len(columns_to_plot) < ncols * nrows:
+    for i in range(len(columns_to_plot), ncols * nrows):
+        ax[i // 3, i % 3].axis('off')
 
 fig.subplots_adjust(hspace=0.6)
 

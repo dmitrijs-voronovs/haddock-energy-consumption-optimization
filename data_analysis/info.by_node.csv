@@ -3,6 +3,9 @@ run_avg_cpu_freq.png,local,daa,4,gl5,6
 run_avg_cpu_freq.png,local,daa,4,ss2,6
 run_avg_cpu_freq.png,local,daa,8,gl5,7
 run_avg_cpu_freq.png,local,daa,8,ss2,6
+run_avg_cpu_freq.png,local,daa,16,gl5,1
+run_avg_cpu_freq.png,local,daa,16,gl6,1
+run_avg_cpu_freq.png,local,daa,32,ss2,1
 run_avg_cpu_freq.png,local,dpp,4,gl5,8
 run_avg_cpu_freq.png,local,dpp,4,ss2,8
 run_avg_cpu_freq.png,local,dpp,8,gl5,9
@@ -15,6 +18,9 @@ run_avg_cpu_util_all.png,local,daa,4,gl5,6
 run_avg_cpu_util_all.png,local,daa,4,ss2,4
 run_avg_cpu_util_all.png,local,daa,8,gl5,7
 run_avg_cpu_util_all.png,local,daa,8,ss2,2
+run_avg_cpu_util_all.png,local,daa,16,gl5,1
+run_avg_cpu_util_all.png,local,daa,16,gl6,1
+run_avg_cpu_util_all.png,local,daa,32,ss2,1
 run_avg_cpu_util_all.png,local,dpp,4,gl5,8
 run_avg_cpu_util_all.png,local,dpp,4,ss2,2
 run_avg_cpu_util_all.png,local,dpp,8,gl5,9
@@ -27,6 +33,9 @@ run_avg_cpu_util_every.png,local,daa,4,gl5,6
 run_avg_cpu_util_every.png,local,daa,4,ss2,4
 run_avg_cpu_util_every.png,local,daa,8,gl5,7
 run_avg_cpu_util_every.png,local,daa,8,ss2,2
+run_avg_cpu_util_every.png,local,daa,16,gl5,1
+run_avg_cpu_util_every.png,local,daa,16,gl6,1
+run_avg_cpu_util_every.png,local,daa,32,ss2,1
 run_avg_cpu_util_every.png,local,dpp,4,gl5,8
 run_avg_cpu_util_every.png,local,dpp,4,ss2,2
 run_avg_cpu_util_every.png,local,dpp,8,gl5,9
@@ -39,6 +48,9 @@ run_avg_mem_util.png,local,daa,4,gl5,6
 run_avg_mem_util.png,local,daa,4,ss2,4
 run_avg_mem_util.png,local,daa,8,gl5,7
 run_avg_mem_util.png,local,daa,8,ss2,2
+run_avg_mem_util.png,local,daa,16,gl5,1
+run_avg_mem_util.png,local,daa,16,gl6,1
+run_avg_mem_util.png,local,daa,32,ss2,1
 run_avg_mem_util.png,local,dpp,4,gl5,8
 run_avg_mem_util.png,local,dpp,4,ss2,2
 run_avg_mem_util.png,local,dpp,8,gl5,9
@@ -51,6 +63,9 @@ run_avg_normalized.png,local,daa,4,gl5,6
 run_avg_normalized.png,local,daa,4,ss2,4
 run_avg_normalized.png,local,daa,8,gl5,7
 run_avg_normalized.png,local,daa,8,ss2,2
+run_avg_normalized.png,local,daa,16,gl5,1
+run_avg_normalized.png,local,daa,16,gl6,1
+run_avg_normalized.png,local,daa,32,ss2,1
 run_avg_normalized.png,local,dpp,4,gl5,8
 run_avg_normalized.png,local,dpp,4,ss2,2
 run_avg_normalized.png,local,dpp,8,gl5,9

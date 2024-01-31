@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[9]:
+# In[ ]:
 
 
 import re
@@ -17,7 +17,8 @@ sys.path.append(str(Path.cwd().parent))
 sys.path.append(str(Path.cwd()))
 from data_analysis.CLI import ExperimentDir
 
-# In[3]:
+
+# In[ ]:
 
 
 exp = ExperimentDir.LOCAL
@@ -53,14 +54,16 @@ for png in pngs:
 df = pd.DataFrame(configs, columns=['cfg_name', 'path', 'workflow', 'mode', 'ncores', 'node', 'trial', 'image_name'])
 df
 
-# In[96]:
+
+# In[ ]:
 
 
 data_gathered = df.groupby(['image_name', 'mode', 'workflow', 'ncores']).size().reset_index(name='count')
 data_gathered.to_csv('info.csv', index=False)
 data_gathered
 
-# In[97]:
+
+# In[ ]:
 
 
 data_gathered_by_node = df.groupby(['image_name', 'mode', 'workflow', 'ncores', 'node']).size().reset_index(
@@ -68,7 +71,8 @@ data_gathered_by_node = df.groupby(['image_name', 'mode', 'workflow', 'ncores', 
 data_gathered_by_node.to_csv('info.by_node.csv', index=False)
 data_gathered_by_node
 
-# In[118]:
+
+# In[ ]:
 
 
 workflow = 'daa'
@@ -76,7 +80,8 @@ image_name = 'run_avg_cpu_util_all.png'
 df_slice = df[(df.workflow == workflow) & (df.image_name == image_name)]
 df_slice
 
-# In[119]:
+
+# In[ ]:
 
 
 df_grouped = df_slice.groupby(['node', 'ncores']).size().reset_index(name='count')
@@ -84,6 +89,7 @@ df_max = df_grouped.groupby('ncores')['count'].max().reset_index(name='max_count
 total_count = df_max['max_count'].sum()
 # df_max
 display(df_grouped, df_max, total_count)
+
 
 # In[ ]:
 
@@ -148,4 +154,10 @@ for workflow in df.workflow.unique():
         plt.savefig(img_name)
         # plt.show()
 
+
+
 # In[ ]:
+
+
+
+
