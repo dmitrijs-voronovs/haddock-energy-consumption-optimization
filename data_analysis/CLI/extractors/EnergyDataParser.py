@@ -15,12 +15,12 @@ class EnergyDataParser(CombinedParser):
             numbers = re.findall(r"(?:\d+,?)+\.\d+", content)
             return [float(num.replace(',', '')) for num in numbers]
 
-    @staticmethod
-    def extract_into_file(src: List[Tuple[str, str]], destination_path):
+    @classmethod
+    def extract_into_file(cls, src: List[Tuple[str, str]], destination_path):
         job_data = []
         for job_name, file in src:
             try:
-                power_energy_pkg, power_energy_ram, perf_elapsed = EnergyDataParser.extract(file)
+                power_energy_pkg, power_energy_ram, perf_elapsed = cls.extract(file)
                 job_data.append(
                     {"JobName": job_name, "power_energy_pkg": power_energy_pkg, "power_energy_ram": power_energy_ram,
                      "perf_elapsed": perf_elapsed})
