@@ -248,13 +248,13 @@ class CLICommandHandler:
         get_destination_path = lambda file_name: lambda cfg: ExperimentDir.host_dir(exp, 'runs', f"run.{cfg[0]}.parsed",
                                                                                     file_name)
 
-        # CPUUtilizationParser.extract_into_file(source_files_config("proc_utilization.log"),
-        #                                        get_destination_path('cpu_utilization.csv'))
-        # EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename_perf)
-        # LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
-        # MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
-        #                                           get_destination_path('memory.csv'))
-        # CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"), get_destination_path('cpu.csv'))
+        CPUUtilizationParser.extract_into_file(source_files_config("proc_utilization.log"),
+                                               get_destination_path('cpu_utilization.csv'))
+        EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename_perf)
+        LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
+        MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
+                                                  get_destination_path('memory.csv'))
+        CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"), get_destination_path('cpu.csv'))
         CPUAvgFrequencyParser.extract_into_file(source_files_config("cpu.csv", "parsed"),
                                                 destination_filename_avg_cpu_freq)
 
