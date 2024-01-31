@@ -15,6 +15,11 @@ class CombinedParser(Parser, ABC):
     @staticmethod
     @abstractmethod
     def extract_into_file(src: List[Tuple[str, str]], destination_path: str):
+        """Extracts data from multiple files and writes to a single file
+        Args:
+            src: List of tuples of job_name and file_path
+            destination_path: path to write the extracted data to
+        """
         pass
 
 

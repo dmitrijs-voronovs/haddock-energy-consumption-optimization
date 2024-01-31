@@ -9,6 +9,7 @@ from pathlib import Path
 
 sys.path.append(os.path.pardir)
 
+from .extractors.CPUAvgFrequencyParser import CPUAvgFrequencyParser
 from .extractors.CPUUtilizationParser import CPUUtilizationParser
 from .extractors.EnergyDataParser import EnergyDataParser
 from .extractors.LogFileParser import LogFileParser
@@ -67,8 +68,7 @@ class CLICommandHandler:
                                                              help='Generate individual run diagrams (mem and cpu utilization, cpu frequency)')
         self.add_dir_arg(generate_run_diagrams_parser)
 
-        subparsers.add_parser('generate_diagrams', aliases=['gen-diagrams'],
-                              help='Generate overview diagrams')
+        subparsers.add_parser('generate_diagrams', aliases=['gen-diagrams'], help='Generate overview diagrams')
 
         subparsers.add_parser('sinfo', help='Slurm node information')
         subparsers.add_parser('squeue', help='Check slurm queue')
@@ -238,22 +238,25 @@ class CLICommandHandler:
     def get_info_data(self, exp: 'ExperimentDir', cls: str):
         ExperimentClass: 'Experiment' = self.create_experiment_class(cls, exp)()
 
-        def source_files_config(name):
-            return [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.info", name)) for cfg in
+        def source_files_config(name, suffix="info"):
+            return [(cfg.name, ExperimentDir.host_dir(exp, 'runs', f"{cfg.run_dir}.{suffix}", name)) for cfg in
                     ExperimentClass.configs]
 
         os.makedirs(ExperimentDir.analysis_dir(exp, 'data', 'info'), exist_ok=True)
-        destination_filename = ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv')
+        destination_filename_perf = ExperimentDir.analysis_dir(exp, 'data', 'info', f'perf.{cls}.csv')
+        destination_filename_avg_cpu_freq = ExperimentDir.analysis_dir(exp, 'data', 'info', f'cpu_freq_avg.{cls}.csv')
         get_destination_path = lambda file_name: lambda cfg: ExperimentDir.host_dir(exp, 'runs', f"run.{cfg[0]}.parsed",
                                                                                     file_name)
 
-        CPUUtilizationParser.extract_into_file(source_files_config("proc_utilization.log"),
-                                               get_destination_path('cpu_utilization.csv'))
-        EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename)
-        LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
-        MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
-                                                  get_destination_path('memory.csv'))
-        CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"), get_destination_path('cpu.csv'))
+        # CPUUtilizationParser.extract_into_file(source_files_config("proc_utilization.log"),
+        #                                        get_destination_path('cpu_utilization.csv'))
+        # EnergyDataParser.extract_into_file(source_files_config("perf_stat.txt"), destination_filename_perf)
+        # LogFileParser.extract_into_file(source_files_config("haddock.output.log"), get_destination_path('steps.csv'))
+        # MemoryUtilizationParser.extract_into_file(source_files_config("mem_utilization.log"),
+        #                                           get_destination_path('memory.csv'))
+        # CPUFrequencyParser.extract_into_file(source_files_config("cpu_frequency.log"), get_destination_path('cpu.csv'))
+        CPUAvgFrequencyParser.extract_into_file(source_files_config("cpu.csv", "parsed"),
+                                                destination_filename_avg_cpu_freq)
 
     @staticmethod
     def generate_run_diagram(parsed_data_dir):
