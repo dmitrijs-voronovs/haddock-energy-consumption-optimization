@@ -1,3 +1,3 @@
 jupyter nbconvert --to python IndividualRunAnalysis.ipynb
-python IndividualRunAnalysis.py
+@REM python IndividualRunAnalysis.py
 copy "IndividualRunAnalysis.py" "../IndividualRunAnalysis.py"

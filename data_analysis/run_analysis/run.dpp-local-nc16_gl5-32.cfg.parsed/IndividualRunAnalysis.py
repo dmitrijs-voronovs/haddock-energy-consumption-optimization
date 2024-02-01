@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[126]:
+# In[5]:
 
 
 import re
@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-# In[136]:
+# In[6]:
 
 
 CPU_FREQ_FILE = 'cpu.csv'
@@ -39,7 +39,7 @@ def merge_with_steps(file):
     return cpu_df, merged_df
 
 
-# In[137]:
+# In[7]:
 
 
 def format_timedelta(td):
@@ -65,7 +65,7 @@ for index in range(0, len(steps_df), 2):
     labels.append(f"{steps_df.loc[index, 'module']} ({duration_str})")
 
 
-# In[174]:
+# In[9]:
 
 
 num_data_points = 160
@@ -80,7 +80,8 @@ title = 'Average CPU Frequency'
 png = "run_avg_cpu_freq.png"
 
 # Calculate the total duration in minutes
-total_duration = (data_df['Timestamp'].max() - data_df['Timestamp'].min()).total_seconds() / 60
+duration_delta = data_df['Timestamp'].max() - data_df['Timestamp'].min()
+total_duration = duration_delta.total_seconds() / 60
 
 # Calculate the frequency in minutes
 freq = round(total_duration / num_data_points, 3)
@@ -127,14 +128,14 @@ for index, row in steps_df.iterrows():
 ax1.set_xlabel('Timestamp')
 ax1.set_ylabel(y_label)
 ax1.legend()
-plt.title(f"{CONFIG}: {title} ({freq}-min intervals)")
+plt.title(f"{CONFIG}: {title} ({freq}-min intervals, total duration: {format_timedelta(duration_delta)})")
 
 # Show the plot
 plt.tight_layout()
 fig.savefig(png)
 
 
-# In[156]:
+# In[10]:
 
 
 cpu_util_df, cpu_util_merged_df = merge_with_steps(CPU_UTILIZATION_FILE)
@@ -150,7 +151,8 @@ title = 'Average CPU Utilization for all cores'
 png = "run_avg_cpu_util_all.png"
 
 # Calculate the total duration in minutes
-total_duration = (data_df['Timestamp'].max() - data_df['Timestamp'].min()).total_seconds() / 60
+duration_delta = data_df['Timestamp'].max() - data_df['Timestamp'].min()
+total_duration = duration_delta.total_seconds() / 60
 
 # Calculate the frequency in minutes
 freq = round(total_duration / num_data_points, 3)
@@ -197,14 +199,14 @@ for index, row in steps_df.iterrows():
 ax1.set_xlabel('Timestamp')
 ax1.set_ylabel(y_label)
 ax1.legend()
-plt.title(f"{CONFIG}: {title} ({freq}-min intervals)")
+plt.title(f"{CONFIG}: {title} ({freq}-min intervals, total duration: {format_timedelta(duration_delta)})")
 
 # Show the plot
 plt.tight_layout()
 fig.savefig(png)
 
 
-# In[175]:
+# In[13]:
 
 
 num_data_points = 30
@@ -220,7 +222,8 @@ title = 'Average CPU Utilization for every core'
 png = "run_avg_cpu_util_every.png"
 
 # Calculate the total duration in minutes
-total_duration = (data_df['Timestamp'].max() - data_df['Timestamp'].min()).total_seconds() / 60
+duration_delta = data_df['Timestamp'].max() - data_df['Timestamp'].min()
+total_duration = duration_delta.total_seconds() / 60
 
 # Calculate the frequency in minutes
 freq = round(total_duration / num_data_points, 3)
@@ -277,14 +280,15 @@ ax1.set_ylabel(y_label)
 # ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 # ax1.legend()
 n_cores = cpu_util_df_every[idx_field_name].unique().shape[0]
-plt.title(f"{CONFIG}: {title}, {n_cores} cores ({freq}-min intervals)")
+plt.title(
+    f"{CONFIG}: {title}, {n_cores} cores ({freq}-min intervals, total duration: {format_timedelta(duration_delta)})")
 
 # Show the plot
 plt.tight_layout()
 fig.savefig(png)
 
 
-# In[122]:
+# In[14]:
 
 
 num_data_points = 160
@@ -298,7 +302,8 @@ title = 'Average Memory Usage Over Time'
 png = "run_avg_mem_util.png"
 
 # Calculate the total duration in minutes
-total_duration = (data_df['Timestamp'].max() - data_df['Timestamp'].min()).total_seconds() / 60
+duration_delta = data_df['Timestamp'].max() - data_df['Timestamp'].min()
+total_duration = duration_delta.total_seconds() / 60
 
 # Calculate the frequency in minutes
 freq = round(total_duration / num_data_points, 3)
@@ -345,14 +350,14 @@ for index, row in steps_df.iterrows():
 ax1.set_xlabel('Timestamp')
 ax1.set_ylabel(y_label)
 ax1.legend()
-plt.title(f"{CONFIG}: {title} ({freq}-min intervals)")
+plt.title(f"{CONFIG}: {title} ({freq}-min intervals, total duration: {format_timedelta(duration_delta)})")
 
 # Show the plot
 plt.tight_layout()
 fig.savefig(png)
 
 
-# In[124]:
+# In[15]:
 
 
 from sklearn.preprocessing import MinMaxScaler
@@ -368,7 +373,8 @@ png = "run_avg_normalized.png"
 scaler = MinMaxScaler()
 
 # Calculate the total duration in minutes
-total_duration = (data_df['Timestamp'].max() - data_df['Timestamp'].min()).total_seconds() / 60
+duration_delta = data_df['Timestamp'].max() - data_df['Timestamp'].min()
+total_duration = duration_delta.total_seconds() / 60
 
 # Calculate the frequency in minutes
 freq = round(total_duration / num_data_points, 3)
@@ -427,7 +433,7 @@ for index, row in steps_df.iterrows():
 ax1.set_xlabel('Timestamp')
 ax1.set_ylabel(y_label)
 ax1.legend()
-plt.title(f"{title} ({freq}-min intervals)")
+plt.title(f"{CONFIG}: {title} ({freq}-min intervals, total duration: {format_timedelta(duration_delta)})")
 
 # Show the plot
 plt.tight_layout()
