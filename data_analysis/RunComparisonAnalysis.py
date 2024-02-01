@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[2]:
 
 
 import re
@@ -18,7 +18,7 @@ sys.path.append(str(Path.cwd()))
 from data_analysis.CLI import ExperimentDir
 
 
-# In[ ]:
+# In[3]:
 
 
 exp = ExperimentDir.LOCAL
@@ -55,7 +55,7 @@ df = pd.DataFrame(configs, columns=['cfg_name', 'path', 'workflow', 'mode', 'nco
 df
 
 
-# In[ ]:
+# In[4]:
 
 
 data_gathered = df.groupby(['image_name', 'mode', 'workflow', 'ncores']).size().reset_index(name='count')
@@ -63,7 +63,7 @@ data_gathered.to_csv('info.csv', index=False)
 data_gathered
 
 
-# In[ ]:
+# In[5]:
 
 
 data_gathered_by_node = df.groupby(['image_name', 'mode', 'workflow', 'ncores', 'node']).size().reset_index(
@@ -72,7 +72,7 @@ data_gathered_by_node.to_csv('info.by_node.csv', index=False)
 data_gathered_by_node
 
 
-# In[ ]:
+# In[6]:
 
 
 workflow = 'daa'
@@ -81,41 +81,59 @@ df_slice = df[(df.workflow == workflow) & (df.image_name == image_name)]
 df_slice
 
 
-# In[ ]:
+# In[15]:
 
 
-df_grouped = df_slice.groupby(['node', 'ncores']).size().reset_index(name='count')
-df_max = df_grouped.groupby('ncores')['count'].max().reset_index(name='max_count')
-total_count = df_max['max_count'].sum()
+df_count = df_slice.groupby(['node', 'ncores']).size().reset_index(name='count')
+df_max_count_per_ncores = df_count.groupby('ncores')['count'].max().reset_index(name='max_count')
+total_count = df_max_count_per_ncores['max_count'].sum()
 # df_max
-display(df_grouped, df_max, total_count)
+node_order_by_run_count = df_slice.groupby(['node']).size().reset_index(name="count").sort_values(by=['count'],
+                                                                                                  ascending=False)
+display(df_count, df_max_count_per_ncores,
+        node_order_by_run_count.node.values.tolist(),
+        total_count)
 
 
-# In[ ]:
+# In[37]:
 
+
+from typing import Set
 
 scale = 3
+
+# df = df[(df.workflow == 'daa') & (df.image_name == 'run_avg_cpu_util_all.png')]
 
 # for unique workflogs
 for workflow in df.workflow.unique():
     for image_name in df.image_name.unique():
         img_name = f"{workflow}_{image_name}"
         print(f"Generating {img_name}")
+
         df_slice = df[(df.workflow == workflow) & (df.image_name == image_name)]
-        df_grouped = df_slice.groupby(['node', 'ncores']).size().reset_index(name='count')
-        df_max = df_grouped.groupby('ncores')['count'].max().reset_index(name='max_count')
-        x_len = len(df_slice.node.unique())
-        y_len = df_max['max_count'].sum()
-        fig, ax = plt.subplots(y_len, x_len, figsize=(x_len * 5 * scale, y_len * 2 * scale))
-        for (n, node) in enumerate(df_slice.node.unique()):
-            y_offset = 0
+        df_count = df_slice.groupby(['node', 'ncores']).size().reset_index(name='count')
+        df_max_count_per_ncores = df_count.groupby('ncores')['count'].max().reset_index(name='max_count')
+
+        n_cols = len(df_slice.node.unique())
+        n_rows = df_max_count_per_ncores['max_count'].sum()
+        fig, ax = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5 * scale, n_rows * 2 * scale))
+
+        node_order_by_run_count = df_slice.groupby(['node']).size().reset_index(name="count").sort_values(
+            by=['count']).node.values.tolist()
+        plotted = set()
+        for col_reverse, node in enumerate(node_order_by_run_count):
+            # reverse iteration for correct y_label (ncores) printing
+            col = len(node_order_by_run_count) - 1 - col_reverse
+            row_offset = 0
             df_slice_node = df_slice[df_slice.node == node]
-            for ncore in df_max.ncores:
-                max_for_ncores = df_max[df_max.ncores == ncore].max_count.values[0]
-                for ncc, (_, cfg) in enumerate(df_slice_node[df_slice_node.ncores == ncore].iterrows()):
-                    nc = y_offset + ncc
-                    ax[nc, n].imshow(plt.imread(cfg.path))
-                    ax[nc, n].axis('off')
+            for ncore in df_max_count_per_ncores.ncores:
+                max_ncore_group_rows = \
+                    df_max_count_per_ncores[df_max_count_per_ncores.ncores == ncore].max_count.values[0]
+                for ncore_group_row, (_, cfg) in enumerate(df_slice_node[df_slice_node.ncores == ncore].iterrows()):
+                    row = row_offset + ncore_group_row
+                    plotted.add((row, col))
+                    ax[row, col].imshow(plt.imread(cfg.path))
+                    ax[row, col].axis('off')
 
 
                     def adjust_style(axx):
@@ -125,32 +143,36 @@ for workflow in df.workflow.unique():
                         axx.spines[:].set_visible(False)
 
 
-                    if n == 0 or n == x_len - 1:
-                        adjust_style(ax[nc, n])
-                        ax[nc, n].set_ylabel(f"{cfg.ncores} ncores", fontsize=20)
-                    if n == x_len - 1:
-                        ax[nc, n].yaxis.set_label_position('right')
+                    if col == 0 or not (row, col + 1) in plotted:
+                        adjust_style(ax[row, col])
+                        ax[row, col].set_ylabel(f"{cfg.ncores} ncores", fontsize=20)
+                        ax[row, col].yaxis.set_label_position('right')
+                    if col == 0:
+                        ax[row, col].yaxis.set_label_position('left')
 
-                    if nc == 0 or nc == y_len - 1:
-                        adjust_style(ax[nc, n])
-                        ax[nc, n].set_xlabel(f"{node}", fontsize=20)
-                    if nc == 0:
-                        ax[nc, n].xaxis.set_label_position('top')
+                    if row == n_rows - 1 or not (row - 1, col) in plotted:
+                        adjust_style(ax[row, col])
+                        ax[row, col].set_xlabel(f"{node}", fontsize=20)
+                        ax[row, col].xaxis.set_label_position('top')
+                    if row == n_rows - 1:
+                        ax[row, col].xaxis.set_label_position('bottom')
 
-                    if ncc == 0 and nc != 0:
-                        ax[nc, n].spines['top'].set_visible(True)
+                    # add horizontal line delimited for ncores
+                    if ncore_group_row == 0 and row != 0:
+                        ax[row, col].spines['top'].set_visible(True)
 
-                y_offset += max_for_ncores
+                row_offset += max_ncore_group_rows
 
-        for i in range(x_len):
-            for j in range(y_len):
-                children = ax[j, i].get_children()
-                if not any(isinstance(child, AxesImage) for child in children):
+        for i in range(n_cols):
+            for j in range(n_rows):
+                if not (j, i) in plotted:
                     ax[j, i].axis('off')
                     ax[j, i].set_xticks([])
                     ax[j, i].set_yticks([])
 
         plt.tight_layout()
+        fig.suptitle(f"{workflow}_{image_name.replace('.png', '')}", fontsize=30, y=1.01)
+
         plt.savefig(img_name)
         # plt.show()
 

@@ -10,3 +10,16 @@ timestamp,module,event
 2024-01-31T12:25:50,caprieval,start
 2024-01-31T12:26:48,caprieval,finish
 2024-01-31T12:26:50,flexref,start
+2024-01-31T13:54:51,flexref,finish
+2024-01-31T13:54:52,caprieval,start
+2024-01-31T13:56:04,caprieval,finish
+2024-01-31T13:56:05,emref,start
+2024-01-31T14:03:52,emref,finish
+2024-01-31T14:03:52,caprieval,start
+2024-01-31T14:04:59,caprieval,finish
+2024-01-31T14:04:59,clustfcc,start
+2024-01-31T14:05:24,clustfcc,finish
+2024-01-31T14:05:24,seletopclusts,start
+2024-01-31T14:06:02,seletopclusts,finish
+2024-01-31T14:06:03,caprieval,start
+2024-01-31T14:06:53,caprieval,finish
