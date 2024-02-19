@@ -32,8 +32,7 @@ class CLICommandHandler:
         subparsers = parser.add_subparsers(dest='command')
         get_data_parser = subparsers.add_parser('get_exp_data', aliases=["get-data"], help='Get experiment data')
         self.add_dir_arg(get_data_parser)
-        get_data_parser.add_argument('-c', '--cls', nargs='*', required=True,
-                                     help='Experiment classnames [example: "Test", "GL2_3"]')
+        self.add_cls_arg(get_data_parser, multiple=True)
         get_log_files_parser = subparsers.add_parser('get_log_files', aliases=["get-logs"], help='Get log files')
         self.add_dir_arg(get_log_files_parser)
         clean_experiment_dir_parser = subparsers.add_parser('clean_experiment_dir', aliases=["clean"],
@@ -42,7 +41,7 @@ class CLICommandHandler:
         clean_experiment_dir_parser.add_argument('--full', action='store_true', default=False,
                                                  help='Clean the entire directory')
         run_experiment_parser = subparsers.add_parser('run_experiment', aliases=["run-exp"], help='Run experiment')
-        run_experiment_parser.add_argument('-n', '--node', type=str, required=True, help='Node [example: "gl2", "gl5"]')
+        self.add_node_arg(run_experiment_parser)
         self.add_dir_arg(run_experiment_parser)
         self.add_cls_arg(run_experiment_parser)
 
@@ -58,6 +57,14 @@ class CLICommandHandler:
                                                          help='Create experiment')
         self.add_dir_arg(create_experiment_parser)
         self.add_cls_arg(create_experiment_parser)
+
+        start_gl3_logger_parser = subparsers.add_parser('start_gl3_logger', aliases=["start-gl3-logger"],
+                                                        help='Start additional gl3 logger for cpu data')
+        self.add_cls_arg(start_gl3_logger_parser)
+
+        stop_gl3_logger_parser = subparsers.add_parser('stop_gl3_logger', aliases=["stop-gl3-logger"],
+                                                       help='Stop additional gl3 logger for cpu data')
+        self.add_cls_arg(stop_gl3_logger_parser)
 
         get_info_data_parser = subparsers.add_parser('get_info_data', aliases=["get-info"],
                                                      help='Get experiment info data (consumed energy from perf module)')
@@ -111,13 +118,26 @@ class CLICommandHandler:
             else:
                 node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node(args.node))
                 CLICommandHandler(node_client).run_experiment(exp_dir, args.cls)
+        elif args.command in ['start_gl3_logger', "start-gl3-logger"]:
+            node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node("gl3"))
+            CLICommandHandler(node_client).start_gl3_logger(args.cls)
+        elif args.command in ['stop_gl3_logger', "stop-gl3-logger"]:
+            node_client = RemoteSSHClient(*CredentialManager.get_credentials_for_node("gl3"))
+            CLICommandHandler(node_client).stop_gl3_logger(args.cls)
+
+    def add_node_arg(self, run_experiment_parser):
+        run_experiment_parser.add_argument('-n', '--node', type=str, required=True, help='Node [example: "gl2", "gl5"]')
 
     def add_dir_arg(self, parser):
         parser.add_argument('-d', '--dir', type=str, required=True, help='Experiment directory')
 
-    def add_cls_arg(self, parser):
-        parser.add_argument('-c', '--cls', type=str, required=True,
-                            help='Experiment classname [example: "Test", "GL2_3"]')
+    def add_cls_arg(self, parser, multiple=False):
+        if multiple:
+            parser.add_argument('-c', '--cls', nargs='*', required=True,
+                                help='Experiment classnames [example: "Test GL2_3"]')
+        else:
+            parser.add_argument('-c', '--cls', type=str, required=True,
+                                help='Experiment classname [example: "Test", "GL2_3"]')
 
     def get_exp_data(self, exp: 'ExperimentDir', experiment_ids):
         exp_dir = ExperimentDir.dir(exp)
@@ -225,6 +245,14 @@ class CLICommandHandler:
             [f"echo running experiment '{exp_id}' on $(hostname)", f"cd {exp_dir}", "pwd", f"sh {create_jobs_script}",
              "echo activate conda", "source $HOME/anaconda3/bin/activate", "conda activate haddock3",
              "echo run experiment", f"sh {run_experiment_script}", "sinfo"])
+
+    def start_gl3_logger(self, exp_id: str):
+        self.client.put_files([PathRegistry.gl3_collect_info_before()], '.')
+        self.client.execute_commands_with_sudo([f"sh {PathRegistry.GL3_COLLECT_INFO_BEFORE_SH} {exp_id}"])
+
+    def stop_gl3_logger(self, exp_id: str):
+        self.client.put_files([PathRegistry.gl3_collect_info_after()], '.')
+        self.client.execute_commands_with_sudo([f"sh {PathRegistry.GL3_COLLECT_INFO_AFTER_SH} {exp_id}"])
 
     def create_experiment_class(self, cls: str, exp: 'ExperimentDir'):
         mode = EXPERIMENT_DIR_TO_MODE_MAP[exp]

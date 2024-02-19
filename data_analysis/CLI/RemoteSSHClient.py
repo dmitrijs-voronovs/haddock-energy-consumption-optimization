@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 from typing import List
 
@@ -88,6 +89,34 @@ class RemoteSSHClient:
             error = stderr.read().decode('utf-8')
             if error:
                 print(f"Error: {error}")
+            return output
+        except Exception as e:
+            print(f"Error: {e}")
+            return ""
+
+    def execute_commands_with_sudo(self, commands: List[str]) -> str:
+        command = " && ".join(commands)
+        try:
+            # Open a new channel with a pseudo-terminal and run a shell
+            shell = self.ssh_client.invoke_shell()
+            # Send the sudo command
+            # noinspection PyTypeChecker
+            shell.send('sudo -S ' + command + '\n')
+            # Wait for the password prompt
+            print("about to sleep")
+            time.sleep(2)
+            print("slept a bit")
+            while not shell.recv_ready():
+                print("sleeping")
+                time.sleep(0.1)
+            print("awake")
+            # Send the password
+            shell.send(self.password + '\n')
+            time.sleep(1)
+            # Receive the output
+            output = shell.recv(1024).decode('utf-8')
+            print(f"{command=}")
+            print(f"{output=}")
             return output
         except Exception as e:
             print(f"Error: {e}")

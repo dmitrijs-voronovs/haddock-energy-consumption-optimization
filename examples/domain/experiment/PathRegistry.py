@@ -50,3 +50,14 @@ class PathRegistry:
         return [f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_AFTER_SH}",
                 f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_INFO_BEFORE_SH}",
                 f"{PathRegistry.script_folder()}/{PathRegistry.COLLECT_HARDWARE_INFO}"]
+
+    GL3_COLLECT_INFO_BEFORE_SH = "gl3.collect_cpu_info.before.sh"
+    GL3_COLLECT_INFO_AFTER_SH = "gl3.collect_cpu_info.after.sh"
+
+    @staticmethod
+    def gl3_collect_info_before() -> str:
+        return f"{PathRegistry.script_folder()}/{PathRegistry.GL3_COLLECT_INFO_BEFORE_SH}"
+
+    @staticmethod
+    def gl3_collect_info_after() -> str:
+        return f"{PathRegistry.script_folder()}/{PathRegistry.GL3_COLLECT_INFO_AFTER_SH}"
