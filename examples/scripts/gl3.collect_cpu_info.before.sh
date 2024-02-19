@@ -43,10 +43,10 @@ echo $! >"$pid_file"
 echo Launching the WattsupPro logger with PID: "$pid_file"
 
 ## Enter a loop to check log file size periodically
-#(
-#  while true; do
-#    sleep $((interval_minute * 60))
-#    check_log_size
-#  done
-#) &
-#echo $! >"$script_pid_file"
+(
+  while true; do
+    sleep $((interval_minute * 60))
+    check_log_size
+  done
+) &
+echo $! >"$script_pid_file"
