@@ -90,7 +90,7 @@ def extract_params_from_local_file_name(dat):
 
 def append_job_data_columns(dat):
     for column in ['ConsumedEnergy', 'AveRSS', 'AveDiskRead', 'AveDiskWrite', 'AveVMSize', 'power_energy_pkg',
-                   'power_energy_ram', 'AVG_CPU_freq_MHz']:
+                   'power_energy_ram', 'AVG_CPU_freq_MHz_K']:
         dat[column] = dat[column].apply(convert_to_numeric)
         dat[f"{column}_K"] = dat[column] / 1000
         dat[f"{column}_M"] = dat[column] / 1_000_000
@@ -288,8 +288,8 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=-60, ha="left")
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
-columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_K', 'AveRSS_M', 'AveDiskRead_M', 'AveDiskWrite_M', 'AveVMSize_M',
-                   'cpu_utilization', 'power_energy_pkg_K', 'power_energy_ram_K', 'AVG_CPU_freq_MHz']
+columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_M', 'AveRSS_G', 'AveDiskRead_G', 'AveDiskWrite_G', 'AveVMSize_G',
+                   'cpu_utilization', 'power_energy_pkg_M', 'power_energy_ram_K', 'AVG_CPU_freq_MHz_K']
 nrows = 2
 ncols = len(columns_to_plot)
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 4, nrows * 5))
@@ -311,8 +311,8 @@ fig.savefig('boxplot-overview-by-workflows.png')
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
-columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_K', 'AveRSS_M', 'AveDiskRead_M', 'AveDiskWrite_M', 'AveVMSize_M',
-                   'cpu_utilization', 'power_energy_pkg_K', 'power_energy_ram_K', 'AVG_CPU_freq_MHz']
+columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_M', 'AveRSS_G', 'AveDiskRead_G', 'AveDiskWrite_G', 'AveVMSize_G',
+                   'cpu_utilization', 'power_energy_pkg_M', 'power_energy_ram_K', 'AVG_CPU_freq_MHz_K']
 nrows = 2
 ncols = len(columns_to_plot)
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 4, nrows * 5))
@@ -328,6 +328,31 @@ for j, workflow in enumerate(data_for_analysis.Workflow.unique()):
 fig.subplots_adjust(hspace=0.5, wspace=0.25)
 
 fig.savefig('boxplot-overview-by-workflows.no-nodes.png')
+
+
+# In[25]:
+
+
+# draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
+columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_M', 'AveRSS_G', 'AveDiskRead_G', 'AveDiskWrite_G', 'AveVMSize_G',
+                   'cpu_utilization', 'power_energy_pkg_M', 'power_energy_ram_K', 'AVG_CPU_freq_MHz_K']
+nrows = 2
+ncols = len(columns_to_plot)
+nrows, ncols = ncols, nrows
+fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 4, nrows * 5))
+for jj, workflow in enumerate(data_for_analysis.Workflow.unique()):
+    for ii, column in enumerate(columns_to_plot):
+        j, i = ii, jj
+        data_for_analysis[data_for_analysis.Workflow == workflow].dropna(subset=column).boxplot(column=column,
+                                                                                                by=['ncores'],
+                                                                                                ax=ax[j, i])
+        ax[j, i].set_title(f"{workflow}-{column}")
+        ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60, ha="left")
+        # next to every boxplot box show data_for_analysis distribution
+
+fig.subplots_adjust(hspace=0.5, wspace=0.25)
+
+fig.savefig('boxplot-overview-by-workflows.no-nodes.vert.png')
 
 
 # In[19]:

@@ -122,4 +122,10 @@ glue_images_vertically([get_image_path(Workflow.DPP, 4, Node.gl5, 32, Img.run_av
                         get_image_path(Workflow.DPP, 32, Node.gl5, 31, Img.run_avg_cpu_util_every)],
                        output_dir / "dpp-cpu_util_every-ncores-cmp.png")
 
+
+
 # In[ ]:
+
+
+
+
