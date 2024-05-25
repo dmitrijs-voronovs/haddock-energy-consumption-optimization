@@ -1,19 +1,20 @@
 # Energy Consumption of Haddock Modes and Parameters
 
-## Subjects
-1. Protein-Protein
-2. Antibody-Antigen
+## Description
 
-## Experiment Design 
+Tool for managing and monitoring [HADDOCKv3](https://github.com/haddocking/haddock3/blob/v3.0.0-beta.5) experiments
+efficiently.
 
-## ToDos
-1. Design of the Experiment [Vincenzo]
-2. Parameters Domain, a range [Dmitrijs]
-    1. Check batch file parameters:
-        - tasks-per-node
-        - nodes
-3. Check the behavior of the parameters [Dmitrijs]
-4. Normal Distribution for Treatment
-5. Energy Consumption of sacct [Dmitrijs]
-6. Setting the Overleaf [Dmitrijs]
-7. List the resource that we can profile using SLURM [Dmitrijs]
+## CLI Usage
+
+Please refer to [this guide](./cli/README.md) for detailed information on how to use the CLI tool.
+
+## Graph examples
+
+### Energy Consumption
+
+![Haddock Energy Consumption](./data_analysis/boxplot-overview.png)
+
+## DAA workflow: Average cpu utilization for every vCPU
+
+![DAA workflow avg cpu utilization for every vCPU](./data_analysis/daa_run_avg_cpu_util_every.png)
