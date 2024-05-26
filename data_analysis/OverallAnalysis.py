@@ -9,6 +9,7 @@ from pathlib import Path
 import pandas as pd
 import regex as re
 from IPython.core.display_functions import display
+from matplotlib.text import Text
 
 
 # In[2]:
@@ -90,11 +91,12 @@ def extract_params_from_local_file_name(dat):
 
 def append_job_data_columns(dat):
     for column in ['ConsumedEnergy', 'AveRSS', 'AveDiskRead', 'AveDiskWrite', 'AveVMSize', 'power_energy_pkg',
-                   'power_energy_ram', 'AVG_CPU_freq_MHz_K']:
+                   'power_energy_ram', 'AVG_CPU_freq_MHz']:
         dat[column] = dat[column].apply(convert_to_numeric)
-        dat[f"{column}_K"] = dat[column] / 1000
-        dat[f"{column}_M"] = dat[column] / 1_000_000
-        dat[f"{column}_G"] = dat[column] / 1_000_000_000
+        # ROUND IT TO 2 DECIMALS AFTER COMMA
+        dat[f"{column}_K"] = round(dat[column] / 1000, 2)
+        dat[f"{column}_M"] = round(dat[column] / 1_000_000, 2)
+        dat[f"{column}_G"] = round(dat[column] / 1_000_000_000, 2)
     dat['ElapsedSeconds'] = dat.Elapsed.apply(convert_elapsed_time)
     dat['ElapsedMinutes'] = dat.ElapsedSeconds / 60
     dat['ElapsedHours'] = dat.ElapsedMinutes / 60
@@ -313,6 +315,23 @@ fig.savefig('boxplot-overview-by-workflows.png')
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
 columns_to_plot = ['ElapsedHours', 'ConsumedEnergy_M', 'AveRSS_G', 'AveDiskRead_G', 'AveDiskWrite_G', 'AveVMSize_G',
                    'cpu_utilization', 'power_energy_pkg_M', 'power_energy_ram_K', 'AVG_CPU_freq_MHz_K']
+
+title_map = {
+    'ElapsedHours': 'Execution Time (h)',
+    'ConsumedEnergy_M': 'Consumed Energy (MJ)',
+    'AveRSS_G': 'Average Memory Utilization (GB)',
+    'AveDiskRead_G': 'Average Disk Read (GB)',
+    'AveDiskWrite_G': 'Average Disk Write (GB)',
+    'AveVMSize_G': 'Average VM Size (GB)',
+    'cpu_utilization': 'CPU Utilization (%)',
+    'power_energy_pkg_M': 'Power Energy Package (MW)',
+    'power_energy_ram_K': 'Power Energy RAM (KW)',
+    'AVG_CPU_freq_MHz_K': 'Average vCPU Frequency (GHz)',
+
+}
+
+from matplotlib.text import Text
+
 nrows = 2
 ncols = len(columns_to_plot)
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 4, nrows * 5))
@@ -321,8 +340,17 @@ for j, workflow in enumerate(data_for_analysis.Workflow.unique()):
         data_for_analysis[data_for_analysis.Workflow == workflow].dropna(subset=column).boxplot(column=column,
                                                                                                 by=['ncores'],
                                                                                                 ax=ax[j, i])
-        ax[j, i].set_title(f"{workflow}-{column}")
-        ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60, ha="left")
+        ax[j, i].set_title(f"{workflow}: {title_map[column]}")
+        ax[j, i].set_xlabel("Number of vCPUs")
+        ax[j, i].set_ylabel(title_map[column])
+        x_ticklabels = []
+        for xlab in ax[j, i].get_xticklabels():
+            text = (re.search(r"\((\d+).+", xlab.get_text()).group(1))
+            x, y = xlab.get_position()
+            x_ticklabels.append(Text(x, y, text=text))
+        ax[j, i].set_xticklabels(x_ticklabels, rotation=-60, ha="left")
+        # ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60, ha="left")
+
         # next to every boxplot box show data_for_analysis distribution
 
 fig.subplots_adjust(hspace=0.5, wspace=0.25)
@@ -330,7 +358,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('boxplot-overview-by-workflows.no-nodes.png')
 
 
-# In[25]:
+# In[19]:
 
 
 # draw two plots based on workflow containing multiple boxplots with data_for_analysis distribution curve for each (ncores,node) agains ConsumedEnergy, then 2 plots agains AveRSS, AveDiskRead, AveDiskWrite, AveVMSize. Add titles to plots with workflow name. Make sure that it is one big plot that contains all the subplots.
@@ -346,8 +374,16 @@ for jj, workflow in enumerate(data_for_analysis.Workflow.unique()):
         data_for_analysis[data_for_analysis.Workflow == workflow].dropna(subset=column).boxplot(column=column,
                                                                                                 by=['ncores'],
                                                                                                 ax=ax[j, i])
-        ax[j, i].set_title(f"{workflow}-{column}")
-        ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60, ha="left")
+        ax[j, i].set_xlabel("Number of vCPUs")
+        ax[j, i].set_ylabel(title_map[column])
+        ax[j, i].set_title(f"{workflow}: {title_map[column]}")
+        # ax[j, i].set_xticklabels(ax[j, i].get_xticklabels(), rotation=-60, ha="left")
+        x_ticklabels = []
+        for xlab in ax[j, i].get_xticklabels():
+            text = (re.search(r"\((\d+).+", xlab.get_text()).group(1))
+            x, y = xlab.get_position()
+            x_ticklabels.append(Text(x, y, text=text))
+        ax[j, i].set_xticklabels(x_ticklabels, rotation=-60, ha="center")
         # next to every boxplot box show data_for_analysis distribution
 
 fig.subplots_adjust(hspace=0.5, wspace=0.25)
@@ -355,7 +391,7 @@ fig.subplots_adjust(hspace=0.5, wspace=0.25)
 fig.savefig('boxplot-overview-by-workflows.no-nodes.vert.png')
 
 
-# In[19]:
+# In[20]:
 
 
 import math
@@ -379,7 +415,7 @@ fig.subplots_adjust(hspace=0.6)
 fig.savefig('boxplot-overview.png')
 
 
-# In[20]:
+# In[22]:
 
 
 import math
@@ -391,8 +427,15 @@ for i, column in enumerate(
         columns_to_plot):
     data_for_analysis.dropna(subset=column).boxplot(column=column, by=['Workflow', 'ncores'],
                                                     ax=ax[i // 3, i % 3])
-    ax[i // 3, i % 3].set_title(column)
-    ax[i // 3, i % 3].set_xticklabels(ax[i // 3, i % 3].get_xticklabels(), rotation=-60, ha="left")
+    ax[i // 3, i % 3].set_xlabel("Workflow, Number of vCPUs")
+    ax[i // 3, i % 3].set_ylabel(title_map[column])
+    ax[i // 3, i % 3].set_title(f"{title_map[column]}")
+    x_ticklabels = []
+    for xlab in ax[i // 3, i % 3].get_xticklabels():
+        text = (re.search(r"\((\w+, \d+).+", xlab.get_text()).group(1))
+        x, y = xlab.get_position()
+        x_ticklabels.append(Text(x, y, text=text))
+    ax[i // 3, i % 3].set_xticklabels(x_ticklabels, rotation=-60, ha="left")
 
 if len(columns_to_plot) < ncols * nrows:
     for i in range(len(columns_to_plot), ncols * nrows):
